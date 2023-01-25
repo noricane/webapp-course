@@ -1,0 +1,103 @@
+<!DOCTYPE xhtml>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aboreto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body class="container">
+    <header class="container header">
+        <div class="row">
+            <div class="logo header--type">
+                <a href="/">BRAND</a>
+
+            </div>
+            <div class="menu--btn">
+                <button onclick="toggleMenu()" id="menubutton" type="button" class="button btn btn-light">Menu</button>
+            </div>
+        </div>
+        <div class="row flex-center--container nav--open nav--closed"  id="menu">
+            <ul>
+                <li>Members Log In</li>
+                <li>Shop men's</li>
+                <li>Shop women's</li>
+                <li>About us</li>
+                <li>Contact us</li>
+            </ul>
+        </div>
+    </header>
+    <div class="row flex-center--container">
+        <video src="video.mp4" autoplay loop class="video"></video>
+    </div>
+    <div class="row center--div">
+        <!-- Haven't decided yet for product niche or if I'll pivot to some other sector -->
+        <h1 class="col-12">Shop the latest luxury X</h1>
+    <article>
+        <h4 class="">Our items are elegant bla bla... paragraph n stuff</h4>
+    </article>
+    <section>
+        <h2>The latest collection -HTMLSCRIPT-</h2>
+        <div class="container " style="text-align:center;">
+            <div class="row card-row  " id="collection" style="">
+                <div id="loading--products"><img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="" height="50px"srcset=""></div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h2>Become a partner now</h2>
+    </section>
+</div>
+</body>
+</html>
+
+<script>
+    //$("#menubutton").onclick = toggleMenu;
+    
+    function toggleMenu(){
+        
+        if($("#menu").hasClass("nav--closed")){
+            $("#menu").removeClass("nav--closed")
+        }else{
+            $("#menu").addClass("nav--closed")
+        }
+        console.log("clicked");
+    }
+    function addProduct(elem) {
+        const newElement = 
+        (`<div class="col productCard remove--anchor-styles">
+            <a href="/productpage.html?product=${elem.id}">
+                <div class="card card--width">
+                    <img class="card-img-top img-fluid productImage " src=${elem.image} alt="Card image cap"/>
+                    <div class="card-block ">
+                        <p class="card-text"><small class="text-muted">${elem.category}</small></p>
+                        <h4 class="card-title">${elem.title}</h4>
+                        <h5 class="card-title">${Math.ceil(parseInt(elem.price))} kr</h5>
+                        <p class="card-text">${elem.description}</p>
+                    </div>
+                </div>    
+            </a>
+            
+        </div>`)
+
+       $("#collection").append(newElement)
+
+    }
+    fetch('https://fakestoreapi.com/products/category/jewelery?limit=5')
+            .then(res=>res.json())
+            .then(json=>{
+                console.log(json)
+                $("#loading--products").remove()
+                json.forEach(element => {
+                    addProduct(element)
+                    console.log(element.id);
+                });  
+            })
+</script>
