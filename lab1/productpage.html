@@ -13,8 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
 </head>
-<body class="container">
-    <header class="container header">
+<body class="container" >
+    <header class="container  header">
         <div class="row">
             <div class="logo header--type">
                 <a href="/">BRAND</a>
@@ -34,30 +34,78 @@
             </ul>
         </div>
     </header>
-    <div class="row flex-center--container">
-    <div id="loading--products" style="text-align: center;margin-top:20vw"><img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="" height="50px"srcset=""></div>
 
+
+    <div class="row flex-center--container">
+    <div id="loading--products" style="text-align: center;margin-top:20vw">
+        <img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="" height="50px"srcset="">
+    
+    </div>
+        
         
     </div>
-    <div class="row" id="product">
+
+    <div style="min-height: 70vh;">
+
+        <div class="row productPage--card-row " id="product">
         
-        
+        </div>
+        <hr class="solid">
+        <div class="container" id="related">
+            <div class="row">
+
+            </div>
+        </div>
+
     </div>
-    <button class="productPage--input-button">+</button>
-    <input type="text" disabled class="productPage--input"  name=""  id="">
-    <button class="productPage--input-button">-</button>
+    
 </body>
+<footer class="footer" >
+    <div class="footer-wrapper"><div class="">
+        <div class="">
+            <span>ABOUT</span>
+            <ul>
+                <li>Our mission</li>
+                <li>About us</li>
+
+            </ul>
+        </div>
+        </div>
+        <div class="">
+            <span>SHOP</span>
+            <ul>
+                <li>Shop men's</li>
+                <li>Shop women's</li>
+            </ul>
+        </div>
+        <div class="">
+            <span>CONTACT</span>
+            <ul>
+                <li>FAQ</li>
+                <li>Contact us</li>
+                <li>Give us your feedback!</li>
+                <li>Partners</li>
+            </ul>
+        </div>
+    </div>
+    <div class="copyright">Copyright © Brand, Inc.</div>
+</footer>
 </html>
 
 <script>
     //$("#menubutton").onclick = toggleMenu;
     function quantityHandler(str){
+        console.log("clicked");
         switch (str) {
             case "+":
-                
+            if( parseInt($("#quantity").val())<10){
+                $("#quantity").val(parseInt($("#quantity").val())+1);
+            }
                 break;
             case "-":
-                
+                if( parseInt($("#quantity").val())>0){
+                $("#quantity").val(parseInt($("#quantity").val())-1);
+            }
                 break;
         
             default:
@@ -75,17 +123,21 @@
     }
     function addProduct(elem) {
         const product = 
-        (`<div class="col productCard remove--anchor-styles">
-
-                <div class="card productPage--card">
-                    <img class="col-sm-12 productPage--image" src=${elem.image} alt="Card image cap"/>
-                    <div class="col-sm-12 productPage--text card-block">
-                        <p class="card-text"><small class="text-muted">${elem.category}</small></p>
+        (`<div class="container col   remove--anchor-styles">
+                <div class="row card ">
+                    <img class="col-sm-12 col-md-6  productPage--image" src=${elem.image} alt="Card image cap"/>
+                    <div class="col-sm-12 col-md-6 productPage--text card-block">
+                        <p class="card-text"><small class="text-muted">${elem.category.toString().toUpperCase()}</small></p>
                         <h4 class="productPage--card-title">${elem.title}</h4>
-                        <h5 class="productPage--card-title">${Math.ceil(parseInt(elem.price))} kr</h5>
+                        <h5 class="productPage--card-price">${Math.ceil(parseInt(elem.price))} kr</h5>
                         <p class="productPage--card-text">${elem.description}</p>
                         <div>
-                            
+                            <div class="productPage--input-wrapper" style="padding-left:5rem; padding-top:5rem;">
+
+                                <button class="productPage--input-button" onclick="quantityHandler('+')">+</button>
+                                <input type="text" id="quantity" value="0" disabled class="productPage--input"  name=""  id="">
+                                <button class="productPage--input-button" onclick="quantityHandler('-')">-</button>
+                            </div>
                         </div>
                     
                     </div>
@@ -99,16 +151,59 @@
 
     }
     
+    
     const urlParams = new URLSearchParams(window.location.search);
-    fetch(`https://fakestoreapi.com/products/${urlParams.get('product')}`)
+    const productId=urlParams.get('product')
+    if(productId != undefined | productId != null){
+        console.log(productId);
+        fetch(`https://fakestoreapi.com/products/${productId}`)
             .then(res=>res.json())
             .then(element=>{
-
                 $("#loading--products").remove()
                 addProduct(element)
-                json.forEach(element => {
+        })
+        fetch(`https://fakestoreapi.com/products/category/jewelery`)
+        .then(res=>res.json())
+        .then(json=>{
+            $("#loading--products").remove()
+            json.forEach(element => {
+                if(element.id != productId){
+                    addRelated(element)
+                }
+                
+
+                
+            });  
+        })  
+    }else{
+       $("#loading--products").append(`
+       <div class="" style="font-weight: bold; font-size: 150%; color: red; margin-top: 3rem;">Missing Product ID</div>
+       `)
+
+    }
+
+    function addRelated(elem) {
+        const product = 
+        (`<div class="productPage--related-product container col productCard col-sm-12 col-md-4  remove--anchor-styles">
+            <a href="/productpage.html?product=${elem.id}">
+
+                <div class="img-container"><img class="  productPage--image" src=${elem.image} alt="Card image cap"/></div>
+
+                    <div class=" productPage--text card-block">
+                        <h4 class="productPage--card-title">${elem.title}</h4>
+                        <p class="card-text"><small class="text-muted">${elem.category.toString().toUpperCase()}</small></p>
+                        <p class="productPage--card-text">${elem.description}</p>
+                        <h5 class="productPage--card-title">${Math.ceil(parseInt(elem.price))} kr</h5>
+
                     
-                    console.log(element.id);
-                });  
-            })
+                    </div>
+
+            </a>      
+
+            
+        </div>`)
+
+       $("#related").append(product)
+
+    }
 </script>

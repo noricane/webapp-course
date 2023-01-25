@@ -34,28 +34,66 @@
             </ul>
         </div>
     </header>
-    <div class="row flex-center--container">
+    <div class="row flex-center--container video-container">
         <video src="video.mp4" autoplay loop class="video"></video>
     </div>
     <div class="row center--div">
         <!-- Haven't decided yet for product niche or if I'll pivot to some other sector -->
-        <h1 class="col-12">Shop the latest luxury X</h1>
-    <article>
-        <h4 class="">Our items are elegant bla bla... paragraph n stuff</h4>
+        <h1 class="col-12 heading">Elevate Your Wardrobe with <br/> Our Premium Jewelry Pieces</h1>
+    <article class="about-us " >
+        <h4 class="">Elevating Style with Timeless, Inclusive Jewelry</h4>
+        <div>
+            At our jewelry brand, we believe in creating spectacular pieces to elevate any outfit and make you feel confident and unique. We use only the finest materials to craft each design with care and attention to detail. Our collection is inclusive and fits all genders. Our commitment to exceptional customer service ensures a satisfying shopping experience. Indulge in self-expression with our jewelry.
+        </div>
     </article>
-    <section>
-        <h2>The latest collection -HTMLSCRIPT-</h2>
-        <div class="container " style="text-align:center;">
+    <section class="">
+        <h2 style="margin-bottom:7rem;">Elegant and Timeless: The *creative name* Collection</h2>
+        <div class="container " style="text-align:center; margin-top: 2rem;">
             <div class="row card-row  " id="collection" style="">
                 <div id="loading--products"><img src="https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif" alt="" height="50px"srcset=""></div>
             </div>
         </div>
     </section>
-    <section>
-        <h2>Become a partner now</h2>
+    <section class="mission">
+        <h2>Our mission</h2>
+        <div>
+            Our mission is to create a diverse collection of high-quality jewelry that fits all, that empowers individuals to express themselves through fashion. We strive to design pieces that not only enhance one's personal style but also evoke confidence and individuality. We are dedicated to providing exceptional customer service, and work to create a satisfying shopping experience. Our goal is to be a dependable and inclusive choice for those seeking to elevate their style.
+        </div>
+    
     </section>
 </div>
 </body>
+<footer class="footer" >
+    <div class="footer-wrapper"><div class="">
+
+        <div class="">
+            <span>ABOUT</span>
+            <ul>
+                <li>Our mission</li>
+                <li>About us</li>
+
+            </ul>
+        </div>
+        </div>
+        <div class="">
+            <span>SHOP</span>
+            <ul>
+                <li>Shop men's</li>
+                <li>Shop women's</li>
+            </ul>
+        </div>
+        <div class="">
+            <span>CONTACT</span>
+            <ul>
+                <li>FAQ</li>
+                <li>Contact us</li>
+                <li>Give us your feedback!</li>
+                <li>Partners</li>
+            </ul>
+        </div>
+    </div>
+    <div class="copyright">Copyright © Brand, Inc.</div>
+</footer>
 </html>
 
 <script>
@@ -75,7 +113,7 @@
         (`<div class="col productCard remove--anchor-styles">
             <a href="/productpage.html?product=${elem.id}">
                 <div class="card card--width">
-                    <img class="card-img-top img-fluid productImage " src=${elem.image} alt="Card image cap"/>
+                    <div class="img-container"><img class=" product-image" src=${elem.image} alt="Card image cap"/></div>
                     <div class="card-block ">
                         <p class="card-text"><small class="text-muted">${elem.category}</small></p>
                         <h4 class="card-title">${elem.title}</h4>
