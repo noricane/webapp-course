@@ -290,6 +290,7 @@ justify-content: center;
 }
 
 .solid{
+    margin-top: 5rem;
     display: absolute;
     left: 0;
 
