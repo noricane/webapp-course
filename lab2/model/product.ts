@@ -15,6 +15,7 @@ export class Product{
         this.price = price;
         this.category =category;
         this.in_stock = in_stock;
+
         this.price_factor = price_factor;
         this.images = [];
         url.forEach(e => this.images.push(e))
