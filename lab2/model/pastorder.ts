@@ -1,5 +1,5 @@
 export type multiProduct={
-    id: number; //product id
+    id: number; //product id 
     amount: number;
 }
 

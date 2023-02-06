@@ -6,12 +6,12 @@ export type paymentInformation={
     isencrypted:boolean; //dont forger to check dis
 }
 export class Product{
-    id:number;
+    id:number; // different id for different sizes? multiProduct is a failed type without this.
     name:string;
     description:string;
     price:number;
-    category:string;
-    in_stock:boolean;
+    category:string;//Remove? sneakers only I'm thnking
+    in_stock:boolean; // Thinking, remove this, keep array of sizes, if len == 0, not in stock.
     price_factor:number; //if factor < 1 then product is on sale
     images: string[];//array of urls.
 

@@ -1,7 +1,7 @@
 import { address } from "./adress";
 
 export class user {
-    id: number;
+    id: number; 
     name: string;
     email: string;
     phonenumber: string;
