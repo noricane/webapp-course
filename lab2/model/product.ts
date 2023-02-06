@@ -1,3 +1,10 @@
+export type paymentInformation={
+    card_holder:string; //Encrypt
+    card_number:string;//Encrypt
+    csv_number:string; //can start with 0? //Encrypt
+    expiration_date:string; //Encrypt
+    isencrypted:boolean; //dont forger to check dis
+}
 export class Product{
     id:number;
     name:string;
