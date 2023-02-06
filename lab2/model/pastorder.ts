@@ -1,4 +1,4 @@
-export type multiProduct{
+export type multiProduct={
     id: number; //product id
     amount: number;
 }
@@ -7,4 +7,9 @@ export type multiProduct{
 export class pastorder{
     id:number;
     items: multiProduct[];
+
+    constructor(id:number,items:multiProduct[]){
+        this.id = id;
+        this.items = items;
+    }
 }
