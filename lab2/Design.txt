@@ -13,7 +13,8 @@ Design
    response should it send back to the browser?
 
    POST request to /products/ with proper description given 
-   that it's not duplicate will return 201 Created response
+   that it's not duplicate will return 201 Created response, 
+   302 Found if alreadyy present and 400 bad request if request is wrong
    
    GET  request from /products/ should get the list of all 
    products and send a 200 OK response

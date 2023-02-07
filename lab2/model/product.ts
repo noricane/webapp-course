@@ -1,3 +1,5 @@
+import { hashize } from "../utils";
+
 export type paymentInformation={
     card_holder:string; //Encrypt, How to hide encryption algorithm, .env var?
     card_number:string;//Encrypt
@@ -18,7 +20,7 @@ export class Product{
     images: string[];//array of urls.
 
     constructor(name:string, brand:string,description:string, color:string,price:number,category:string,in_stock:boolean,price_factor:number, ...url:string[]){
-        this.id = hashize(name);
+        this.id = hashize(brand.concat(name));//different brands may have the exact same modelname
         this.name =name;
         this.brand =brand;
         this.description =description;
