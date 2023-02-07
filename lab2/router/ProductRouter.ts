@@ -2,7 +2,7 @@ import { Product } from "../model/product";
 
 export interface IProductService {
     //Returns a list of all listed products
-    getProducts() : Promise<Array<Product>>;
+    getProducts() : Promise<Array<ProductCollection>>;
 
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
@@ -19,10 +19,15 @@ export interface IProductService {
 
 
 }
-export class ProductService implements IProductService{
-    products : Array<Product> = [];
+export type ProductCollection = {
+    id:number;//!Maybe hash model name instead, now the id of a color will depend on Date.now() not good
+    variations: Map<string,Product>;//{"red":{red sneaker}, "green":{green sneaker},... }
 
-    async getProducts(): Promise<Array<Product>> {
+}
+export class ProductService implements IProductService{
+    products : Array<ProductCollection> = [];
+
+    async getProducts(): Promise<Array<ProductCollection>> {
         return this.products;
     }
     addProduct(desc: Object): Promise<Product> {
