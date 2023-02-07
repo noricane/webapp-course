@@ -20,8 +20,10 @@ export interface IProductService {
 
 }
 export class ProductService implements IProductService{
-    getProducts(): Promise<Product[]> {
-        throw new Error("Method not implemented.");
+    products : Array<Product> = [];
+
+    async getProducts(): Promise<Array<Product>> {
+        return this.products;
     }
     addProduct(desc: Object): Promise<Product> {
         throw new Error("Method not implemented.");

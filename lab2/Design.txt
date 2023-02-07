@@ -1,10 +1,32 @@
 Design
 
-1. What classes and objects should exist in our model?
+1. Model - What classes and objects should exist in our model?
+---Did without sketching
 
-2. What operations do we need to perform on these entities?
+2. Services - What operations do we need to perform on these entities?
 
-3. Which requests should the server accept? 
+---Add product, remove product, restock product, get products,
+
+3. Controllers - Which requests should the server accept? 
    For each request, which of the operations we 
    identified in question 2 should it perform, and what 
    response should it send back to the browser?
+
+   POST request to /products/ with proper description given 
+   that it's not duplicate will return 201 Created response
+   
+   GET  request from /products/ should get the list of all 
+   products and send a 200 OK response
+
+   PUT request to /products/?id should update the stock of the product
+   given that the product exists and the request is sent in a correct way.
+   This will return a 200 OK response then, a 400 Bad Request if faulty request
+   and 404 Not Found if item is not found.
+
+   DELETE request /products/?id should remove the product
+   given that the product exists and the request is sent in a correct way.
+   This will return a 200 OK response then, a 400 Bad Request if faulty request
+   and 404 Not Found if item is not found.
+
+
+   
