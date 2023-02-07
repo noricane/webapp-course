@@ -6,7 +6,7 @@ export interface IProductService {
 
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
-    addProduct(desc:Object): Promise<Product>
+    addProduct(desc:Object): Promise<Product|{}>
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
