@@ -10,7 +10,7 @@ export interface IProductService {
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
-    restockProduct(id:number,amount:number): Promise<boolean>
+    restockProduct(id:number,size:string,amount:number): Promise<boolean>
 
     // Removes a product with the given id from stock,
     // and returns the removed Task object
@@ -20,6 +20,18 @@ export interface IProductService {
 
 }
 export class ProductService implements IProductService{
+    getProducts(): Promise<Product[]> {
+        throw new Error("Method not implemented.");
+    }
+    addProduct(desc: Object): Promise<Product> {
+        throw new Error("Method not implemented.");
+    }
+    restockProduct(id: number, size: string, amount: number): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+    removeProduct(id: number): Promise<Product> {
+        throw new Error("Method not implemented.");
+    }
 
 }
 
