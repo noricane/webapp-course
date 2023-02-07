@@ -1,5 +1,5 @@
 export type paymentInformation={
-    card_holder:string; //Encrypt
+    card_holder:string; //Encrypt, How to hide encryption algorithm, .env var?
     card_number:string;//Encrypt
     csv_number:string; //can start with 0? //Encrypt
     expiration_date:string; //Encrypt

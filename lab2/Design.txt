@@ -1,0 +1,10 @@
+Design
+
+1. What classes and objects should exist in our model?
+
+2. What operations do we need to perform on these entities?
+
+3. Which requests should the server accept? 
+   For each request, which of the operations we 
+   identified in question 2 should it perform, and what 
+   response should it send back to the browser?
