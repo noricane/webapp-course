@@ -3,7 +3,7 @@ import { Product } from "../model/product";
 
 export interface IProductService {
     //Returns a list of all listed products
-    getProducts() : Promise<Map<string,Map<string,Product>>>;
+    getProducts() : Promise<Map<string,Map<string,Product>>|Error>;
 
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
@@ -35,12 +35,27 @@ type productConstructor= {
     price_factor:number;
     url: string[];
 }
+
+export class ProductError{
+    code:number;
+    message:string;
+
+    constructor(code:number, message:string){
+        this.code = code;
+        this.message = message;
+    }
+}
 export class ProductService implements IProductService{
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
     products : Map<string,Map<string,Product>> = new Map();
 
-    async getProducts(): Promise<Map<string,Map<string,Product>>> {
-        return this.products; //Send an array of Map<string,product> instead?
+    async getProducts(): Promise<Map<string,Map<string,Product>>|ProductError> {
+        if(this.products.keys.length > 0){
+            return this.products; //Send an array of Map<string,product> instead?
+        }else{
+            return new ProductError("Empty") 
+        }
+            
     }
     async addProduct(desc: productConstructor): Promise<Product|Error> {   
         const {color} = desc;
@@ -80,7 +95,7 @@ export class ProductService implements IProductService{
                 return true
                 
             }else{
-                return new Error("Color not found")
+                return new ProductError("Color not found")
 
             }
         }
@@ -93,7 +108,7 @@ export class ProductService implements IProductService{
          this.products.delete(id)
          return query   
         }
-        return new Error("Bad request: id not found")
+        return new ProductError("Bad request: id not found")
     }
     async removeProductColor(id: string, color:string): Promise<Product|Error> {
         const query = this.products.get(id);
@@ -104,11 +119,11 @@ export class ProductService implements IProductService{
                 query.delete(color)
                 return color_query;
             }else{
-                return new Error("Bad request: Color not found")
+                return new ProductError("Bad request: Color not found")
 
             }
         }
-        return new Error("Bad request: product not found")
+        return new ProductError("Bad request: product not found")
     }
     
 }
