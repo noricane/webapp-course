@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { makeProductService } from "../service/ProductService";
+import { makeProductService, ProductError } from "../service/ProductService";
 import { Product } from "../model/product";
 
 const product_service = makeProductService();
@@ -13,10 +13,10 @@ product_router.get("/", async (
     try {
         const product = await product_service.getProducts();
         if(product instanceof Map<string, Map<string, Product>>){
-            res.status(200).send(product as Map<string, Map<string, Product>>);
+            res.status(200).send(product as Map<string, Map<string, Product>>);//Casting === bad??
         }else{
-            let err = (product as errorType)
-            res.status().send();
+            let err = (product as ProductError)//Casting === bad??
+            res.status(err.code).send(err.message);
             
         }
     } catch (e: any) {

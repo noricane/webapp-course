@@ -3,23 +3,23 @@ import { Product } from "../model/product";
 
 export interface IProductService {
     //Returns a list of all listed products
-    getProducts() : Promise<Map<string,Map<string,Product>>|Error>;
+    getProducts() : Promise<Map<string,Map<string,Product>>|ProductError>;
 
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
-    addProduct(desc:Object): Promise<Product|Error>
+    addProduct(desc:Object): Promise<Product|ProductError>
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
-    restockProduct(id: string, color:string, instructions : {size:number ,amount:number}): Promise<boolean|Error> 
+    restockProduct(id: string, color:string, instructions : {size:number ,amount:number}): Promise<boolean|ProductError> 
 
     // Removes a product with the given id from stock,
     // and returns the removed Map<string(id),Product> object
-    removeProduct(id:string): Promise<Map<string,Product>|Error> 
+    removeProduct(id:string): Promise<Map<string,Product>|ProductError> 
 
     // Removes a color within the given product from id from stock,
     // and returns the removed product object
-    removeProductColor(id: string, color:string): Promise<Product|Error> 
+    removeProductColor(id: string, color:string): Promise<Product|ProductError> 
 
 
 
