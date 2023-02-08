@@ -31,7 +31,7 @@ type productConstructor= {
     color:string;
     price:number;
     category:string;
-    in_stock:boolean;
+    stock:stockedSize[];
     price_factor:number;
     url: string[];
 }
@@ -44,7 +44,7 @@ export class ProductService implements IProductService{
     }
     async addProduct(desc: productConstructor): Promise<Product|Error> {   
         const {color} = desc;
-        const item = new Product(desc.name, desc.brand, desc.description, desc.color, desc.price, desc.category, desc.in_stock, desc.price_factor, ...desc.url);
+        const item = new Product(desc.name, desc.brand, desc.description, desc.color, desc.price, desc.category, desc.stock, desc.price_factor, desc.url);
 
         const findEntry = this.products.get(item.id);
         if(findEntry != null){
