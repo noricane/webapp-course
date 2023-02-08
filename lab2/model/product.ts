@@ -1,4 +1,4 @@
-import { hashize } from "../utils";
+import { hashize } from "../helper/utils";
 
 export type paymentInformation={
     card_holder:string; //Encrypt, How to hide encryption algorithm, .env var?
