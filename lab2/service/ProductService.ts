@@ -57,7 +57,7 @@ export class ProductService implements IProductService{
         }
             
     }
-    async addProduct(desc: productConstructor): Promise<Product|Error> {   
+    async addProduct(desc: productConstructor): Promise<Product|ProductError> {   
         const {color} = desc;
         const item = new Product(desc.name, desc.brand, desc.description, desc.color, desc.price, desc.category, desc.stock, desc.price_factor, desc.url);
 
@@ -65,7 +65,7 @@ export class ProductService implements IProductService{
         if(findEntry != null){
             if(findEntry.get(color)!=null){
                 //color exists
-                return new Error("Product already exists, did you mean to restock?")
+                return new ProductError("Product already exists, did you mean to restock?")
             }else{
                 findEntry.set(color,item)
                 return item
@@ -77,7 +77,7 @@ export class ProductService implements IProductService{
         
         
     }
-    async restockProduct(id: string, color:string, new_stock : stockedSize  ): Promise<true|Error> {
+    async restockProduct(id: string, color:string, new_stock : stockedSize  ): Promise<true|ProductError> {
         const {size, amount} = new_stock
         const query = this.products.get(id);
         
@@ -100,9 +100,9 @@ export class ProductService implements IProductService{
             }
         }
         
-        return new Error("Id not found")
+        return new ProductError("Id not found")
     }
-    async removeProduct(id: string):  Promise<Map<string,Product>|Error>  {
+    async removeProduct(id: string):  Promise<Map<string,Product>|ProductError>  {
         const query = this.products.get(id);
         if(query != null){
          this.products.delete(id)
@@ -110,7 +110,7 @@ export class ProductService implements IProductService{
         }
         return new ProductError("Bad request: id not found")
     }
-    async removeProductColor(id: string, color:string): Promise<Product|Error> {
+    async removeProductColor(id: string, color:string): Promise<Product|ProductError> {
         const query = this.products.get(id);
         if(query!=null){
             const color_query = query.get(color)
