@@ -110,7 +110,7 @@ export class ProductService implements IProductService{
     async restockProduct(id: string, color:string, new_stock : stockedSize  ): Promise<true|ProductError> {
         const {size, amount} = new_stock
         const query = this.products.get(id);
-        
+         
         if(query!=null){
             const color_query = query.get(color)
             if(color_query!=null){
