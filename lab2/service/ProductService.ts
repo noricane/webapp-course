@@ -1,5 +1,6 @@
 import { stockedSize } from './../model/product';
 import { Product } from "../model/product";
+import { productConstructor } from '../helper/utils';
 
 export interface IProductService {
     //Returns a list of all listed products
@@ -27,17 +28,6 @@ export interface IProductService {
 
 
 
-}
-type productConstructor= {
-    name:string;
-    brand: string;
-    description:string;
-    color:string;
-    price:number;
-    category:string;
-    stock:stockedSize[];
-    price_factor:number;
-    url: string[];
 }
 
 export class ProductError{
