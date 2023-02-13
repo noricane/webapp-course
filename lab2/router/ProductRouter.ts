@@ -112,8 +112,8 @@ product_router.post("/", async (
 })
 
 
-
-product_router.put("/", async (
+//TODO, is this good practice to have id outside url??
+product_ro uter.put("/", async (
     req: Request<{}, {}, {id:string, color:string,size:number, amount:number}>,
     res: Response<string>
 ) => {
@@ -137,24 +137,52 @@ product_router.put("/", async (
     }
 })
 
-
-product_router.delete("/:id", async (
-    req: Request<{}, {}, {id:string}>,
-    res: Response<string>
+//TODO, is this safe to have id in delete url??
+produ ct_router.delete("/:id", async (
+    req: Request<{id:string}, {}, {}>,
+    res: Response< Map<string, Product> | string>
 ) => {
     try {
-
+        const {id} = req.params;
+        if (typeof(id) != "string"){
+            res.status(400).send(`Bad DELETE call to ${req.originalUrl} --- fields do not adhere to restock api specification`);
+            return
+        }
+        const resp =  await product_service.removeProduct(id)
+        if(resp instanceof Map<string, Product>){
+            //Success, resp contains products!
+            res.status(200).send(resp);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
+            
+        }
     }
     catch (e: any) {
         res.status(500).send(e.message);
     }
 })
-
-product_router.delete("/:id/:color", async (
-    req: Request<{}, {}, {id:string, color:string}>,
-    res: Response<string>
+//TODO, is this safe to have id in delete url??
+product _router.delete("/:id/:color", async ( 
+    req: Request<{id:string, color:string}, {}, {}>,
+    res: Response<Product|string>
 ) => {
     try {
+        const {id, color} = req.params;
+        if (typeof(id) != "string" || typeof(color) != "string"){
+            res.status(400).send(`Bad DELETE call to ${req.originalUrl} --- fields do not adhere to restock api specification`);
+            return
+        }
+        const resp =  await product_service.removeProductColor(id,color)
+        if(resp instanceof Product){
+            //Success, resp contains products!
+            res.status(200).send(resp);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
+            
+        }
+
 
     }
     catch (e: any) {
