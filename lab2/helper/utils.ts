@@ -1,4 +1,4 @@
-import { stockedSize } from "../model/product";
+import { stockedSize } from "../src/model/product";
 
 const crypto = require('crypto');
 
@@ -7,7 +7,10 @@ export function hashize(str:string) {
     const hash = crypto.createHmac('sha256', normalized).digest('hex');
     return hash;
 }
-
+export enum UserType {
+    ADMIN,
+    CUSTOMER
+}
 
 /*ANY CHANGES IN CONSTRUCTOR MUST REFLECT IN FUNCTION BELOW "isProduct" */
 export type productConstructor= {

@@ -3,7 +3,8 @@ import { stockedSize } from './../model/product';
 import express, { Request, Response } from "express";
 import { makeProductService, ProductError } from "../service/ProductService";
 import { Product } from "../model/product";
-import { isProduct, productConstructor } from "../helper/utils";
+import { isProduct, productConstructor } from '../../helper/utils';
+
 
 const product_service = makeProductService();
 
@@ -113,7 +114,7 @@ product_router.post("/", async (
 
 
 //TODO, is this good practice to have id outside url??
-product_ro uter.put("/", async (
+product_router.put("/", async (
     req: Request<{}, {}, {id:string, color:string,size:number, amount:number}>,
     res: Response<string>
 ) => {
@@ -138,7 +139,7 @@ product_ro uter.put("/", async (
 })
 
 //TODO, is this safe to have id in delete url??
-produ ct_router.delete("/:id", async (
+product_router.delete("/:id", async (
     req: Request<{id:string}, {}, {}>,
     res: Response< Map<string, Product> | string>
 ) => {
@@ -163,7 +164,7 @@ produ ct_router.delete("/:id", async (
     }
 })
 //TODO, is this safe to have id in delete url??
-product _router.delete("/:id/:color", async ( 
+product_router.delete("/:id/:color", async ( 
     req: Request<{id:string, color:string}, {}, {}>,
     res: Response<Product|string>
 ) => {

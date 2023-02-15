@@ -1,6 +1,8 @@
 import { stockedSize } from './../model/product';
 import { Product } from "../model/product";
-import { productConstructor } from '../helper/utils';
+
+import { User } from '../model/user';
+import { productConstructor } from '../../helper/utils';
 
 export interface IProductService {
     //Returns a list of all listed products
@@ -26,8 +28,11 @@ export interface IProductService {
     // and returns the removed product object
     removeProductColor(id: string, color:string): Promise<Product|ProductError> 
 
+    addUser(): Promise<User|ProductError> //Change name of ProductError type?
+    removeUser(id:number): Promise<User|ProductError> 
 
-
+    addAdmin(): Promise<User|ProductError> //Change name of ProductError type?
+    removeAdmin(id:number): Promise<User|ProductError> 
 }
 
 export class ProductError{
@@ -39,6 +44,7 @@ export class ProductError{
         this.message = message;
     }
 }
+/* @ts-ignore */
 export class ProductService implements IProductService{
    
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
