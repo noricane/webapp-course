@@ -28,11 +28,11 @@ export interface IProductService {
     // and returns the removed product object
     removeProductColor(id: string, color:string): Promise<Product|ProductError> 
 
-    addUser(): Promise<User|ProductError> //Change name of ProductError type?
+ /*    addUser(): Promise<User|ProductError> //Change name of ProductError type?
     removeUser(id:number): Promise<User|ProductError> 
 
     addAdmin(): Promise<User|ProductError> //Change name of ProductError type?
-    removeAdmin(id:number): Promise<User|ProductError> 
+    removeAdmin(id:number): Promise<User|ProductError>  */
 }
 
 export class ProductError{
@@ -44,17 +44,18 @@ export class ProductError{
         this.message = message;
     }
 }
-/* @ts-ignore */
+
 export class ProductService implements IProductService{
    
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
     products : Map<string,Map<string,Product>> = new Map();
 
     async getProducts(): Promise<Map<string,Map<string,Product>>|ProductError> {
-        if(this.products.keys.length > 0){
+              
+        if(this.products.size > 0){
             return this.products; //Send an array of Map<string,product> instead?
         }else{
-            return new ProductError(204,"There are no products added yet") 
+            return new ProductError(404,"There are no products added yet") 
         }
             
     }

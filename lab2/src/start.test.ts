@@ -1,7 +1,9 @@
 import * as SuperTest from "supertest"
+import { productConstructor } from "../helper/utils"
+import { stockedSize } from "./model/product"
 
-import { productConstructor } from "./helper/utils"
-import { Product, stockedSize } from "./src/model/product"
+
+
 import { app } from "./start"
 
 

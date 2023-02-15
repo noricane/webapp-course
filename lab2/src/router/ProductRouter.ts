@@ -18,17 +18,21 @@ product_router.get("/", async (
         const resp = await product_service.getProducts();
 
         if(resp instanceof Map<string, Map<string, Product>>){
-            //Success, resp contains products!
+            //Success, resp contains products!           
             res.status(200).send(resp);
         }else{
             //Resp is of type ProductError
-            res.status(resp.code).send(resp.message);
+            const code: number = resp.code
+            const message: string = resp.message
+            res.status(code).send(message);
             
         }
     } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
+
+
 
 product_router.get("/:id", async (
     req: Request<{id:string}, {}, {}>,
@@ -54,7 +58,7 @@ product_router.get("/:id", async (
         res.status(500).send(e.message);
     }
 });
-
+/* 
 product_router.get("/:id", async (
     req: Request<{color:string}, {}, {id:string}>,
     res: Response<Product | string>
@@ -84,19 +88,23 @@ product_router.get("/:id", async (
         res.status(500).send(e.message);
     }
 });
-
+*/
 
 
 product_router.post("/", async (
-    req: Request<{}, {}, { description : productConstructor }>,
+    req: Request<{}, {}, { description : productConstructor  }>,
     res: Response<Product | string>
 ) => {
     try {
-        const description = req.body.description;
-        if (!isProduct(description)) {
+
+
+
+        
+        if (!isProduct(req.body.description)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description does not adhere to constructor for product`);
             return;
         }
+        const description: productConstructor= req.body.description;
 
         const resp = await product_service.addProduct(description);
         if(resp instanceof Product){
@@ -112,7 +120,7 @@ product_router.post("/", async (
     }
 })
 
-
+/* 
 //TODO, is this good practice to have id outside url??
 product_router.put("/", async (
     req: Request<{}, {}, {id:string, color:string,size:number, amount:number}>,
@@ -189,4 +197,4 @@ product_router.delete("/:id/:color", async (
     catch (e: any) {
         res.status(500).send(e.message);
     }
-})
+}) */
