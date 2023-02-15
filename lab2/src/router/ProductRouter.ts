@@ -58,7 +58,7 @@ product_router.get("/:id", async (
         res.status(500).send(e.message);
     }
 });
-/* 
+
 product_router.get("/:id", async (
     req: Request<{color:string}, {}, {id:string}>,
     res: Response<Product | string>
@@ -88,23 +88,21 @@ product_router.get("/:id", async (
         res.status(500).send(e.message);
     }
 });
-*/
+
 
 
 product_router.post("/", async (
-    req: Request<{}, {}, { description : productConstructor  }>,
+    req: Request<{}, {}, { productInformation : productConstructor  }>,
     res: Response<Product | string>
 ) => {
     try {
 
-
-
         
-        if (!isProduct(req.body.description)) {
+        if (!isProduct(req.body.productInformation)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description does not adhere to constructor for product`);
             return;
         }
-        const description: productConstructor= req.body.description;
+        const description: productConstructor= req.body.productInformation;
 
         const resp = await product_service.addProduct(description);
         if(resp instanceof Product){
@@ -120,7 +118,7 @@ product_router.post("/", async (
     }
 })
 
-/* 
+
 //TODO, is this good practice to have id outside url??
 product_router.put("/", async (
     req: Request<{}, {}, {id:string, color:string,size:number, amount:number}>,
@@ -197,4 +195,4 @@ product_router.delete("/:id/:color", async (
     catch (e: any) {
         res.status(500).send(e.message);
     }
-}) */
+}) 
