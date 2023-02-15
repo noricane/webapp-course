@@ -21,9 +21,9 @@ export type productConstructor= {
     price_factor:number;
     url: string[];
 }
-/* Check that object is of type productConstructor couldn't think of better way */
-{/* @ts-ignore complaining that arg is of any type, this is intended*/}
-export function isProduct(arg){
+/* Check that object is of type productConstructtor couldn't think of better way */
+
+export function isProduct(arg: any){
     let nameCheck:boolean    = arg?.name != null && typeof(arg.name)== "string"
     let brandCheck:boolean   = arg?.brand != null && typeof(arg.brand)== "string"
     let descCheck:boolean    = arg?.description != null && typeof(arg.description)== "string"
