@@ -4,34 +4,26 @@ import {Product} from '../model/product'
 export const shoes = function initShoes():Map<string,Map<string,Product>>{
     const map: Map<string,Map<string,Product>> = new Map();
     
+    const p1 = createProduct("Air Jordan 1 low","Nike","Royal Blue",1249);
+    const p2 = createProduct("Air Jordan 1 low","Nike","Celtic Green",1249);
+    const p3 = createProduct("Foam Runners","Yeezy","Sand",3495);
+    const p4 = createProduct("Foam Runners","Yeezy","MXT Moon Grey",3495);
     
-    
-    return null
+    const lp = [p1,p2,p3,p4]
+
+    lp.forEach[[akslhdkhjasd]]
+
+    return map
 }
 
 
 const createProduct = (name:string, brand: string, color: string, price: number):Product=>{
-    let luh: string = `{
-        "productInformation": {
-            "name": "Air Jordan 1 low",
-            "brand": "Nike",
-            "description": "Shoes",
-            "color": "Celtic Green",
-            "price": 1249,
-            "category": "low sneakers",
-            "stock": [
-                {
-                    "size": 42,
-                    "amount": 42
-                }
-            ],
-            "price_factor": 1,
-            "url": [
-                "url"
-            ]
+    const luh =  [
+        {
+            size: 42,
+            amount: 42
         }
-    }`
-    const p = new Product()
-    return 
+    ]
+    return new Product(name,brand,"Shoes",color,price,"Low Sneakers",luh,1,[`https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1131&q=80`])
 
 }
