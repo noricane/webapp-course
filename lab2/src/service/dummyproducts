@@ -1,0 +1,37 @@
+import { productConstructor } from '../../helper/utils';
+import {Product} from '../model/product'
+
+export const shoes = function initShoes():Map<string,Map<string,Product>>{
+    const map: Map<string,Map<string,Product>> = new Map();
+    
+    
+    
+    return null
+}
+
+
+const createProduct = (name:string, brand: string, color: string, price: number):Product=>{
+    let luh: string = `{
+        "productInformation": {
+            "name": "Air Jordan 1 low",
+            "brand": "Nike",
+            "description": "Shoes",
+            "color": "Celtic Green",
+            "price": 1249,
+            "category": "low sneakers",
+            "stock": [
+                {
+                    "size": 42,
+                    "amount": 42
+                }
+            ],
+            "price_factor": 1,
+            "url": [
+                "url"
+            ]
+        }
+    }`
+    const p = new Product()
+    return 
+
+}
