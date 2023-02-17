@@ -1,4 +1,4 @@
-import { productConstructor } from '../../helper/utils';
+import { normalizeString, productConstructor } from '../../helper/utils';
 import {Product} from '../model/product'
 
 export const shoes = function initShoes():Map<string,Map<string,Product>>{
@@ -11,7 +11,22 @@ export const shoes = function initShoes():Map<string,Map<string,Product>>{
     
     const lp = [p1,p2,p3,p4]
 
-    lp.forEach[[akslhdkhjasd]]
+    lp.forEach(e => {
+        const query = map.get(e.id)
+        if( query != null){
+            let elems: string[] = []
+            const newColor = normalizeString(e.color);
+            const innerQuery: Product | undefined =  query.get(newColor);
+            if( innerQuery != null){
+                query.set(newColor/**NORMALIZED STRING HERE */,e)
+                
+                return
+            }return
+
+        }
+        const init: [string, Product] = [normalizeString(e.color),e]
+        map.set(e.id,new Map([init]))
+    })
 
     return map
 }

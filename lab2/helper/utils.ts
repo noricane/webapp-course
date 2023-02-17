@@ -2,10 +2,12 @@ import { stockedSize } from "../src/model/product";
 
 const crypto = require('crypto');
 
+export function normalizeString(str: string){
+    return str.replace(/\s/g, '').toLowerCase();
+}
+
 export function hashize(str:string) {
-    const normalized = str.replace(/\s/g, '').toLowerCase();
-    const hash = crypto.createHmac('sha256', normalized).digest('hex');
-    return hash;
+    return crypto.createHmac('sha256', normalizeString(str)).digest('hex');
 }
 export enum UserType {
     ADMIN,
