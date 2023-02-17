@@ -1,5 +1,5 @@
 import { Hash } from 'crypto';
-import { UserType } from '../../helper/utils';
+import { UserType } from '../helper/utils';
 import { BaseUser } from './baseuser';
 export class Admin extends BaseUser{
     //API_KEY:string

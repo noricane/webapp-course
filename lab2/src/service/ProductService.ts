@@ -2,7 +2,8 @@ import { stockedSize } from './../model/product';
 import { Product } from "../model/product";
 
 import { User } from '../model/user';
-import { productConstructor } from '../../helper/utils';
+import { productConstructor } from '../helper/utils';
+import { initShoes } from './dummyproducts';
 
 export interface IProductService {
     //Returns a list of all listed products
@@ -48,7 +49,12 @@ export class ProductError{
 export class ProductService implements IProductService{
    
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
-    products : Map<string,Map<string,Product>> = new Map();
+    //products : Map<string,Map<string,Product>> = new Map();
+    products : Map<string,Map<string,Product>> = initShoes();
+    constructor(){
+        console.log("Initialized shoe collection",this.products);
+    }
+    
 
     async getProducts(): Promise<Map<string,Map<string,Product>>|ProductError> {
               

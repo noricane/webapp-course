@@ -1,7 +1,7 @@
-import { normalizeString, productConstructor } from '../../helper/utils';
+import { normalizeString, productConstructor } from '../helper/utils';
 import {Product} from '../model/product'
 
-export const shoes = function initShoes():Map<string,Map<string,Product>>{
+export function initShoes():Map<string,Map<string,Product>>{
     const map: Map<string,Map<string,Product>> = new Map();
     
     const p1 = createProduct("Air Jordan 1 low","Nike","Royal Blue",1249);

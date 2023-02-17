@@ -1,4 +1,4 @@
-import { UserType } from "../../helper/utils";
+import { UserType } from "../helper/utils";
 import { address } from "./adress";
 import { BaseUser } from "./baseuser";
 

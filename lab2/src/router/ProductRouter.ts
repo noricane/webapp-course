@@ -3,7 +3,7 @@ import { stockedSize } from './../model/product';
 import express, { Request, Response } from "express";
 import { makeProductService, ProductError } from "../service/ProductService";
 import { Product } from "../model/product";
-import { isProduct, productConstructor } from '../../helper/utils';
+import { isProduct, productConstructor } from '../helper/utils';
 
 
 const product_service = makeProductService();

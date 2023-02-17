@@ -1,4 +1,4 @@
-import { stockedSize } from "../src/model/product";
+import { stockedSize } from "../model/product";
 
 const crypto = require('crypto');
 
