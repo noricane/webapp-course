@@ -1,11 +1,23 @@
 Describe the data flow for this use case in the following form:
 When the app first starts, the user sees...
+    The top should be a navbar with relevant links and a hamburger button if screen is small.
+    The user should see a banner video or image wiht some sort of CTA.
+    The user should see a section of relevant or popular products after the banner.
+    Then some copyrighty things like zalando. Just repeating sections of different categories to give the customer ideas.
+    Then We come to the footer.
+    
+
 The frontend sends a [GET/PUT/...] request to the backend with body ...
+    GET needs either relevant products or popular products when start site.
 The backend returns a response with body ...
+    List of products
 The frontend displays ... to the user
+    grid of products
 The user performs the following input: ...
+    add to cart
 The frontend sends a [GET/PUT/...] request to the backend with body ...
 Etc.
+    session
 
 
 
