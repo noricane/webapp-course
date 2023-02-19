@@ -9,7 +9,10 @@ const Nav = () => {
   }
   return (
     <div className='w-screen  bg-stone-200 shadow-md  h-24 items-center flex text-zinc-800 font-bold'>
-      <video onClick={homeButtonHandler} src={'media/logohb.mp4'} muted playsInline draggable="false" autoPlay loop className='hover:cursor-pointer  h-24 utmd:mx-auto md:left-0 video mix-blend-darken'/>
+      <video onClick={homeButtonHandler}  muted playsInline draggable="false" autoPlay loop className='hover:cursor-pointer  h-24 utmd:mx-auto md:left-0 video mix-blend-darken'>
+        <source  src={'media/logohb.mp4'}  type="video/mp4" />
+      <p>Aesthetic video loop of logo</p>
+      </video>
       <div className='flex justify-center  h-24 items-center absolute w-screen '>
       <div className='left-0 mx-4 md:hidden absolute'><Hamburger toggled={isOpen} toggle={setOpen} /></div>
       <ul id="navLinks" className='flex utmd:hidden gap-8 mx-auto'>

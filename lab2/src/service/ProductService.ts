@@ -59,6 +59,7 @@ export class ProductService implements IProductService{
     async getProducts(): Promise<Map<string,Map<string,Product>>|ProductError> {
               
         if(this.products.size > 0){
+            console.log("Sending products",this.products);
             return this.products; //Send an array of Map<string,product> instead?
         }else{
             return new ProductError(404,"There are no products added yet") 

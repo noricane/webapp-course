@@ -12,14 +12,26 @@ export const product_router = express.Router();
 
 product_router.get("/", async (
     req: Request<{}, {}, {}>,
-    res: Response<Map<string, Map<string, Product>> | string>
+    res: Response<Map<string, Map<string, Product>> | string | JSON>
 ) => {
     try {
+        console.log("router, before");
         const resp = await product_service.getProducts();
-
+        console.log("router, after");
         if(resp instanceof Map<string, Map<string, Product>>){
-            //Success, resp contains products!           
-            res.status(200).send(resp);
+            console.log("Not empty,sending",resp);
+           
+            //Success, resp contains products! 
+            let res_obj = {}
+            Array.from(resp.entries()).forEach(e => {
+                const product = {}
+                Array.from(e.entries()).forEach(inner_e => {
+                Object.defineProperty(product, inner_e[0],inner_e[1] )
+                    
+                })
+                Object.defineProperty(res_obj, e[0],product )
+            })
+            res.status(200).send(JSON.stringify(res_obj));
         }else{
             //Resp is of type ProductError
             const code: number = resp.code
@@ -41,16 +53,21 @@ product_router.get("/:id", async (
     try {
         const { id } = req.params
         if(typeof(id) != "string"){
-        res.status(400).send("Bad GET request, id must be of type string");
-            
+            res.status(400).send("Bad GET request, id must be of type string");
         }
+        
         const resp = await product_service.getProduct(id);
-
+        
+        
         if(resp instanceof Map<string, Product>){
             //Success, resp contains products!
+
+            
             res.status(200).send(resp);
         }else{
             //Resp is of type ProductError
+            console.log("error");
+            
             res.status(resp.code).send(resp.message);
             
         }
