@@ -6,8 +6,11 @@ module.exports = {
   theme: {
     extend: {
       screens: {
+        'utxl': {'max':'1423px'},
+        'utlg': {'max':'1023px'},
         'utmd': {'max':'767px'},
-        'utxs': {'max':'480px'},
+        'utsm': {'max':'639px'},
+        'utxs': {'max':'479px'},
         'xs': {'min':'480px'},
       }
     },

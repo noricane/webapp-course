@@ -1,3 +1,4 @@
+import { toObject } from './../helper/utils';
 import { stockedSize } from './../model/product';
 
 import express, { Request, Response } from "express";
@@ -22,16 +23,10 @@ product_router.get("/", async (
             console.log("Not empty,sending",resp);
            
             //Success, resp contains products! 
-            let res_obj = {}
-            Array.from(resp.entries()).forEach(e => {
-                const product = {}
-                Array.from(e.entries()).forEach(inner_e => {
-                Object.defineProperty(product, inner_e[0],inner_e[1] )
-                    
-                })
-                Object.defineProperty(res_obj, e[0],product )
-            })
-            res.status(200).send(JSON.stringify(res_obj));
+            const res_obj = toObject(resp)
+            console.log("res_obj", res_obj);
+            
+            res.status(200).send(res_obj);
         }else{
             //Resp is of type ProductError
             const code: number = resp.code

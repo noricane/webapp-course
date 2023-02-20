@@ -1,4 +1,4 @@
-import { stockedSize } from "../model/product";
+import { Product, stockedSize } from "../model/product";
 
 const crypto = require('crypto');
 
@@ -45,3 +45,18 @@ export function isProduct(arg: any){
     }
     return true
 }
+
+
+/*
+ * Turn the map<String, Object> to an Object so it can be converted to JSON
+ */
+
+
+export const toObject = (map:any):any =>
+    Array.from( 
+        map.entries(), ([ k, v ]) =>
+            v instanceof Map
+                ? { key: k, value: toObject(v) }
+                : { key: k, value: v }
+    )
+  

@@ -6,11 +6,7 @@ import Grid from './components/structural/Grid';
 
  
 function App() {
-  if(true){
-    return (
-      <Grid />
- );
-  }
+ 
 
   return (
     <Layout />
