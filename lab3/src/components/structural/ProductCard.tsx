@@ -9,17 +9,17 @@ const ProductCard = () => {
   return (
      <li className="bg-stone-50 rounded-sm shadow-xl"><div className="h-96">
         aa</div>
-        <div className='h-30 max-h-30 px-3 py-2  bg-stone-50 border-t-2 border-stone-200'>
-            <span className='font-bold text-2xl  whitespace-nowrap max-h-4 text-ellipsis overflow-hidden '>title as getting very long</span>
-            <div className='flex justify-between my-2'>
-                <div className='flex flex-col'>
-
+        <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
+            <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, commodi! Aliquid, nisi. Sapiente, quisquam dicta qui nostrum sunt corporis est.</span>
+            <div className='flex items-center justify-between my-2'>
                 <Price price={price} pricefactor={pricefactor}/>
+
+
                
-                </div>
+
                 <div className='flex gap-2'>
-                    <button className='w-20 h-12 bg-stone-200 border-2 border-stone-300 rounded-lg shadow-sm hover:shadow-md hover:scale-110 transition-transform'>BUY</button>
-                    <button className='w-12 h-12 bg-stone-200 border-2 border-stone-300 rounded-lg shadow-sm hover:shadow-md hover:scale-110 transition-transform'><AiOutlineInfoCircle size={27.5}  className='fill-stone-500 ml-auto mr-auto' /></button>
+                    <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-500 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button>
+                    <button className='w-12 h-12 bg-stone-200 border-2 border-stone-300 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all'><AiOutlineInfoCircle size={27.5}  className='fill-stone-500 ml-auto mr-auto' /></button>
                 </div>
 
             </div>

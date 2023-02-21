@@ -5,7 +5,7 @@ const Layout = () => {
   return (
     <div className='min-h-screen bg-[#edeceb]'>
         <Nav />
-        {/* <Grid /> */}
+        <Grid />
     </div>
   )
 }
