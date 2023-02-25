@@ -17,8 +17,12 @@ export function initShoes():Map<string,Map<string,Product>>{
             let elems: string[] = []
             const newColor = normalizeString(e.color);
             const innerQuery: Product | undefined =  query.get(newColor);
-            if( innerQuery != null){
+            console.log("before innerqery");
+            
+            if( innerQuery == null){
                 query.set(newColor/**NORMALIZED STRING HERE */,e)
+                console.log("Added new color");
+                console.log("New map", query);
                 
                 return
             }return

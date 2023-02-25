@@ -1,30 +1,44 @@
-import React from "react";
-import Layout from "../components/Layout";
-import Grid from "../components/structural/Grid";
+import React, { useEffect, useState } from "react";
+import HomeHeader from "../components/Misc/HomeHeader";
+import Carousel from "../components/structural/Carousel";
+
+
+import { Product } from "../model/product";
 const Home = () => {
+  function getProducts(){
+    const item:Product = {
+      id:"luh",
+      name: "string",
+      brand: "string",
+      description: "string",
+      color: "string",
+      price: 10,
+      category: "string",
+      stock: [
+          {
+              size: 0,
+              amount: 0
+          }
+      ],
+      price_factor: 10,
+      images: [
+          "url"
+      ]
+    }
+    setProducts(prev => [...prev,item, item, item, item])
+  }
+  useEffect(()=>{
+    getProducts()
+  },[])
+  const [product, setProducts] = useState<Product[]>([]);
+
   return (
     <>
-      <div className="">
-        <div className="absolute h-[42rem] justify-center w-full flex flex-col">
-          <span className=" text-5xl text-stone-200  text-center font-extrabold w-full ">
-            Sneakers are our thing!
-          </span>
-          <span className="w-full justify-center flex gap-4 mt-4">
-            <button className=" text-xl w-36  text-center font-extrabold  bg-stone-200 ">
-              Browse
-            </button>
-            <button className=" text-xl w-48 h-12  text-center font-extrabold  bg-stone-200 ">
-              What's New?
-            </button>
-          </span>
-        </div>
-        <img
-          className="bg-black  w-screen h-[42rem] object-cover"
-          src={"media/jwall.jpg"}
-        ></img>
+      <div className="shadow-md">
+        <HomeHeader />
       </div>
-
-      <Grid />
+      <div className="h-[36rem] mb-4 bg-stone-800"><Carousel items={product}/></div>
+      
     </>
   );
 };

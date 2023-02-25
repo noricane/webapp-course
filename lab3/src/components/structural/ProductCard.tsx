@@ -18,8 +18,8 @@ const ProductCard = () => {
                
 
                 <div className='flex gap-2'>
-                    <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-500 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button>
-                    <button className='w-12 h-12 bg-stone-200 border-2 border-stone-300 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all'><AiOutlineInfoCircle size={27.5}  className='fill-stone-500 ml-auto mr-auto' /></button>
+                    <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button>
+                    <button className='w-12 h-12 bg-stone-200  rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all'><AiOutlineInfoCircle size={27.5}  className='fill-stone-500 ml-auto mr-auto' /></button>
                 </div>
 
             </div>
