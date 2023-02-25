@@ -19,7 +19,9 @@ body {
 }
 
 /* --------------- Adding CSS that's non-included in Tailwind Here --------------- */
-
+html {
+  -webkit-tap-highlight-color: transparent;
+}
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
