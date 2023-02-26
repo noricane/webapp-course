@@ -6,7 +6,7 @@ import Home from './pages/Home';
 
  
 function App(props:any) {
- 
+  
 
   return (
     <Home/>
@@ -14,3 +14,5 @@ function App(props:any) {
 }
 
 export default App;
+
+

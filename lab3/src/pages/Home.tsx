@@ -25,19 +25,28 @@ const Home = () => {
           "url"
       ]
     }
-    setProducts(prev => [...prev,item, item, item, item])
+    setProducts(prev => [...prev,item, item, item, item, item, item, item, item,])
   }
+  const [product, setProducts] = useState<Product[]>([]);
+
   useEffect(()=>{
     getProducts()
+    
+    
   },[])
-  const [product, setProducts] = useState<Product[]>([]);
+  useEffect(()=>{
+    console.log(product);
+    
+    
+  },[product])
+
 
   return (
     <>
       <div className="shadow-md">
         <HomeHeader />
       </div>
-      <div className="h-[36rem] mb-4 bg-stone-800"><Carousel items={product}/></div>
+      <div className="h-[36rem] mb-4 bg-stone-800 "><Carousel items={product}/></div>
       
     </>
   );
