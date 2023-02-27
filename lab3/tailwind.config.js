@@ -5,6 +5,7 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily:{'oswald':['Oswald','sans-serif']},
       screens: {
         'utxl': {'max':'1423px'},
         'utlg': {'max':'1023px'},
