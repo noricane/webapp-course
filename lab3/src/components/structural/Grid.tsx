@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { config } from '../../model/config'
 import ProductCard from './ProductCard'
 const Grid = () => {
     const [list,setList] = useState<any[]>([])
@@ -7,7 +8,7 @@ const Grid = () => {
         async function getTasks(){
             console.log("Before get");
             
-            const resp =  await axios.get("http://localhost:8080/product")
+            const resp =  await axios.get(`${config.URL}/product`)
 
             setList(prev => [...prev,resp.data])
         }
