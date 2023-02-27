@@ -61,10 +61,10 @@ const Home = () => {
        <form action="">
        <span>
        <label htmlFor="email" className="text-stone-50 font-bold"> Email </label>
-        <input id="email"  className="h-9 utlg:w-[90%] w-96 bg-stone-900 border-2 border-stone-300 text-white p-2" type="text" placeholder="Enter your email" />
+        <input id="email"  className="h-9 utlg:w-[90%] w-96 bg-stone-900 border-2 border-stone-300 text-white p-2" type="email" placeholder="Enter your email" />
 
-       </span>
-       <button>Subscribe</button>
+       </span> <br />
+       <button className="mt-4 hover:bg-stone-900 h-12 w-32 border active:bg-stone-50 active:text-stone-900">Subscribe</button>
        </form>
         </div>
       <img
