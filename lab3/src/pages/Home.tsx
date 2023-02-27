@@ -58,11 +58,14 @@ const Home = () => {
         <h1 className="font-bold text-white font-oswald text-xl">SIGN UP TO OUR NEWS LETTER</h1></span>
         <div>Sign up to our newsletter to get the latest and greatest! <br />
           Never miss out on exclusive offers, latest releases and hot sneaker news!</div>
+       <form action="">
        <span>
        <label htmlFor="email" className="text-stone-50 font-bold"> Email </label>
         <input id="email"  className="h-9 utlg:w-[90%] w-96 bg-stone-900 border-2 border-stone-300 text-white p-2" type="text" placeholder="Enter your email" />
 
        </span>
+       <button>Subscribe</button>
+       </form>
         </div>
       <img
         style={{left:300}}
