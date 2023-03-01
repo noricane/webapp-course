@@ -11,9 +11,10 @@ const Home = () => {
       name: "string",
       brand: "string",
       description: "string",
-      color: "string",
+      color: "Blud Red",
+      generalColor:"red",
       price: 10,
-      category: "string",
+      category: "string",isInStock:()=>false,
       stock: [
           {
               size: 0,
