@@ -2,7 +2,7 @@ import React from 'react'
 import Badge from '../Misc/Badge'
 import Price from '../Misc/Price'
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { GrCircleInformation } from "react-icons/gr";
+
 const ProductCard = () => {
     const price = 2000
     const pricefactor = 0.8
@@ -18,8 +18,8 @@ const ProductCard = () => {
                
 
                 <div className='flex gap-2'>
-                    <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button>
-                    <button className='w-12 h-12 bg-stone-200  rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all'><AiOutlineInfoCircle size={27.5}  className='fill-stone-500 ml-auto mr-auto' /></button>
+                    <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>EDIT</button>
+
                 </div>
 
             </div>
