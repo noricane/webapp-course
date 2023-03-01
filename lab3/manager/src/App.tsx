@@ -5,8 +5,8 @@ import Login from './pages/Login';
 function App() {
   return (
     <div className="">
-      {/* <Dashboard></Dashboard> */}
-      {<Login></Login>}
+      {<Dashboard></Dashboard>}
+      {/* {<Login></Login>} */}
     </div>
   );
 }
