@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Router } from 'react-router'
 import {Twirl as Hamburger} from 'hamburger-react'
 import ResponsiveMenu from '../Misc/ResponsiveMenu'
+import { Link } from 'react-router-dom'
 const Nav = () => {
   const [isOpen, setOpen] = useState(false)
  
@@ -24,10 +25,11 @@ const Nav = () => {
       <div className='left-0 mx-4 md:hidden absolute'><Hamburger toggled={isOpen} toggle={setOpen} /></div>
       <ul id="navLinks" className='flex utmd:hidden gap-7  relative z-10 mx-auto'>
       
-        <li>Home</li>
-        <li>Categories</li>
-        <li>What's New?</li>
-        <li>Member's Club</li>
+        <li><Link to={'/'}>Home</Link></li>
+        <li><Link to={'/browse'}>Browse</Link></li>
+        <li><Link to={'/news'}>What's New?</Link></li>
+        <li><Link to={'/membersclub'}>Member's Club</Link></li>
+       
         
       </ul>
       

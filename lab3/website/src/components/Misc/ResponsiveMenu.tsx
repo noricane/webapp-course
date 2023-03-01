@@ -10,7 +10,7 @@ const ResponsiveMenu = (props:any) => {
     
 
     <a rel="noreferrer" href="https://www.louvre.fr/en/visit" target={"_blank"}>Home</a>
-    <a rel="noreferrer" href="https://www.louvre.fr/en/explore" target={"_blank"}>Categories</a>
+    <a rel="noreferrer" href="https://www.louvre.fr/en/explore" target={"_blank"}>Browse</a>
     <a rel="noreferrer" href="https://www.louvre.fr/en/what-s-on" target={"_blank"}>What&apos;s New?</a>
     <a rel="noreferrer" href="https://www.louvre.fr/en/what-s-on" target={"_blank"}>Member&apos;s Club</a>
     <a href='/' className='sm:hidden hover:bg-stone-200 hover:text-black w-24 self-center bg-stone-900 p-1 border-stone-200 border-4'>Sign Up</a>
