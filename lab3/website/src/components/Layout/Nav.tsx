@@ -8,7 +8,8 @@ const Nav = () => {
   const navigate = useNavigate()
   
   const homeButtonHandler = (e:React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
-    e?.preventDefault();
+    e.preventDefault();
+
     console.log("clicked video");
     
     //router push home
@@ -21,7 +22,7 @@ const Nav = () => {
       </div>
       <div className='w-screen  bg-stone-200 shadow-md  h-24 items-center flex text-zinc-800 font-bold'>
       
-      <video onClick={homeButtonHandler}  muted playsInline draggable="false" autoPlay loop className='hover:cursor-pointer  h-24 w-auto utmd:mx-auto md:left-0 video mix-blend-darken'>
+      <video onClick={homeButtonHandler}  muted playsInline draggable="false" autoPlay loop className='hover:cursor-pointer  relative z-10 h-24 w-auto utmd:mx-auto md:left-0 mix-blend-darken'>
         <source  src={'media/logohb.mp4'}  type="video/mp4" />
       <p>Aesthetic video loop of logo</p>
       </video>
