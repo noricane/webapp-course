@@ -2,7 +2,7 @@ import React from 'react'
 
 const Account = () => {
   return (
-    <div>Account</div>
+    <div className='min-h-[60vh]'>Account</div>
   )
 }
 

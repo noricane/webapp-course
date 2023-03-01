@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Router } from 'react-router'
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import {Twirl as Hamburger} from 'hamburger-react'
 import ResponsiveMenu from '../Misc/ResponsiveMenu'
-import { Link } from 'react-router-dom'
+
 const Nav = () => {
   const [isOpen, setOpen] = useState(false)
  
@@ -12,7 +12,7 @@ const Nav = () => {
     //router push home
   }
   return (
-    <div>
+    <nav>
       <div className='w-full h-8 bg-stone-800 flex items-center justify-center font-semibold text-stone-200'>
         Free Shipping for Members
       </div>
@@ -24,11 +24,13 @@ const Nav = () => {
       <div className='flex justify-center  h-24 items-center absolute w-screen '>
       <div className='left-0 mx-4 md:hidden absolute'><Hamburger toggled={isOpen} toggle={setOpen} /></div>
       <ul id="navLinks" className='flex utmd:hidden gap-7  relative z-10 mx-auto'>
-      
+      <Router>
+
         <li><Link to={'/'}>Home</Link></li>
         <li><Link to={'/browse'}>Browse</Link></li>
         <li><Link to={'/news'}>What's New?</Link></li>
-        <li><Link to={'/membersclub'}>Member's Club</Link></li>
+      <li><Link to={'/membersclub'}>Member's Club</Link></li>
+      </Router>
        
         
       </ul>
@@ -45,7 +47,7 @@ const Nav = () => {
 
     <ResponsiveMenu openState={isOpen} setOpenState={setOpen} />
 
-    </div>
+    </nav>
   )
 }
 

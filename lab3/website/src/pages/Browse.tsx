@@ -2,7 +2,7 @@ import React from 'react'
 
 const Browse = () => {
   return (
-    <div>Browse</div>
+    <div className=' min-h-[60vh]'>Browse</div>
   )
 }
 

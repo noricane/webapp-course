@@ -8,16 +8,18 @@ import Home from './pages/Home';
 
 
  
-function App(props:any) {
-  
+function App() {
+  /* <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/browse" element={<Browse/>}/>
+          <Route path="/account" element={<Account/>}/>
+        </Routes>
+      </BrowserRouter> */
 
   return (
+    <Home />
     
-    <Routes>
-      <Route path="/" element={<Home/>}/>
-      <Route path="/browse" element={<Browse/>}/>
-      <Route path="/account" element={<Account/>}/>
-    </Routes>
 );
 }
 
