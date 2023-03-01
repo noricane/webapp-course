@@ -24,13 +24,13 @@ const Nav = () => {
       <div className='flex justify-center  h-24 items-center absolute w-screen '>
       <div className='left-0 mx-4 md:hidden absolute'><Hamburger toggled={isOpen} toggle={setOpen} /></div>
       <ul id="navLinks" className='flex utmd:hidden gap-7  relative z-10 mx-auto'>
-      <Router>
+
 
         <li><Link to={'/'}>Home</Link></li>
         <li><Link to={'/browse'}>Browse</Link></li>
         <li><Link to={'/news'}>What's New?</Link></li>
       <li><Link to={'/membersclub'}>Member's Club</Link></li>
-      </Router>
+
        
         
       </ul>

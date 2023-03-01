@@ -5,38 +5,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Layout from "./components/Layout/Layout";
 import { BrowserRouter } from "react-router-dom";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import Home from "./pages/Home";
-import Browse from "./pages/Browse";
-import Account from "./pages/Account";
-import NotFound from "./pages/NotFound";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home/>,
-  },{
-    path: "/browse",
-    element: <Browse/>,
-  },{
-    path: "/account",
-    element: <Account/>,
-  },{
-    path:"*",
-    element: <NotFound />
-  }
-]);
+
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Layout>
-      <RouterProvider router={router} />
-    </Layout>
+    <BrowserRouter>
+      <Layout>
+        <App />
+      </Layout>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
