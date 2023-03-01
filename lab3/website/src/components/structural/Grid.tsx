@@ -12,9 +12,12 @@ const Grid = () => {
             const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`)
             console.log("Data",data);
             
-            Array.from(data.values()).forEach(({value}:{value:any[]}) => {
-
-              console.log("val", e.value)
+            Array.from(data.values()).forEach((e:any) => {
+              
+              e.value.forEach((element:any) => {
+                arr.push(element.value)
+                
+              })
               
                            
             })
