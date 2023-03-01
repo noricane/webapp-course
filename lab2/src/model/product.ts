@@ -1,3 +1,4 @@
+import { GENERALCOLOR } from './../helper/utils';
 import { hashize } from "../helper/utils";
 
 export type paymentInformation={
@@ -18,6 +19,7 @@ export class Product{
     brand: string;
     description:string;
     color:string;
+    generalColor:GENERALCOLOR;
     price:number;
     category:string;//Remove? sneakers only I'm thnking
     stock:stockedSize[]; 
@@ -28,12 +30,13 @@ export class Product{
         return !(this.stock.length == 0)
     }
 
-    constructor(name:string, brand:string,description:string, color:string,price:number,category:string,stock:stockedSize[],price_factor:number, url:string[]){
+    constructor(name:string, brand:string,description:string, color:string,generalColor:GENERALCOLOR,price:number,category:string,stock:stockedSize[],price_factor:number, url:string[]){
         this.id = hashize(brand.concat(name));//different brands may have the exact same modelname
         this.name =name;
         this.brand =brand;
         this.description =description;
         this.color =color;
+        this.generalColor = generalColor
         this.price = price;
         this.category =category;
         this.stock = []

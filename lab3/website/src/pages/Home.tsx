@@ -22,7 +22,7 @@ const Home = () => {
       ],
       price_factor: 10,
       images: [
-          "url"
+          "https://cdn.shopify.com/s/files/1/0367/8922/3483/products/Sneaker_1800x1200.png?v=1662223200"
       ]
     }
     setRecommended(prev => [...prev,item, item, item, item, item, item, item, item,])
@@ -52,7 +52,12 @@ const Home = () => {
         <h1 className="text-stone-50 text-2xl text-center relative font-bold top-8 font-oswald"> P O P U L A R &nbsp; P R O D U C T S</h1>
        <div className="relative top-16 "> <Carousel items={recommended}/></div>
         </div>
-      <div className="text-center flex justify-center items-center text-stone-50 font-mono  flex-col">
+      <div className="text-center h-[40rem] flex justify-center items-center text-stone-50 font-mono  flex-col">
+      <img
+        style={{left:300}}
+          className="bg-stone-300  h-full opacity-80  w-screen object-cover"
+          src={"media/scrollshoes.png"}
+        />
       <div className="py-8 utlg:w-[90vw] w-[50rem] gap-4 flex-col flex justify center absolute bg-stone-700 mx-auto utlg:px-8 p-4">
        <span> <h2 className="font-bold text-white font-oswald ">KEEP YOURSELF UPDATED!</h2>
         <h1 className="font-bold text-white font-oswald text-xl">SIGN UP TO OUR NEWS LETTER</h1></span>
@@ -67,11 +72,7 @@ const Home = () => {
        <button className="mt-4 hover:bg-stone-900 h-12 w-32 border active:bg-stone-50 active:text-stone-900">Subscribe</button>
        </form>
         </div>
-      <img
-        style={{left:300}}
-          className="bg-stone-300 relate   w-screen h-[42rem] object-cover"
-          src={"media/scrollshoes.png"}
-        />
+      
         
       </div>
 

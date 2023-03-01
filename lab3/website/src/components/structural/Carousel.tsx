@@ -28,7 +28,7 @@ const scrollSideways = (px:number) => {
         <motion.ul id='container'  ref={ref} style={{scrollSnapType: "x mandatory"}} className='px-24 relative flex list-none  gap-6  justify-between w-screen overflow-scroll scrollbar-hide'>
             {items.map(e => 
                 <div  style={{scrollSnapAlign:"center"}} className='grow w-96 [&>*]:w-96'  >
-                    <ProductCard/>
+                    <ProductCard map/>
                 </div>)}
         </motion.ul>
         <button onClick={()=>{scrollSideways(-384)}} className='absolute left-8 text-stone-600  rounded-md bg-stone-100 shadow-lg active:bg-stone-300 active:scale-105 transition-all duration-75'><BsArrowRightSquare size={"2.5rem"} style = {{transform: 'rotate(180deg)' }} /></button>
