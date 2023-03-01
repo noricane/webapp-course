@@ -7,9 +7,11 @@ const Grid = () => {
     const [list,setList] = useState<Product[]>([])
     useEffect(()=>{
         async function getTasks(){
-            console.log("Before get");
+            try {
+              console.log("Before get");
             let arr:Product[]= []
             const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`)
+            
             console.log("Data",data);
             
             Array.from(data.values()).forEach((e:any) => {
@@ -24,6 +26,10 @@ const Grid = () => {
             console.log("Arr",arr);
             
             setList(prev => [...prev,...arr])
+            } catch (error) {
+
+              
+            }
         }
         
         getTasks();

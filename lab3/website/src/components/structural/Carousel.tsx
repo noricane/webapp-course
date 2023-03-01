@@ -6,16 +6,16 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { config } from '../../model/config';
 
 
-const Carousel = ({items}:{items:Product[]}) => {
+const Carousel = ({items, id}:{items:Product[],id:string}) => {
   const ref = useRef<HTMLUListElement>(null);
   
   const [scrollX, setScrollX] = useState(0);
 
 const scrollSideways = (px:number) => {
-  let elemScroll:number | undefined = document.getElementById("container")?.scrollLeft
+  let elemScroll:number | undefined = document.getElementById(id)?.scrollLeft
  
   if(ref != null &&elemScroll!=null){
-    if (scrollX + px < 0 || scrollX + px > 384*items.length-2){return}
+    if (scrollX + px < 0 || scrollX + px > 384*items.length-1){return}
     ref.current?.scrollTo({
         top: 0,
         left: elemScroll + px,
@@ -26,7 +26,7 @@ const scrollSideways = (px:number) => {
 };
   return (
     <div className='flex h-full px-4 items-center justify-center' >
-        <motion.ul id='container'  ref={ref} style={{scrollSnapType: "x mandatory"}} className='px-24 relative flex list-none  gap-6  justify-between w-screen overflow-scroll scrollbar-hide'>
+        <motion.ul id={id}  ref={ref} style={{scrollSnapType: "x mandatory"}} className='px-24 relative flex list-none  gap-6  justify-between w-screen overflow-scroll scrollbar-hide'>
             {items.map(e => {
 
                 return <div  style={{scrollSnapAlign:"center"}} className='grow w-96 [&>*]:w-96'  >

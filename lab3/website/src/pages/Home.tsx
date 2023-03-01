@@ -51,7 +51,7 @@ const Home = () => {
       </div>
       <div className="h-[40rem]  bg-stone-800 ">
         <h1 className="text-stone-50 text-2xl text-center relative font-bold top-8 font-oswald"> P O P U L A R &nbsp; P R O D U C T S</h1>
-       <div className="relative top-16 "> <Carousel items={recommended}/></div>
+       <div className="relative top-16 "> <Carousel items={recommended} id="popular"/></div>
         </div>
       <div className="text-center h-[40rem] flex justify-center items-center text-stone-50 font-mono  flex-col">
       <img
@@ -79,7 +79,9 @@ const Home = () => {
 
       <div className="h-[40rem] flex flex-col justify-end mb-4 bg-stone-800  ">
         <h1 className="text-stone-50 text-2xl text-center relative font-bold top-8 font-oswald">S H O P &nbsp; O U R &nbsp; L A T E S T &nbsp; A R R I V A L S</h1>
-        <Carousel items={latest}/></div>
+        <Carousel items={latest} id="latest"/>
+        <span className="text-white"> {latest.length}</span>
+        </div>
 
       
     </>
