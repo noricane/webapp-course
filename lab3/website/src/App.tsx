@@ -3,6 +3,7 @@ import Account from "./pages/Account";
 import Browse from "./pages/Browse";
 
 import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/browse" element={<Browse />} />
       <Route path="/account" element={<Account />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
