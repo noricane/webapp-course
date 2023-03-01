@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, useNavigate } from 'react-router-dom';
 import {Twirl as Hamburger} from 'hamburger-react'
 import ResponsiveMenu from '../Misc/ResponsiveMenu'
 
 const Nav = () => {
   const [isOpen, setOpen] = useState(false)
- 
+  const navigate = useNavigate()
   
-  const homeButtonHandler = (e:any) => {
+  const homeButtonHandler = (e:React.MouseEvent<HTMLVideoElement, MouseEvent>) => {
     e?.preventDefault();
+    console.log("clicked video");
+    
     //router push home
+    navigate('/')
   }
   return (
     <nav>
@@ -17,7 +20,8 @@ const Nav = () => {
         Free Shipping for Members
       </div>
       <div className='w-screen  bg-stone-200 shadow-md  h-24 items-center flex text-zinc-800 font-bold'>
-      <video onClick={homeButtonHandler}  muted playsInline draggable="false" autoPlay loop className='hover:cursor-pointer  h-24 utmd:mx-auto md:left-0 video mix-blend-darken'>
+      
+      <video onClick={homeButtonHandler}  muted playsInline draggable="false" autoPlay loop className='hover:cursor-pointer  h-24 w-auto utmd:mx-auto md:left-0 video mix-blend-darken'>
         <source  src={'media/logohb.mp4'}  type="video/mp4" />
       <p>Aesthetic video loop of logo</p>
       </video>

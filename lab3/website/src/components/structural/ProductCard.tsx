@@ -34,6 +34,8 @@ const ProductCard = ({item}:Props //in some places we already have acces to the 
         getProducts(item)
     }
   }, [item]);
+  if(product == null ){return <div>Loading..</div>}
+
     const variantStyles = "[&>*>#variants]:hover:opacity-100 [&>*>#variants]:hover:bottom-[4rem] [&>*>#variants]:hover:h-[4rem]"
     const price = 2000
     const pricefactor = 0.8
