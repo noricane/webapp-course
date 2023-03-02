@@ -25,8 +25,8 @@ product_router.get("/", async (
             //Success, resp contains products! 
             const res_obj = toObject(resp)
             console.log("res_obj", res_obj);
-            
             res.status(200).send(res_obj);
+            
         }else{
             //Resp is of type ProductError
             const code: number = resp.code
@@ -57,8 +57,9 @@ product_router.get("/:id", async (
         if(resp instanceof Map<string, Product>){
             //Success, resp contains products!
 
+
             
-            res.status(200).send(resp);
+            res.status(200).send(toObject(resp));
         }else{
             //Resp is of type ProductError
             console.log("error");

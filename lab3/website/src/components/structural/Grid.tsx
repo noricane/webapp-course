@@ -10,7 +10,8 @@ const Grid = () => {
             try {
               console.log("Before get");
             let arr:Product[]= []
-            const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`)
+            const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`);
+            
             
             console.log("Data",data);
             

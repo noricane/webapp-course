@@ -20,11 +20,16 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
     const [product, setProduct] = useState<Product>()
     const [map, setMap] = useState<Map<string,Product>>()
     const getProducts = async (item:Product) => {
-        const {data} = await axios.get(`${config.URL}/products/${item.id}`)
 
-        
-        if (data instanceof Map<string,Product>){
-            setMap(data)
+        const {data}:{data:any[]} = await axios.get(`${config.URL}/product/${item.id}`)
+
+        const toMap = new Map<string,Product>()
+        data.forEach(e => toMap.set(e.key,e.value))
+        if (toMap instanceof Map<string,Product>){
+
+            console.log("toMap",toMap);
+            
+            setMap(toMap)
         }
     }
     
@@ -32,10 +37,16 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
     if (item instanceof MapAndColor) {
         setProduct(item.map.get(item.color));
         setMap(item.map)
+
+        
     } else {
+
+        
         setProduct(item);
         getProducts(item)
     }
+
+    
   }, [item]);
   if(product == null ){return <div>Loading..</div>}
 
