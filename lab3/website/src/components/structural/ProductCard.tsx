@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import Badge from '../Misc/Badge'
 import Price from '../Misc/Price'
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { GrCircleInformation } from "react-icons/gr";
 import { Product } from '../../model/product';
 import axios from 'axios';
 import { config } from '../../model/config';
 import ProductVariants from '../Misc/ProductVariants';
+import ProductLink from '../Logic/ProductLink';
 class MapAndColor {
     constructor(public map: Map<string, Product>, public color: string) {}
 }
@@ -17,6 +17,7 @@ interface Props {
 }
 const ProductCard = ({item,key}:Props //in some places we already have acces to the map. In some places we don't, if only product is passed, fetch data here.
 ) => {
+    const [currentImage, setCurrentImage] = useState<string>()
     const [product, setProduct] = useState<Product>()
     const [map, setMap] = useState<Map<string,Product>>()
     const getProducts = async (item:Product) => {
@@ -35,12 +36,14 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
     
   useEffect(() => {
     if (item instanceof MapAndColor) {
-        setProduct(item.map.get(item.color));
+        const product = item.map.get(item.color);
+        setProduct(product);
         setMap(item.map)
-
+        setCurrentImage(product?.images[0])
         
     } else {
 
+        setCurrentImage(item.images[0])
         
         setProduct(item);
         getProducts(item)
@@ -54,10 +57,12 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
     const price = 2000
     const pricefactor = 0.8
   return (
+     
+     
      <li key={key} className={`bg-stone-50 ${variantStyles} rounded-sm shadow-xl`}>
         <div className="h-96">
-        {product == null ? 'ERROR' : <img className='h-full w-full object-cover'  src={product.images[0]} alt="" />}
-        <ProductVariants color={item.color} map={map}/>
+        {product == null ? 'ERROR' :<ProductLink color={product.color} id={product.id}>  <img className='h-full w-full object-cover'  src={currentImage} alt="" /></ProductLink>}
+        <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>
         </div>
         <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
             <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>{product.name} </span>
@@ -72,8 +77,17 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
             </div>
         </div>
         </li>
+
      
   )
 }
 
 export default ProductCard
+
+
+
+
+
+
+
+

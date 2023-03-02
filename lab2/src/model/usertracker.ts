@@ -1,5 +1,5 @@
 export class UserTracker {
-    //todo
+    //todo - Track user behavior to be able to correctly provide suggestions
     asdkijhkhjasdhkjasdd
 
 
