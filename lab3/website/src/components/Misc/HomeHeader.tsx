@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const HomeHeader = () => {
   return (
@@ -9,10 +10,12 @@ const HomeHeader = () => {
           </span>
           <span className="w-full justify-center flex gap-4 mt-4">
             <button className=" text-xl w-36  text-center font-extrabold  bg-stone-200 ">
-              Browse
+              <Link to={"/browse"}>Browse</Link>
             </button>
             <button className=" text-xl w-48 h-12  text-center font-extrabold  bg-stone-200 ">
-              What's New?
+             
+              <Link to={"/news"}>What's New?</Link>
+
             </button>
           </span>
         </div>

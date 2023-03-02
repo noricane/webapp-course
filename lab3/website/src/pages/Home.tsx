@@ -68,6 +68,7 @@ const Home = () => {
        </span> <br />
        <button className="mt-4 hover:bg-stone-900 h-12 w-32 border active:bg-stone-50 active:text-stone-900">Subscribe</button>
        </form>
+       <span className="text-xs">By subscribing you agree to our Privacy Policy</span>
         </div>
       
         
@@ -76,7 +77,7 @@ const Home = () => {
       <div className="h-[40rem] flex flex-col justify-end mb-4 bg-stone-800  ">
         <h1 className="text-stone-50 text-2xl text-center relative font-bold top-8 font-oswald">S H O P &nbsp; O U R &nbsp; L A T E S T &nbsp; A R R I V A L S</h1>
         <Carousel items={latest} id="latest"/>
-        <span className="text-white"> {latest.length}</span>
+
         </div>
 
       
