@@ -37,11 +37,7 @@ const Home = () => {
     
     
   },[])
-  useEffect(()=>{
-    console.log(recommended);
-    
-    
-  },[recommended])
+  
 
 
   return (

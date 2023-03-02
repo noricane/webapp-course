@@ -15,7 +15,7 @@ const Price = (props:any) => {
 
   return (
 
-       <>{price}</>
+    <div className='w-auto [&>*]:h-2.5 mb-3 gap-2 flex flex-wrap px-0 font-semibold'> {`${price} ${config.CURRENCY}`}</div>
     
   )
 }

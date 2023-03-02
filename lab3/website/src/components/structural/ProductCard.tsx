@@ -12,16 +12,19 @@ class MapAndColor {
 }
   
 interface Props {
-    item:(MapAndColor|Product)
+    item:(MapAndColor|Product);
+    key:string,
 }
-const ProductCard = ({item}:Props //in some places we already have acces to the map. In some places we don't, if only product is passed, fetch data here.
+const ProductCard = ({item,key}:Props //in some places we already have acces to the map. In some places we don't, if only product is passed, fetch data here.
 ) => {
     const [product, setProduct] = useState<Product>()
     const [map, setMap] = useState<Map<string,Product>>()
     const getProducts = async (item:Product) => {
-        const resp = await axios.get(`${config.URL}/products/${item.id}`)
-        if (resp instanceof Map<string,Product>){
-            setMap(resp)
+        const {data} = await axios.get(`${config.URL}/products/${item.id}`)
+
+        
+        if (data instanceof Map<string,Product>){
+            setMap(data)
         }
     }
     
@@ -40,15 +43,16 @@ const ProductCard = ({item}:Props //in some places we already have acces to the 
     const price = 2000
     const pricefactor = 0.8
   return (
-     <li className={`bg-stone-50 ${variantStyles}  rounded-sm shadow-xl`}>
+     <li key={key} className={`bg-stone-50 ${variantStyles} rounded-sm shadow-xl`}>
         <div className="h-96">
-        {product == null ? 'ERROR' : <img className='h-full object-cover '  src={product.images[0]} alt="" />}
+        {product == null ? 'ERROR' : <img className='h-full w-full object-cover'  src={product.images[0]} alt="" />}
         <ProductVariants color={item.color} map={map}/>
         </div>
         <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
-            <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Est, commodi! Aliquid, nisi. Sapiente, quisquam dicta qui nostrum sunt corporis est.</span>
+            <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>{product.name} </span>
+            <br /><span className='text-stone-600 text-lg font-semibold'>{product.color}</span>
             <div className='flex items-center justify-between my-2'>
-                <Price price={price} pricefactor={pricefactor}/>
+                <Price price={product.price} pricefactor={product.price_factor}/>
 
                 <div className='flex gap-2'>
                     <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button>

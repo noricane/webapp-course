@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Product } from '../../model/product'
 interface Props {
     map: Map<string,Product>|undefined;
@@ -11,6 +11,9 @@ const ProductVariants = ({map,color}:Props) => {
     const arr = Array.from(map.values()).filter(e => e.color != color);
     const product = map.get(color)
     if(product!=null){arr.push(product)}
+
+
+    
   return (
     <PopUp items={arr.reverse()} />
   )
@@ -18,6 +21,8 @@ const ProductVariants = ({map,color}:Props) => {
 
 
 const PopUp = ({items}:{items:Product[]}) => {
+
+
     const error = items.length == 0;
     const mapItems = () => {return ''}
     return (
