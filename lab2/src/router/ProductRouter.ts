@@ -1,10 +1,11 @@
-import { toObject } from './../helper/utils';
+import { toObject, GENERALCOLOR } from './../helper/utils';
 import { stockedSize } from './../model/product';
 
 import express, { Request, Response } from "express";
-import { makeProductService, ProductError } from "../service/ProductService";
+
 import { Product } from "../model/product";
 import { isProduct, productConstructor } from '../helper/utils';
+import { makeProductService, ProductError } from '../service/ProductService';
 
 
 const product_service = makeProductService();
@@ -39,7 +40,87 @@ product_router.get("/", async (
     }
 });
 
+product_router.get("/", async (
+    req: Request<{color:string}, {}, {}>,
+    res: Response<Product[] | string>
+) => {
+    try {
+        
+        if(req.query.color == null){
 
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must exist...`);
+            //Shouldn't this be the previous method?
+            return
+        }
+        if(typeof req.query.color != "string" || !Object.values(GENERALCOLOR).includes(req.query.color.toUpperCase())){
+            //400 Bad request, make sure the color and id is of type string.
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value`);
+            return
+
+        }else{
+        const query:string = req.query.color
+        
+        let color: GENERALCOLOR = Object.values(GENERALCOLOR).indexOf(query.toUpperCase())
+        if (color as number == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value`);
+            return
+        }
+        const resp = await product_service.getColorProducts(color);
+
+        if(resp instanceof ProductError){
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
+        }else{
+            res.status(200).send(resp);
+            //Success, resp contains products!
+            
+        }
+    }
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
+
+product_router.get("/", async (
+    req: Request<{category:string}, {}, {}>,
+    res: Response<Product[] | string>
+) => {
+    try {
+        
+        if(req.query.color == null){
+
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must exist...`);
+            //Shouldn't this be the previous method?
+            return
+        }
+        if(typeof req.query.color != "string" /* || !Object.values(GENERALCOLOR).includes(req.query.color.toUpperCase()) */){ //TODO, make category enum
+            //400 Bad request, make sure the color and id is of type string.
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value`);
+            return
+
+        }else{
+        const query:string = req.query.color
+        
+        let color: GENERALCOLOR = Object.values(GENERALCOLOR).indexOf(query.toUpperCase())
+        if (color as number == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value`);
+            return
+        }
+        const resp = await product_service.getColorProducts(color);
+
+        if(resp instanceof ProductError){
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
+        }else{
+            res.status(200).send(resp);
+            //Success, resp contains products!
+            
+        }
+    }
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
 
 product_router.get("/:id", async (
     req: Request<{id:string}, {}, {}>,
@@ -72,6 +153,7 @@ product_router.get("/:id", async (
     }
 });
 
+
 product_router.get("/:id", async (
     req: Request<{color:string}, {}, {id:string}>,
     res: Response<Product | string>
@@ -82,6 +164,8 @@ product_router.get("/:id", async (
         }
         if(typeof req.query.color != "string" || typeof req.body.id != "string"){
             //400 Bad request, make sure the color and id is of type string.
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color and id query must be string`);
+            
         }else{
 
         const id: string = req.body.id

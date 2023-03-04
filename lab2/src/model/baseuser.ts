@@ -8,7 +8,7 @@ export abstract class BaseUser {
     abstract getType():string;
 
     constructor(id: number,name: string,email:string){
-        this.id = id;
+        this.id = Date.now();
         this.name = name;
         this.email = email;
         this.password = ""

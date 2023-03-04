@@ -4,7 +4,7 @@ export type multiProduct={
 }
 
 
-export class pastorder{
+export class PastOrder{
     id:number;
     items: multiProduct[];
 

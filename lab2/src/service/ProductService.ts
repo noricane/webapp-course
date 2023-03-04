@@ -1,4 +1,5 @@
-import { stockedSize } from './../model/product';
+import { GENERALCOLOR } from '../helper/utils';
+import { stockedSize } from '../model/product';
 import { Product } from "../model/product";
 
 import { User } from '../model/user';
@@ -13,9 +14,16 @@ export interface IProductService {
     getProduct(id:string) : Promise<Map<string,Product>|ProductError>;
     //Returns specific product and its color
     getProductColor(id:string,color:string) : Promise<Product|ProductError>;
+
+    //Returns lists of products in category
+    getCategoryProducts(category:string): Promise<Product[]|ProductError>//FChange to enum probably
+    //Returns lists of products with color
+    getColorProducts(color:GENERALCOLOR): Promise<Product[]|ProductError>
+
+
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
-    addProduct(desc:Object): Promise<Product|ProductError>
+    addProduct(desc:Object): Promise<Product|ProductError>//Technically equivalent to an addProductColor method
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
@@ -53,6 +61,28 @@ export class ProductService implements IProductService{
     products : Map<string,Map<string,Product>> = initShoes();
     constructor(){
         console.log("Initialized shoe collection",this.products);
+    }
+    async getCategoryProducts(category: string): Promise<ProductError | Product[]> {
+        const productList:Product[] = []
+        Array.from(this.products.values()).forEach(
+            innermap=> Array.from(innermap.values()).forEach
+            (product => {if(product.category == category){ productList.push(product) }}
+            ))
+        if (productList.length == 0) {
+            return new ProductError(404, "No Products found")
+        }
+        return productList
+    }
+    async getColorProducts(color: GENERALCOLOR): Promise<ProductError | Product[]> {
+        const productList:Product[] = []
+        Array.from(this.products.values()).forEach(
+            innermap=> Array.from(innermap.values()).forEach
+            (product => {if(product.generalColor == color){ productList.push(product) }}
+            ))
+        if (productList.length == 0) {
+            return new ProductError(404, "No Products found")
+        }
+        return productList
     }
     
 

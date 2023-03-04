@@ -14,3 +14,4 @@ export const app = express();
 app.use(express.json());
 app.use(cors());
 app.use("/product", product_router);
+//app.use("/product", user_router);

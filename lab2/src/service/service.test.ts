@@ -1,6 +1,6 @@
 import { GENERALCOLOR } from './../helper/utils';
 import { Product } from "../model/product";
-import { makeProductService } from "./ProductService";
+import { makeProductService } from "./UserService";
 
 
 const test_env = makeProductService()
