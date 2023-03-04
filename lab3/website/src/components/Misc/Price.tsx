@@ -5,7 +5,7 @@ import Badge from './Badge'
 const Price = (props:any) => {
     const price= props.price
     const pricefactor = props.pricefactor
-
+    if(price == -1 ){return <div className='font-bold text-stone-500'>Out of Stock</div>}
     if(price*pricefactor < price){
         return <div><div className='w-auto [&>*]:h-2.5 mb-3 gap-2 flex flex-wrap px-0 font-semibold'> 
         <span className='line-through text-stone-500'>{`${price}${config.CURRENCY} `}</span><span className=''>{`${price*pricefactor}${config.CURRENCY} `}</span>
