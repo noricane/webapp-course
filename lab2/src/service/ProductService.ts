@@ -66,7 +66,7 @@ export class ProductService implements IProductService{
         const productList:Product[] = []
         Array.from(this.products.values()).forEach(
             innermap=> Array.from(innermap.values()).forEach
-            (product => {if(product.category == category){ productList.push(product) }}
+            (product => {if(product.category.toLowerCase().replace(/\s/g, '').toLowerCase() == category.toLowerCase().replace(/\s/g, '').toLowerCase()){ productList.push(product) }}//While no enum this is fine
             ))
         if (productList.length == 0) {
             return new ProductError(404, "No Products found")
