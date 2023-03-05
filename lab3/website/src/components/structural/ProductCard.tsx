@@ -59,9 +59,9 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
   return (
      
      
-     <li key={key} className={`bg-stone-50 ${variantStyles} rounded-sm shadow-xl`}>
-        <div className="h-96">
-        {product == null ? 'ERROR' :<ProductLink color={product.color} id={product.id}>  <img className='h-full w-full object-cover'  src={currentImage} alt="" /></ProductLink>}
+     <li key={key} className={`bg-white ${variantStyles}  rounded-sm shadow-xl`}>
+        <div className="h-96  ">
+        {product == null ? 'ERROR' :<ProductLink color={product.color} id={product.id}> <img className='h-full w-full object-contain'  src={currentImage} alt="" />  </ProductLink>}
         <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>
         </div>
         <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>

@@ -48,7 +48,9 @@ product_router.get("/", async (
 
         if(resp instanceof ProductError){
             //Resp is of type ProductError
-            res.status(resp.code).send("ERROR OCCURED WHILE TRYING TO FIND COLOR: ".concat(resp.message));
+            res.status(resp.code).send(resp.message);
+            return
+
         }else{
 
             //Success, resp contains products!
@@ -63,17 +65,18 @@ product_router.get("/", async (
         const query:string = req.query.category
         
 
-        if (typeof query != "string"){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
+        let category: CATEGORY = Object.values(CATEGORY).indexOf(query.toUpperCase())
+        if (category as number == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- category query must be correct type`);
             return
         }
-        let category: CATEGORY = Object.values(CATEGORY).indexOf(query.toUpperCase())
 
         const resp = await product_service.getCategoryProducts(category);
 
         if(resp instanceof ProductError){
             //Resp is of type ProductError
-            res.status(resp.code).send("ERROR OCCURED WHILE TRYING TO FIND COLOR: ".concat(resp.message));
+            res.status(resp.code).send(resp.message);
+            return
         }else{
 
             //Success, resp contains products!
@@ -90,10 +93,13 @@ product_router.get("/", async (
         res.status(200).send( colorList)
     }else{
         res.status(200).send(categoryList)
+        
 
     }
     } catch (e: any) {
         res.status(500).send(e.message);
+        return
+
     }
 });
 
