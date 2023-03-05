@@ -12,7 +12,18 @@ const product_service = makeProductService();
 
 export const product_router = express.Router();
 
-
+product_router.get("/brands", async (
+    req: Request<{}, {}, {}>,
+    res: Response<string[]>,
+    next:Function
+) => {
+    try {
+        const resp = await product_service.getBrands()
+        res.status(200).send(resp)
+    }catch (e: any) {
+        res.status(500).send(e.message);
+    }
+}) 
 
 product_router.get("/", async (
     req: Request<{color:string,category:string}, {}, {}>,
@@ -307,3 +318,4 @@ product_router.delete("/:id/:color", async (
         res.status(500).send(e.message);
     }
 }) 
+

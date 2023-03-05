@@ -1,4 +1,4 @@
-import { CATEGORY } from './../helper/utils';
+import { CATEGORY, checkLatinCharacters } from './../helper/utils';
 import { GENERALCOLOR } from '../helper/utils';
 import { stockedSize } from '../model/product';
 import { Product } from "../model/product";
@@ -10,6 +10,9 @@ import { initShoes } from './dummyproducts';
 export interface IProductService {
     //Returns a list of all listed products
     getProducts() : Promise<Map<string,Map<string,Product>>|ProductError>;
+
+    //Returns list of brands
+    getBrands(): Promise<string[]>;
     
     //Return specific product
     getProduct(id:string) : Promise<Map<string,Product>|ProductError>;
@@ -60,7 +63,7 @@ export class ProductService implements IProductService{
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
     //products : Map<string,Map<string,Product>> = new Map();
     products : Map<string,Map<string,Product>> = initShoes();
-    brands: string[] = []
+    brands: string[] = ["Nike","Louis Vuitton","Adidas", "Maison Margiela"]
     constructor(){
         console.log("Initialized shoe collection",this.products);
     }
@@ -87,6 +90,9 @@ export class ProductService implements IProductService{
         return productList
     }
     
+    async getBrands(): Promise<string[]>{
+        return this.brands
+    }
 
     async getProducts(): Promise<Map<string,Map<string,Product>>|ProductError> {
               
@@ -134,12 +140,15 @@ export class ProductService implements IProductService{
                 return new ProductError(409,"Product already exists, did you mean to restock?")
             }else{
                 findEntry.set(color,item)
-                return item
             }
         }else{//Product doesn't exist
             this.products.set(item.id,new Map<string,Product>([[color,item]]))
-            return item;
         }
+        //If brand doesn't exist add it.
+        if(this.brands.filter(e => checkLatinCharacters(e) == checkLatinCharacters(desc.brand)).length == 0){
+            this.brands.push(desc.brand)
+        }
+        return item;
         
         
     }

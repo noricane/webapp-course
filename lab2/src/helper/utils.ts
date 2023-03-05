@@ -2,6 +2,9 @@ import { Product, stockedSize } from "../model/product";
 
 const crypto = require('crypto');
 
+export function checkLatinCharacters(str: string):string{
+    return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
+}
 export function normalizeString(str: string){
     return str.replace(/\s/g, '').toLowerCase();
 }
