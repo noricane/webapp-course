@@ -1,3 +1,4 @@
+import { CATEGORY } from './../helper/utils';
 import { GENERALCOLOR } from '../helper/utils';
 import { stockedSize } from '../model/product';
 import { Product } from "../model/product";
@@ -16,7 +17,7 @@ export interface IProductService {
     getProductColor(id:string,color:string) : Promise<Product|ProductError>;
 
     //Returns lists of products in category
-    getCategoryProducts(category:string): Promise<Product[]|ProductError>//FChange to enum probably
+    getCategoryProducts(category:CATEGORY): Promise<Product[]|ProductError>//FChange to enum probably
     //Returns lists of products with color
     getColorProducts(color:GENERALCOLOR): Promise<Product[]|ProductError>
 
@@ -62,11 +63,11 @@ export class ProductService implements IProductService{
     constructor(){
         console.log("Initialized shoe collection",this.products);
     }
-    async getCategoryProducts(category: string): Promise<ProductError | Product[]> {
+    async getCategoryProducts(category: CATEGORY): Promise<ProductError | Product[]> {
         const productList:Product[] = []
         Array.from(this.products.values()).forEach(
             innermap=> Array.from(innermap.values()).forEach
-            (product => {if(product.category.toLowerCase().replace(/\s/g, '').toLowerCase() == category.toLowerCase().replace(/\s/g, '').toLowerCase()){ productList.push(product) }}//While no enum this is fine
+            (product => {if(product.category == category){ productList.push(product) }}//While no enum this is fine
             ))
         if (productList.length == 0) {
             return new ProductError(404, "No Products found")

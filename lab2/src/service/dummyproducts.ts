@@ -1,4 +1,4 @@
-import { GENERALCOLOR } from './../helper/utils';
+import { GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { normalizeString, productConstructor } from '../helper/utils';
 import {Product} from '../model/product'
 
@@ -64,6 +64,6 @@ const createProduct = (name:string, brand: string, color: string,generalColor:GE
             amount: 42
         }
     ]
-    return new Product(name,brand,"Shoes",color,generalColor,price,"Low Sneakers",luh,.1,url)
+    return new Product(name,brand,"Shoes",color,generalColor,price,CATEGORY.LOW,luh,.1,url)
 
 }

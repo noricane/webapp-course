@@ -1,4 +1,4 @@
-import { toObject, GENERALCOLOR } from './../helper/utils';
+import { toObject, GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { stockedSize } from './../model/product';
 
 import express, { Request, Response } from "express";
@@ -67,7 +67,9 @@ product_router.get("/", async (
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- category query must be correct type`);
             return
         }
-        const resp = await product_service.getCategoryProducts(query);
+        let category: CATEGORY = Object.values(CATEGORY).indexOf(query.toUpperCase())
+
+        const resp = await product_service.getCategoryProducts(category);
 
         if(resp instanceof ProductError){
             //Resp is of type ProductError
