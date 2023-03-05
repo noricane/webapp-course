@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react'
 import Dropdown from '../components/Misc/Dropdown'
 import Card from '../components/Structural/Card'
 import Grid from '../components/Structural/Grid'
+import { ToArray } from '../helper/utils'
 import { config } from '../model/config'
+import { CATEGORY, GENERALCOLOR } from '../model/misc'
 import { Product } from '../model/product'
 
 
@@ -27,28 +29,22 @@ const Dashboard = () => {
   
   async function getBrands(){
     try {
-    let arr:string[]= []
-    const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product/brands`);
-    Array.from(data.values()).forEach((e:any) => {
-      e.value.forEach((element:any) => {
-        arr.push(element.value)
-      })        
-    })
-    console.log("Arr",arr);
-    setBrands(prev => [...prev,...arr])
+    const {data}:{data:string[]} =  await axios.get(`${config.URL}/product/brands`);
+    setBrands(prev => [...prev,...data])
     } catch (error) {
     }
 }
   useEffect(()=>{
     
     getTasks();   
+    getBrands();   
   },[])
   
   
   
-  const [brands, setBrands] = useState<string[]>(["rackowens"])
-  const [categories, setCategories] = useState<string[]>(["looasjkdhakjshdkahsdksajhtop"])
-  const [colors, setColors] = useState<string[]>(["bloo","red"])
+  const [brands, setBrands] = useState<string[]>([])
+  const categories:CATEGORY[] =[CATEGORY.LOW,CATEGORY.MID,CATEGORY.HIGH]
+  const colors :string[] = ToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   
   const [items, setItems] = useState<Product[]>([])
   const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {}
