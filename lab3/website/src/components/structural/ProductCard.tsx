@@ -23,13 +23,9 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
     const getProducts = async (item:Product) => {
 
         const {data}:{data:any[]} = await axios.get(`${config.URL}/product/${item.id}`)
-
         const toMap = new Map<string,Product>()
         data.forEach(e => toMap.set(e.key,e.value))
         if (toMap instanceof Map<string,Product>){
-
-            console.log("toMap",toMap);
-            
             setMap(toMap)
         }
     }
@@ -40,17 +36,12 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
         setProduct(product);
         setMap(item.map)
         setCurrentImage(product?.images[0])
-        
     } else {
-
         setCurrentImage(item.images[0])
-        
         setProduct(item);
         getProducts(item)
-    }
-
-    
-  }, [item]);
+    }    
+  }, []);
   if(product == null ){return <div>Loading..</div>}
 
     const variantStyles = "[&>*>#variants]:hover:opacity-100 [&>*>#variants]:hover:bottom-[4rem] [&>*>#variants]:hover:h-[4rem]"
