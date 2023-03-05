@@ -13,6 +13,12 @@ export enum UserType {
     ADMIN,
     CUSTOMER
 }
+export enum CATEGORIES {
+    LOW,
+    MID,
+    HIGH,
+}
+
 export enum GENERALCOLOR {
     BLACK,
     GRAY,
