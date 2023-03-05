@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Dropdown from '../components/Misc/Dropdown'
 import Card from '../components/Structural/Card'
 import Grid from '../components/Structural/Grid'
@@ -42,6 +42,11 @@ const Dashboard = () => {
   
   
   
+
+  const selectedBrand = useRef<string>()
+  const selectedCategory = useRef<string>()
+  const [selectedColor, setSelectedColor] = useState<GENERALCOLOR>()
+
   const [brands, setBrands] = useState<string[]>([])
   const categories:CATEGORY[] =[CATEGORY.LOW,CATEGORY.MID,CATEGORY.HIGH]
   const colors :string[] = ToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
@@ -65,11 +70,11 @@ const Dashboard = () => {
           <Button desc='Edit Batch' />
 
           <label htmlFor="brand">Brand:</label>
-          <Dropdown items={brands} />
+          <Dropdown selected={} items={brands} />
           <label htmlFor="category">Category:</label>
-          <Dropdown items={categories} />
+          <Dropdown selected={} items={categories} />
           <label htmlFor="category">Color:</label>
-          <Dropdown items={colors} />
+          <Dropdown selected={} items={colors} />
 
           <Button desc='Filter Selection' onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{}} />
 
