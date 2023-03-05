@@ -8,40 +8,22 @@ const Grid = () => {
     useEffect(()=>{
         async function getTasks(){
             try {
-              console.log("Before get");
-            let arr:Product[]= []
-            const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`);
-            
-            
-            console.log("Data",data);
-            
-            Array.from(data.values()).forEach((e:any) => {
-              
-              e.value.forEach((element:any) => {
-                arr.push(element.value)
-                
+              let arr:Product[]= []
+              const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`);
+              Array.from(data.values()).forEach((e:any) => {
+                e.value.forEach((element:any) => {
+                  arr.push(element.value)
+                })
               })
-              
-                           
-            })
-            console.log("Arr",arr);
-            
-            setList(prev => [...prev,...arr])
+              setList(prev => [...prev,...arr])
             } catch (error) {
-
               
             }
         }
         
-        getTasks();
-
-
-
-        
+        getTasks();       
     },[])
-    useEffect(()=>{ 
-      console.log(list)
-    },[list]);
+
   return (
     <div className="min-h-screen flex justify-center py-10">
   <div className="flex-1 utxs:max-w-xl utsm:max-w-md max-w-8xl mx-auto utxs:px-5  px-10">{/* utxs:px-2 */}
