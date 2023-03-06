@@ -26,7 +26,7 @@ product_router.get("/brands", async (
 }) 
 
 product_router.get("/", async (
-    req: Request<{color:string,category:string}, {}, {}>,
+    req: Request<{color:number,category:string}, {}, {}>,
     res: Response<Product[] | string>,
     next:Function
 ) => {
@@ -38,7 +38,7 @@ product_router.get("/", async (
             return next()
             
         }
-        if (req.query.color != null && (typeof req.query.color != "string" || !Object.values(GENERALCOLOR).includes(req.query.color.toUpperCase())) ||(req.query.category != null && typeof req.query.category != "string") ){
+        if (req.query.color == null && (typeof req.query.color != "string" || !Object.values(GENERALCOLOR).includes(req.query.color)) ||(req.query.category != null && typeof req.query.category != "string") ){
             //400 Bad request, make sure the color and id is of type string.
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- color/category query must be correct type and correct value ${req.query.color}`);
             return
@@ -48,11 +48,13 @@ product_router.get("/", async (
         if(req.query.color != null){
         
             
-        const query:string = req.query.color
+        const query = req.query.color
+        if(typeof(query) != "string"){return}
+        let color: GENERALCOLOR = Object.values(GENERALCOLOR).indexOf(query)
+        console.log("color",parseInt(query)  );
         
-        let color: GENERALCOLOR = Object.values(GENERALCOLOR).indexOf(query.toUpperCase())
-        if (color as number == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
-            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value`);
+        if (parseInt(query) == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value ${typeof(req.query.color)}`);
             return
         }
         const resp = await product_service.getColorProducts(color);

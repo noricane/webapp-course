@@ -29,7 +29,7 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
         data.forEach(e => toMap.set(e.key,e.value))
         if (toMap instanceof Map<string,Product>){
 
-            console.log("toMap",toMap);
+
             
             setMap(toMap)
         }

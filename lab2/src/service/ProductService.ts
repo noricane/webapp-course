@@ -82,7 +82,10 @@ export class ProductService implements IProductService{
         const productList:Product[] = []
         Array.from(this.products.values()).forEach(
             innermap=> Array.from(innermap.values()).forEach
-            (product => {if(product.generalColor == color){ productList.push(product) }}
+            (product => {
+                console.log("COLORs g then c",product.generalColor,color);
+                
+                if(product.generalColor == color){ productList.push(product) }}
             ))
         if (productList.length == 0) {
             return new ProductError(404, "No Products found")

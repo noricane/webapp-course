@@ -70,7 +70,7 @@ const Dashboard = () => {
         arr.push(element.value)
       })        
     })
-    console.log("Arr",arr);
+
     setItems(prev => [...prev,...arr])
     } catch (error) {
     }
@@ -84,7 +84,7 @@ const Dashboard = () => {
         arr.push(element.value)
       })        
     })
-    console.log("Arr",arr);
+
     setItems(prev => [...prev,...arr])
     } catch (error) {
     }
@@ -93,7 +93,7 @@ const Dashboard = () => {
   async function getBrands(){
     try {
     const {data}:{data:string[]} =  await axios.get(`${config.URL}/product/brands`);
-    setBrands(prev => [...prev,...data])
+    setBrands(prev => [...data])
     } catch (error) {
     }
 }
@@ -116,7 +116,7 @@ const Dashboard = () => {
   const colors :string[] = ToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   
   const [items, setItems] = useState<Product[]>([])
-  const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {    
     if(state.brand == prevState.brand && state.category == prevState.category && state.color == prevState.color ){return}
     else if (state.brand != prevState.brand || state.color != prevState.color){
       getTasksPayload({brand:state.brand,color:state.color})
@@ -124,12 +124,15 @@ const Dashboard = () => {
     }
     if (state.category != prevState.category) {
       setItems(prev => prev.filter((e:Product) => e.category == state.category))
-    }
+      setPrevState(state)
+    } 
+    console.log(state);
+    console.log(items);
   }
 
-  const Button = ({desc}:{desc:string,onClick?:Function}) => {
+  const Button = ({desc,onClick}:{desc:string,onClick?:Function}) => {
     return (
-      <button onClick={()=>{}}  className='bg-stone-800 text-stone-50 h-12 w-36 hover:bg-stone-900 rounded-sm active:bg-stone-50 active:text-stone-800 transition-all'>{desc}</button>
+      <button onClick={()=>{onClick != null && onClick()}}  className='bg-stone-800 text-stone-50 h-12 w-36 hover:bg-stone-900 rounded-sm active:bg-stone-50 active:text-stone-800 transition-all'>{desc}</button>
 
     )
   }
@@ -157,7 +160,7 @@ const Dashboard = () => {
           <label htmlFor="category">Color:</label>
           <ColorDropdown onClick={dispatch} action={"set_color"} state={state.color} items={colors} >Colors</ColorDropdown>
 
-          <Button desc='Filter Selection' onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{}} />
+          <Button desc='Filter Selection' onClick={filterHandler} />
 
 
         </div>
