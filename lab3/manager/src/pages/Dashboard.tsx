@@ -105,7 +105,7 @@ const Dashboard = () => {
   const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     if(state.brand == prevState.brand && state.category == prevState.category && state.color == prevState.color ){return}
     else{
-      axios
+      axios.get()
       setPrevState(state)
     }
   }
