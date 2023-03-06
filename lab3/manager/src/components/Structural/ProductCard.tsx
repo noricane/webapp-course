@@ -66,7 +66,7 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
         <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>
         </div>
         <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
-            <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>{product.name} </span>
+            <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>{product.brand} {product.name}  </span>
             <br /><span className='text-stone-600 text-lg font-semibold'>{product.color}</span>
             <div className='flex items-center justify-between my-2'>
                 <Price price={product.price} pricefactor={product.price_factor}/>
