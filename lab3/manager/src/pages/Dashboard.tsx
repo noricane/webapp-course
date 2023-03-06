@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
 import { BrandDropdown, ColorDropdown } from '../components/Misc/Dropdown'
-import Card from '../components/Structural/Card'
 import Grid from '../components/Structural/Grid'
 import { ToArray } from '../helper/utils'
 import { config } from '../model/config'
@@ -96,14 +95,20 @@ const Dashboard = () => {
 }
 
   const [state, dispatch] = useReducer(reducer ,initialState);
-  console.log(state.brand);
-  
+  const [prevState,setPrevState] = useState<FilterState>({brand:null,category:null,color:null})
+
   const [brands, setBrands] = useState<string[]>([])
   const categories:CATEGORY[] =[CATEGORY.LOW,CATEGORY.MID,CATEGORY.HIGH]
   const colors :string[] = ToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   
   const [items, setItems] = useState<Product[]>([])
-  const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {}
+  const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if(state.brand == prevState.brand && state.category == prevState.category && state.color == prevState.color ){return}
+    else{
+      axios
+      setPrevState(state)
+    }
+  }
 
   const Button = ({desc}:{desc:string,onClick?:Function}) => {
     return (
