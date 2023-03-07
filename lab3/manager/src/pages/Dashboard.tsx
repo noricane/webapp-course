@@ -50,7 +50,7 @@ function reducer(state:FilterState,
 const Dashboard = () => {
   async function getTasksPayload({category,color,brand}:{category:CATEGORY | null, color:GENERALCOLOR | null, brand:string | null}){
     try {
-    let arr:Product[]= []
+
     const {data}:{data:Product[]} =  await axios.get(`${config.URL}/product?${category != null ? `category=${category}&` : ''}${color != null ? `color=${color}`: ''}`);
     console.log(data);
     
@@ -75,8 +75,9 @@ const Dashboard = () => {
         arr.push(element.value)
       })        
     })
-
-    setItems(prev => [...prev,...arr])
+    console.log("DTATA",data);
+    
+    setItems([...arr])
     } catch (error) {
     }
   }
@@ -106,7 +107,7 @@ const Dashboard = () => {
   const categories:CATEGORY[] =[CATEGORY.LOW,CATEGORY.MID,CATEGORY.HIGH]
   const colors :string[] = ToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   
-  const [items, setItems] = useState<Product[]>([])
+  const [items, setItems] = useState<Product[]>()
   const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {    
     console.log(state);
     
