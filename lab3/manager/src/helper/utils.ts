@@ -8,3 +8,7 @@ export function ToArray() {
         .filter(StringIsNumber)
         .map((key:any) => GENERALCOLOR[key]); //??any
 }
+
+export function checkLatinCharacters(str: string):string{
+    return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
+}

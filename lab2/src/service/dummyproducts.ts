@@ -5,13 +5,16 @@ import {Product} from '../model/product'
 export function initShoes():Map<string,Map<string,Product>>{
     const map: Map<string,Map<string,Product>> = new Map();
     
+    
     const p33 = createProduct("Foam Runners","Yeezy","Stone Salt",GENERALCOLOR.BEIGE,3495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front_970x.jpg?v=1670005153","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front-Side_970x.jpg?v=1670404734","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Sole_970x.jpg?v=1670404734");
     const p34 = createProduct("Foam Runners","Yeezy","MXT Moon Grey",GENERALCOLOR.GRAY,3495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-MXT-Moon-Grey-Crepslocker-2048x2048-1_f47252b8-46a2-4987-a9f6-4428f8c197ca_970x.jpg?v=1648475497","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-MXT-Moon-Grey-Crepslocker-2048x2048-2_1aea5deb-560b-4388-a7f5-0eac2aa597b5_970x.jpg?v=1648475497",);
-   
+    
     const p11 = createProduct("Air Jordan 1 Low","Nike","True Blue",GENERALCOLOR.BLUE,1249,"https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Top_970x.jpg?v=1676626230","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front-Side_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Back_970x.jpg?v=1676626230");
     const p12 = createProduct("Air Jordan 1 Low","Nike","Green Toe",GENERALCOLOR.GREEN,4200,"https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-Green-Toe-Crepslocker-Front_56b39ac6-a7f7-4d5e-a7b9-c0b039ad9097_970x.jpg?v=1648461426","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-Green-Toe-Crepslocker-Back-Side_970x.jpg?v=1648461426");
     const p13 = createProduct("Travis Scott x Air Jordan 1 Low","Nike","OG SP Black Phantom",GENERALCOLOR.BLACK,10000,"https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Front_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Front-Side_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Back-Side_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Back_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Sole_970x.jpg?v=1670490242");
     const p14 = createProduct("Dior x Air Jordan 1 Low","Nike","OG Grey",GENERALCOLOR.GRAY,149990,"https://cdn.shopify.com/s/files/1/1626/5391/products/DIOR-X-AIR-JORDAN-1-LOW-OG-GREY-SNEAKER-Crepslocker-Front_970x.jpg?v=1648204697");
+    
+    const p200 = createProductCategory("Foam Runners","Yeezy","color",GENERALCOLOR.BEIGE,CATEGORY.HIGH,1,"");
     
     const p1000 = createProduct("Dunk Low","Off-White x Nike ","Lot 47 (White/Neutral Grey-Green Spark-Court Purple)",GENERALCOLOR.MULTICOLORED,7702 ,"https://cdn.shopify.com/s/files/1/1626/5391/products/Nike-x-Off-White-Dunk-Low-Lot-47-Crepslocker-Front_970x.jpg?v=1648146730");
     const p1001 = createProduct("Dunk Low","Off-White x Nike ","Lot 1 (White/Metallic Silver-Butter)",GENERALCOLOR.WHITE,18612 ,"https://cdn.shopify.com/s/files/1/1626/5391/products/Nike-x-Off-White-Dunk-Low-Lot-1-Crepslocker-Side_970x.jpg?v=1656786098");
@@ -59,6 +62,11 @@ export function initShoes():Map<string,Map<string,Product>>{
 }
 
 
+const createProductCategory = (name:string, brand: string, color: string,generalColor:GENERALCOLOR, category:CATEGORY,price: number,...url:string[]):Product=>{
+    const p = createProduct(name,brand,color,generalColor,price,...url)
+    p.category = category
+    return p
+}
 const createProduct = (name:string, brand: string, color: string,generalColor:GENERALCOLOR, price: number,...url:string[]):Product=>{
     const luh =  [
         {

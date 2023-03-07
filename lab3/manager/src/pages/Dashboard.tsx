@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
 import { BrandDropdown, ColorDropdown } from '../components/Misc/Dropdown'
 import Grid from '../components/Structural/Grid'
-import { ToArray } from '../helper/utils'
+import { checkLatinCharacters, ToArray } from '../helper/utils'
 import { config } from '../model/config'
 import { CATEGORY, GENERALCOLOR } from '../model/misc'
 import { Product } from '../model/product'
@@ -52,15 +52,16 @@ const Dashboard = () => {
     try {
 
     const {data}:{data:Product[]} =  await axios.get(`${config.URL}/product?${category != null ? `category=${category}&` : ''}${color != null ? `color=${color}`: ''}`);
-    console.log(data);
+    console.log("DATA IS ",data);
     
 
-
+    setItems(data)
+    
     if (brand != null) {
-      setItems(prev => data.filter((e:Product) => e.brand == brand))
+      setFiltered(data == null ? undefined :  data.filter((e:Product) => checkLatinCharacters(e.brand) == checkLatinCharacters(brand)))
     } else{
-      setItems(data)
-
+      setFiltered(data)
+      
     }
   
     } catch (error) {
@@ -77,6 +78,7 @@ const Dashboard = () => {
     })
     console.log("DTATA",data);
     
+    setFiltered([...arr])
     setItems([...arr])
     } catch (error) {
     }
@@ -108,18 +110,27 @@ const Dashboard = () => {
   const colors :string[] = ToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   
   const [items, setItems] = useState<Product[]>()
+  const [filtered, setFiltered] = useState<Product[]>()
+
   const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {    
-    console.log(state);
-    
     if(state.brand == prevState.brand && state.category == prevState.category && state.color == prevState.color ){return}
-    else if (state.category != prevState.category || state.color != prevState.color){
-      getTasksPayload({category:state.category,color:state.color,brand:state.brand})
-      
-    }
+    else if ( state.category != prevState.category || state.color != prevState.color){/*  if (state.category != prevState.category || state.color != prevState.color) */
+    console.log("Here");
     
-    setPrevState(state)
+      getTasksPayload({category:state.category,color:state.color,brand:state.brand})
+      setPrevState(state)
+      
+    } else if (state.brand != null){
+      
+      setFiltered(prev => {
+        if(prev != null && state.brand != null)/* @ts-ignore */{
+          return items.filter((e:Product) => checkLatinCharacters(e.brand) == checkLatinCharacters(state.brand))
+        }
+      })
+
+    }
     console.log(state);
-    console.log(items);
+
   }
 
   const Button = ({desc,onClick}:{desc:string,onClick?:Function}) => {
@@ -156,7 +167,7 @@ const Dashboard = () => {
 
 
         </div>
-        <Grid items={items}/>
+        <Grid items={filtered}/>
     </div>
   )
 }
