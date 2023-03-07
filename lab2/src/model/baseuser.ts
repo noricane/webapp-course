@@ -2,7 +2,7 @@ export abstract class BaseUser {
     profilepic:string | undefined;//url TODO
     protected id: number; 
     protected name: string;
-    protected email: string;
+    email: string;
     protected password: string;
     
     abstract getType():string;

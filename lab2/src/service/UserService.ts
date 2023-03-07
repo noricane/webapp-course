@@ -34,7 +34,7 @@ export interface IUserService {
 
 
     addAdmin(admin:Admin): Promise<Admin|ProductError> //Change name of ProductError type?
-    removeAdmin(id:number): Promise<User|ProductError> 
+    removeAdmin(id:number): Promise<Admin|ProductError> 
 }
 
 export class ProductError{
@@ -53,7 +53,7 @@ export class UserService implements IUserService{
     }
     users: Map<string,User> = new Map<string,User>()
 
-    admins: Map<number,User> = new Map<number,User>()
+    admins: Map<number,Admin> = new Map<number,Admin>()
     
     async getUsers(): Promise<User[]> {
         return Array.from(this.users.values())
@@ -104,21 +104,21 @@ export class UserService implements IUserService{
         }
     }
     async addAdmin(admin: Admin): Promise<ProductError | Admin> {
-        const query = this.admins.get(admin.email)
+        const query = this.admins.get(admin.getId())
         if(query == null){
-            this.admins.set(admin.id,admin)
+            this.admins.set(admin.getId(),admin)
             return admin
         }else{
             return new ProductError(400, "User already exists")
         }
     }
-    async removeAdmin(id: number): Promise<ProductError | User> {
+    async removeAdmin(id: number): Promise<ProductError | Admin> {
         const query = this.admins.get(id)
         if(query != null){
             this.admins.delete(id)
             return query
         }else{
-            return new ProductError(404, "User not found")
+            return new ProductError(404, "Admin not found")
         }
     }
    
