@@ -1,3 +1,4 @@
+import { multiProduct } from './../model/pastorder';
 import { stockedSize } from '../model/product';
 import { Product } from "../model/product";
 
@@ -5,6 +6,7 @@ import { User } from '../model/user';
 import { productConstructor } from '../helper/utils';
 import { initShoes } from './dummyproducts';
 import { PastOrder } from '../model/pastorder';
+import { Admin } from '../model/admin';
 
 export interface IUserService {
     logInUser(mail: string,password:string) : Promise<boolean|ProductError>;
@@ -21,7 +23,7 @@ export interface IUserService {
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
-    addUserOrder(id: string, order:PastOrder): Promise<PastOrder|ProductError> 
+    addUserOrder(id: string, ...order: multiProduct[]): Promise<true|ProductError> 
 
     // Removes a product with the given id from stock,
     // and returns the removed Map<string(id),Product> object
@@ -31,7 +33,7 @@ export interface IUserService {
 
 
 
-    addAdmin(): Promise<User|ProductError> //Change name of ProductError type?
+    addAdmin(admin:Admin): Promise<Admin|ProductError> //Change name of ProductError type?
     removeAdmin(id:number): Promise<User|ProductError> 
 }
 
@@ -74,20 +76,50 @@ export class UserService implements IUserService{
         }
 
     }
-    async addUser(desc: Object): Promise<ProductError | User> {
-        throw new Error('Method not implemented.');
+    async addUser(user: User): Promise<ProductError | User> {
+        const query = this.users.get(user.email)
+        if(query == null){
+            this.users.set(user.email,user)
+            return user
+        }else{
+            return new ProductError(400, "User already exists")
+        }
     }
-    async addUserOrder(id: string, order: PastOrder): Promise<PastOrder | ProductError> {
-        throw new Error('Method not implemented.');
+    async addUserOrder(id: string, ...order: multiProduct[]): Promise<true | ProductError> {
+        const query = this.users.get(id)
+        if(query != null){
+            query.addOrder(...order)
+            return true
+        }else{
+            return new ProductError(400, "User already exists")
+        }
     }
     async removeUser(id: string): Promise<ProductError | User> {
-        throw new Error('Method not implemented.');
+        const query = this.users.get(id)
+        if(query != null){
+            this.users.delete(id)
+            return query
+        }else{
+            return new ProductError(404, "User not found")
+        }
     }
-    async addAdmin(): Promise<ProductError | User> {
-        throw new Error('Method not implemented.');
+    async addAdmin(admin: Admin): Promise<ProductError | Admin> {
+        const query = this.admins.get(admin.email)
+        if(query == null){
+            this.admins.set(admin.id,admin)
+            return admin
+        }else{
+            return new ProductError(400, "User already exists")
+        }
     }
     async removeAdmin(id: number): Promise<ProductError | User> {
-        throw new Error('Method not implemented.');
+        const query = this.admins.get(id)
+        if(query != null){
+            this.admins.delete(id)
+            return query
+        }else{
+            return new ProductError(404, "User not found")
+        }
     }
    
    

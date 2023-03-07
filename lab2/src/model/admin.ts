@@ -6,8 +6,11 @@ export class Admin extends BaseUser{
     getType():string {
         return UserType[UserType.ADMIN]
     }
-     constructor(id: number,name: string,email: string){
-        super(id,name,email)
+    getId():number{
+        return super.id
+    }
+     constructor(id: number,name: string,email: string,password: string){
+        super(name,email,password)
         
         try{
             //Create apikey then send api key and id.

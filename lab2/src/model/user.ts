@@ -9,8 +9,8 @@ export class User extends BaseUser{
     orders: PastOrder[]
     adresses: address[];
     
-    constructor(id: number,name: string,email: string,phonenumber: string,birthdate: string,adresses: address[], ...orders:PastOrder[]){
-        super(id,name,email)
+    constructor(name: string,email: string,password:string,phonenumber: string,birthdate: string,adresses: address[], ...orders:PastOrder[]){
+        super(name,email,password)
         this.phonenumber = phonenumber;
         this.birthdate = birthdate;
         this.adresses = adresses;

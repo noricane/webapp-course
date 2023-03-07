@@ -1,17 +1,17 @@
 export abstract class BaseUser {
     profilepic:string | undefined;//url TODO
-    private id: number; 
-    name: string;
-    private email: string;
-    private password: string;
-
+    protected id: number; 
+    protected name: string;
+    protected email: string;
+    protected password: string;
+    
     abstract getType():string;
 
-    constructor(id: number,name: string,email:string){
+    constructor(name: string,email:string,password:string){
         this.id = Date.now();
         this.name = name;
         this.email = email;
-        this.password = ""
+        this.password = "hashed password goes here, password is hashed client side then sent"
 
     }
 }
