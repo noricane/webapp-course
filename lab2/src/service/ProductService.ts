@@ -63,7 +63,7 @@ export class ProductService implements IProductService{
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
     //products : Map<string,Map<string,Product>> = new Map();
     products : Map<string,Map<string,Product>> = initShoes();
-    brands: string[] = ["Nike","Louis Vuitton","Adidas", "Maison Margiela"]
+    brands: string[] = ["Nike","Louis Vuitton","Adidas", "Maison Margiela","Off-White x Nike"]
     constructor(){
         console.log("Initialized shoe collection",this.products);
     }
@@ -71,25 +71,28 @@ export class ProductService implements IProductService{
         const productList:Product[] = []
         Array.from(this.products.values()).forEach(
             innermap=> Array.from(innermap.values()).forEach
-            (product => {if(product.category == category){ productList.push(product) }}//While no enum this is fine
+            (product => {
+                console.log("Equal",product.category == category);
+                
+                if(product.category == category){ productList.push(product) }}//While no enum this is fine
             ))
-        if (productList.length == 0) {
+        /* if (productList.length == 0) {
             return new ProductError(404, "No Products found")
-        }
+        } */
         return productList
     }
-    async getColorProducts(color: GENERALCOLOR): Promise<ProductError | Product[]> {
+    async getColorProducts(color: number): Promise<ProductError | Product[]> {
         const productList:Product[] = []
         Array.from(this.products.values()).forEach(
             innermap=> Array.from(innermap.values()).forEach
-            (product => {
-                console.log("COLORs g then c",product.generalColor,color);
-                
-                if(product.generalColor == color){ productList.push(product) }}
+            (product => {               
+                if(product.generalColor == color){                     
+                    productList.push(product) 
+                }}
             ))
-        if (productList.length == 0) {
+        /* if (productList.length == 0) {
             return new ProductError(404, "No Products found")
-        }
+        } */
         return productList
     }
     

@@ -26,13 +26,13 @@ product_router.get("/brands", async (
 }) 
 
 product_router.get("/", async (
-    req: Request<{color:number,category:string}, {}, {}>,
+    req: Request<{color:string,category:string}, {}, {}>,
     res: Response<Product[] | string>,
     next:Function
 ) => {
     try {
-        let categoryList: Product[] = []
-        let colorList: Product[] = []
+        let categoryList: Product[] | null = null
+        let colorList: Product[] | null = null
         if(req.query.color == null && req.query.category == null){
             console.log('the response will be sent by the next function ...')
             return next()
@@ -50,14 +50,15 @@ product_router.get("/", async (
             
         const query = req.query.color
         if(typeof(query) != "string"){return}
-        let color: GENERALCOLOR = Object.values(GENERALCOLOR).indexOf(query)
-        console.log("color",parseInt(query)  );
+        const parsedquery:number = parseInt(query)
+        let color: GENERALCOLOR = Object.values(GENERALCOLOR).indexOf(parsedquery)
+
         
         if (parseInt(query) == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value ${typeof(req.query.color)}`);
             return
         }
-        const resp = await product_service.getColorProducts(color);
+        const resp = await product_service.getColorProducts(parsedquery);
 
         if(resp instanceof ProductError){
             //Resp is of type ProductError
@@ -67,6 +68,7 @@ product_router.get("/", async (
         }else{
 
             //Success, resp contains products!
+            
             colorList = resp
         }
     }
@@ -77,14 +79,17 @@ product_router.get("/", async (
         if(req.query.category != null){
         const query:string = req.query.category
         
+        const parsedquery = parseInt(query)
 
-        let category: CATEGORY = Object.values(CATEGORY).indexOf(query.toUpperCase())
-        if (category as number == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
+        
+
+
+        if (parsedquery == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- category query must be correct type`);
             return
         }
 
-        const resp = await product_service.getCategoryProducts(category);
+        const resp = await product_service.getCategoryProducts(parsedquery);
 
         if(resp instanceof ProductError){
             //Resp is of type ProductError
@@ -98,17 +103,18 @@ product_router.get("/", async (
     }
 
 
-    if(colorList.length > 0 && categoryList.length > 0){
+    if(categoryList !=null && colorList !=null){
+        /* @ts-ignore  for some reason TS still thinks categoryList might be null*/
+        console.log("SE#NDING",colorList.filter(e => categoryList.includes(e)));
+        /* @ts-ignore  for some reason TS still thinks categoryList might be null*/
         
-
         res.status(200).send( colorList.filter(e => categoryList.includes(e)))
-    }else if (colorList.length > 0){
+    }else if (colorList != null){
         res.status(200).send( colorList)
-    }else{
+    }else if( categoryList != null){
         res.status(200).send(categoryList)
-        
-
     }
+
     } catch (e: any) {
         res.status(500).send(e.message);
         return

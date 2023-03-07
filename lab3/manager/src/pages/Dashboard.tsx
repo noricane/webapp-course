@@ -61,17 +61,16 @@ function reducer(state:FilterState,
 
 
 const Dashboard = () => {
-  async function getTasksPayload({brand,color}:{brand:string | null,color:GENERALCOLOR | null}){
+  async function getTasksPayload({category,color}:{category:CATEGORY | null,color:GENERALCOLOR | null}){
     try {
     let arr:Product[]= []
-    const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product?${brand != null ? `brand=${brand}&` : ''}${color != null ? `color=${color}`: ''}`);
-    Array.from(data.values()).forEach((e:any) => {
-      e.value.forEach((element:any) => {
-        arr.push(element.value)
-      })        
-    })
+    const {data}:{data:Product[]} =  await axios.get(`${config.URL}/product?${category != null ? `category=${category}&` : ''}${color != null ? `color=${color}`: ''}`);
+    console.log(data);
+    
+    setItems(data)
 
-    setItems(prev => [...prev,...arr])
+
+  
     } catch (error) {
     }
   }
@@ -118,11 +117,11 @@ const Dashboard = () => {
   const [items, setItems] = useState<Product[]>([])
   const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {    
     if(state.brand == prevState.brand && state.category == prevState.category && state.color == prevState.color ){return}
-    else if (state.brand != prevState.brand || state.color != prevState.color){
-      getTasksPayload({brand:state.brand,color:state.color})
+    else if (state.category != prevState.category || state.color != prevState.color){
+      getTasksPayload({category:state.category,color:state.color})
       setPrevState(state)
     }
-    if (state.category != prevState.category) {
+    if (state.brand != prevState.brand) {
       setItems(prev => prev.filter((e:Product) => e.category == state.category))
       setPrevState(state)
     } 
