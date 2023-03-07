@@ -49,32 +49,44 @@ export class UserService implements IUserService{
     logInUser(mail: string, password: string): Promise<boolean | ProductError> {
         throw new Error('Method not implemented.');
     }
-    users: Map<number,User> = new Map<number,User>()
+    users: Map<string,User> = new Map<string,User>()
 
     admins: Map<number,User> = new Map<number,User>()
     
-    getUsers(): Promise<ProductError | User[]> {
+    async getUsers(): Promise<User[]> {
+        return Array.from(this.users.values())
+    }
+    async getUser(mail: string): Promise<ProductError | User> {
+        const query: User | undefined = this.users.get(mail);
+
+        if(query != undefined){
+            return query;
+        }else{
+            return new ProductError(404, "No user found with that email")
+        }
+    }
+    async getUserOrders(id: string /* mail */): Promise<ProductError | PastOrder[]> {
+        const query: User | undefined = this.users.get(id);
+        if(query != undefined){
+            return query.orders
+        }else{
+            return new ProductError(404, "No user found")
+        }
+
+    }
+    async addUser(desc: Object): Promise<ProductError | User> {
         throw new Error('Method not implemented.');
     }
-    getUser(mail: string): Promise<ProductError | User> {
+    async addUserOrder(id: string, order: PastOrder): Promise<PastOrder | ProductError> {
         throw new Error('Method not implemented.');
     }
-    getUserOrders(id: string): Promise<ProductError | PastOrder[]> {
+    async removeUser(id: string): Promise<ProductError | User> {
         throw new Error('Method not implemented.');
     }
-    addUser(desc: Object): Promise<ProductError | User> {
+    async addAdmin(): Promise<ProductError | User> {
         throw new Error('Method not implemented.');
     }
-    addUserOrder(id: string, order: PastOrder): Promise<PastOrder | ProductError> {
-        throw new Error('Method not implemented.');
-    }
-    removeUser(id: string): Promise<ProductError | User> {
-        throw new Error('Method not implemented.');
-    }
-    addAdmin(): Promise<ProductError | User> {
-        throw new Error('Method not implemented.');
-    }
-    removeAdmin(id: number): Promise<ProductError | User> {
+    async removeAdmin(id: number): Promise<ProductError | User> {
         throw new Error('Method not implemented.');
     }
    
