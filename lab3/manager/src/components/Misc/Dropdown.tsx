@@ -8,7 +8,7 @@ export const BrandDropdown = ({state,items,children,onClick,action }:{items:any[
       <div className=''> 
         <MenuButton onClick={()=>setOpen(prev => !prev)}>{children}</MenuButton>
         <div className={`${open ? '' :'hidden'} absolute w-56 max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
-          {items.map(e => <button onClick={() => onClick({type:action,payload:e})} className={`p-2 m-1 overflow-hidden text-ellipsis whitespace-nowrap ${state == e? 'bg-stone-900 text-white active:bg-white  active:text-black border-stone-900 hover:bg-stone-600': 'hover:bg-stone-200 bg-white active:bg-stone-900 active:border-stone-900 active:text-white border-stone-200' } border-2  rounded-full leading-[.25rem]`} m-1>{e}</button>)}
+          {items.map(e => <button onClick={() => e != state ? onClick({type:action,payload:e}) : onClick({type:action,payload:null})} className={`p-2 m-1 overflow-hidden text-ellipsis whitespace-nowrap ${state == e? 'bg-stone-900 text-white active:bg-white  active:text-black border-stone-900 hover:bg-stone-600': 'hover:bg-stone-200 bg-white active:bg-stone-900 active:border-stone-900 active:text-white border-stone-200' } border-2  rounded-full leading-[.25rem]`} m-1>{e}</button>)}
         </div>
       </div>
        
@@ -22,7 +22,7 @@ export const ColorDropdown = ({state,items,children,onClick,action}:{items:any[]
     <div>
       <MenuButton onClick={()=>{setOpen(prev => !prev)}}>{state == null ? `${children} ➤` : GENERALCOLOR[state]}</MenuButton>
       <div className={`${open ? '' :'hidden'} absolute w-56  max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
-        {items.map(e => <button onClick={() => onClick({type:action,payload:e})} className={`p-2 m-1 ${state == e? 'bg-stone-900 text-white active:bg-white  active:text-black border-stone-900 hover:bg-stone-600': 'hover:bg-stone-200 bg-white active:bg-stone-900 active:border-stone-900 active:text-white border-stone-200' } border-2  rounded-md leading-[.25rem]`} m-1><span className={`h-4 w-4 inline-block border-black border`} style={{background:`${e.toLowerCase() == 'multicolored' ? 'linear-gradient(90deg, red, yellow, green, blue)': e}`}}></span> {e}</button>)}
+        {items.map(e => <button onClick={() => e != state ? onClick({type:action,payload:e}) : onClick({type:action,payload:null})} className={`p-2 m-1 ${state == e? 'bg-stone-900 text-white active:bg-white  active:text-black border-stone-900 hover:bg-stone-600': 'hover:bg-stone-200 bg-white active:bg-stone-900 active:border-stone-900 active:text-white border-stone-200' } border-2  rounded-md leading-[.25rem]`} m-1><span className={`h-4 w-4 inline-block border-black border`} style={{background:`${e.toLowerCase() == 'multicolored' ? 'linear-gradient(90deg, red, yellow, green, blue)': e}`}}></span> {e}</button>)}
       </div>
     </div>   
     );

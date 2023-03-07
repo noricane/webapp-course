@@ -23,53 +23,45 @@ function reducer(state:FilterState,
                   action:{type:FilterAction["type"],payload:string}):FilterState  {
   switch (action.type) {
     case 'set_brand':
-
       return {...state, brand: action.payload}
-      
-      
-      
-      
+     
       case 'set_category':
         const categoryindex:number = Object.values(CATEGORY).indexOf(action.payload.toUpperCase());
         if(categoryindex < 0){
           return state
         }
-
         return {...state, category: categoryindex}
-
-
       
     case 'set_color':
       console.log(action.payload);
-      
 
       const colorindex:number = Object.values(GENERALCOLOR).indexOf(action.payload.toUpperCase());
       if(colorindex < 0){
         return state
       }
-
-      return {...state, color: colorindex}
-      
-
+      return {...state, color: colorindex}   
 
     default:
       return state;
-        
-
   }
 }
 
 
 const Dashboard = () => {
-  async function getTasksPayload({category,color}:{category:CATEGORY | null,color:GENERALCOLOR | null}){
+  async function getTasksPayload({category,color,brand}:{category:CATEGORY | null, color:GENERALCOLOR | null, brand:string | null}){
     try {
     let arr:Product[]= []
     const {data}:{data:Product[]} =  await axios.get(`${config.URL}/product?${category != null ? `category=${category}&` : ''}${color != null ? `color=${color}`: ''}`);
     console.log(data);
     
-    setItems(data)
 
 
+    if (brand != null) {
+      setItems(prev => data.filter((e:Product) => e.brand == brand))
+    } else{
+      setItems(data)
+
+    }
   
     } catch (error) {
     }
@@ -116,15 +108,15 @@ const Dashboard = () => {
   
   const [items, setItems] = useState<Product[]>([])
   const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {    
+    console.log(state);
+    
     if(state.brand == prevState.brand && state.category == prevState.category && state.color == prevState.color ){return}
     else if (state.category != prevState.category || state.color != prevState.color){
-      getTasksPayload({category:state.category,color:state.color})
-      setPrevState(state)
+      getTasksPayload({category:state.category,color:state.color,brand:state.brand})
+      
     }
-    if (state.brand != prevState.brand) {
-      setItems(prev => prev.filter((e:Product) => e.category == state.category))
-      setPrevState(state)
-    } 
+    
+    setPrevState(state)
     console.log(state);
     console.log(items);
   }

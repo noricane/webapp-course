@@ -63,7 +63,7 @@ export class ProductService implements IProductService{
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
     //products : Map<string,Map<string,Product>> = new Map();
     products : Map<string,Map<string,Product>> = initShoes();
-    brands: string[] = ["Nike","Louis Vuitton","Adidas", "Maison Margiela","Off-White x Nike"]
+    brands: string[] = ["Nike","Louis Vuitton","Adidas","Yeezy", "Maison Margiela","Off-White x Nike"]
     constructor(){
         console.log("Initialized shoe collection",this.products);
     }
