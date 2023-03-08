@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <div className='w-full h-96 flex  utmd:flex-col utmd:gap-10 justify-between p-12 bg-stone-800 text-stone-200 text-lg'>
+    <div className='w-full h-96 utsm:h-[45rem] flex  utmd:flex-col utmd:gap-10 justify-between p-12 bg-stone-800 text-stone-200 text-lg'>
       <section>
         <h1 className='font-oswald text-xl font-bold mb-4'>A B O U T</h1>
         <ul className='grid gap-4 '>

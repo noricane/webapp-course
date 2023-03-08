@@ -20,7 +20,7 @@ const Nav = () => {
       <div className="w-full h-8 bg-stone-800 flex items-center justify-center font-semibold text-stone-200">
         Free Shipping for Members
       </div>
-      <div className="w-screen  bg-stone-200 shadow-md  h-24 items-center flex text-zinc-800 font-bold">
+      <div className="w-screen  bg-stone-200 shadow-md relative z-10 h-24 items-center flex text-zinc-800 font-bold">
         <video onClick={homeButtonHandler} muted playsInline draggable="false" autoPlay loop className="hover:cursor-pointer  relative z-10 h-24 w-auto utmd:mx-auto md:left-0 mix-blend-darken" >
           {/*SRC property: For some reason the logo dissapeared when I refreshed the page (on an url that is not base path / e.g /product/id) with the path 'media/logohb.mp4', this code fixes it apparently. */}
           <source
