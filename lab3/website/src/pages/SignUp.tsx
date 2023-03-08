@@ -6,7 +6,7 @@ const SignUp = () => {
     return (
       <div className="min-h-[45rem] flex justify-center items-center">
 
-        <section className="bg-stone-300  absolute h-[70%] rounded-lg mx-auto min-h-[30rem] min-w-[300px] w-[80%] max-w-[55rem] flex flex-col justify-center gap-4">
+        <section className="bg-stone-300  absolute h-[70%] rounded-md mx-auto min-h-[30rem] min-w-[300px] w-[80%] max-w-[55rem] flex flex-col justify-center gap-4">
           <h2 className="text-center font-oswald font-bold text-2xl">Sign Up</h2>
 
           <form className="">
