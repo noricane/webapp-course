@@ -90,10 +90,6 @@ export function isUser(arg: any){
     let birthdateCheck:boolean   = arg?.birthdate != null && arg.birthdate instanceof Date
     let addressCheck:boolean   = arg?.address != null && Array.isArray(arg?.address) && arrayType(arg?.address,"string")
     let orderCheck:boolean   = arg?.orders != null && Array.isArray(arg?.orders) && arrayInstance(arg?.orders,PastOrder)
-    
-    
-
-
     let checks = [nameCheck,emailCheck,passwordCheck,phonenumberCheck,birthdateCheck,addressCheck,orderCheck]
     if (!nameCheck || !emailCheck || !passwordCheck || !phonenumberCheck || !birthdateCheck || !addressCheck || !orderCheck 
         || Object.keys(arg).length > checks.length) {
@@ -126,7 +122,7 @@ const arrayType = (arr:any[],type:string):boolean => {
         }})
     return bool
 }
-const arrayInstance = (arr:any[],type:any):boolean => {
+export const arrayInstance = (arr:any[],type:any):boolean => {
     let bool = true
     if(arr.length == 0) {
         return bool
@@ -135,5 +131,16 @@ const arrayInstance = (arr:any[],type:any):boolean => {
         if(!(e instanceof type)){
             bool = false
         }})
+    return bool
+}
+
+//Checks that given an array the items are of type multiProduct
+export const isMultiProducts = (list:any[]):boolean => {
+    let bool = true;
+    list.forEach(e => {
+        if(e.id == null || e.amount == null){
+            bool= false
+        }
+    })
     return bool
 }

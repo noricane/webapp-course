@@ -91,7 +91,7 @@ export class UserService implements IUserService{
             query.addOrder(...order)
             return true
         }else{
-            return new ProductError(400, "User already exists")
+            return new ProductError(400, "User doesn't exists")
         }
     }
     async removeUser(id: string): Promise<ProductError | User> {
