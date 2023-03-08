@@ -9,6 +9,7 @@ export class Admin extends BaseUser{
     getId():number{
         return super.id
     }
+    
      constructor(name: string,email: string,password: string){
         super(name,email,password)
         

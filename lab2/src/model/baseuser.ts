@@ -6,7 +6,9 @@ export abstract class BaseUser {
     protected password: string;
     
     abstract getType():string;
-
+    comparePassword(pass:string):boolean{
+        return pass == this.password
+    }
     constructor(name: string,email:string,password:string){
         this.id = Date.now();
         this.name = name;

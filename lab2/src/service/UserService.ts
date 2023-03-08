@@ -1,3 +1,4 @@
+import { addressType } from './../model/adress';
 import { multiProduct } from './../model/pastorder';
 import { stockedSize } from '../model/product';
 import { Product } from "../model/product";
@@ -7,9 +8,10 @@ import { productConstructor } from '../helper/utils';
 import { initShoes } from './dummyproducts';
 import { PastOrder } from '../model/pastorder';
 import { Admin } from '../model/admin';
+import { address } from '../model/adress';
 
 export interface IUserService {
-    logInUser(mail: string,password:string) : Promise<boolean|ProductError>;
+    logInUser(mail: string,password:string) : Promise<User|ProductError>;
     //Returns a list of all listed products
     getUsers() : Promise<User[]|ProductError>;
     
@@ -48,12 +50,24 @@ export class ProductError{
 }
 
 export class UserService implements IUserService{
-    logInUser(mail: string, password: string): Promise<boolean | ProductError> {
-        throw new Error('Method not implemented.');
+    async logInUser(mail: string, password: string): Promise<User | ProductError> {
+        const user = await this.getUser(mail)
+        if (user instanceof User){
+            if(user.comparePassword(password)){
+                return user
+            }else{
+                return new ProductError(404,"Email or password was not found")
+            }
+        }else{
+            return new ProductError(404,"Email or password was not found")
+        }
     }
     users: Map<string,User> = new Map<string,User>()
-
     admins: Map<number,Admin> = new Map<number,Admin>()
+    constructor(){
+        const user = new User("James Brown","jb@gmail.com","jb123","0731231234",new Date(1978),[new address(addressType.DELIVERY,"Saxophonestreet 45","New York","USA","4423")])
+        this.users.set(user.email,user)
+    }
     
     async getUsers(): Promise<User[]> {
         return Array.from(this.users.values())
