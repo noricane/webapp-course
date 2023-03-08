@@ -4,6 +4,9 @@ import Browse from "./pages/Browse";
 
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
+import ProductPage from "./pages/ProductPage";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
@@ -11,6 +14,9 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/browse" element={<Browse />} />
       <Route path="/account" element={<Account />} />
+      <Route path="/signin" element={<SignUp />} />
+      <Route path="/signup" element={<SignIn />} />
+      <Route path="/product/:id" element={<ProductPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
