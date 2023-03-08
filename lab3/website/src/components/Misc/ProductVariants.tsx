@@ -1,3 +1,6 @@
+/* Not to be confused with productpagevariant which are the variants that are shown while on a specific product's page */
+
+
 import React, { useEffect } from 'react'
 import { Product } from '../../model/product'
 import ProductLink from '../Logic/ProductLink';

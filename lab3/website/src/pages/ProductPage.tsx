@@ -1,4 +1,5 @@
 import React from 'react'
+import ProductPageVariants from '../components/Misc/ProductPageVariants';
 import Carousel from '../components/structural/Carousel';
 import ProductImages from '../components/structural/ProductImages';
 import SizeList from '../components/structural/SizeList';
@@ -6,6 +7,7 @@ import { config } from '../model/config';
 
 const ProductPage = () => {
     const Product = {
+        id:"helo",
         name: "Name",
         brand: "Brand",
         description: "888 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, dolorem id modi, perspiciatis ullam possimus, assumenda quam quibusdam inventore consequuntur aliquam. Temporibus ipsam deserunt totam laborum beatae maxime, reiciendis consequuntur ex molestiae. Dicta minima molestias incidunt. Numquam distinctio a quis laboriosam, assumenda ducimus eveniet. Rerum placeat minus officiis possimus? Debitis.",
@@ -31,9 +33,12 @@ const ProductPage = () => {
           },],
         price_factor: 1,
         images: ["https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Top_970x.jpg?v=1676626230","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front-Side_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Back_970x.jpg?v=1676626230"],
+        isInStock:()=>true
     };
 
-    return (<div className='utsm:min-h-screen h-[50rem] flex justify-center items-center font-oswald text-5xl'>Erro message</div>)
+    if(false){
+        return (<div className='utsm:min-h-screen h-[50rem] flex justify-center items-center font-oswald text-5xl'>Erro message</div>)
+    }
 
   return (
     <>
@@ -48,9 +53,9 @@ const ProductPage = () => {
             <h3 className='text-xl text-stone-500 font-oswald'>"{Product.color}"</h3>
             <span className='text-xl font-semibold mb-3'>{Product.price*Product.price_factor} {config.CURRENCY}</span>
 
-            <div className=' h-32 w-[] my-8 bg-stone-300'>
 
-            </div>
+                <ProductPageVariants items={[Product,Product,Product,Product,Product,Product,]} />
+
 
             <section>{Product.description}</section>
 
