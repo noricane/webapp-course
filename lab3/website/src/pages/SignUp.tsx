@@ -23,8 +23,9 @@ const SignUp = () => {
 
              
               {/* Address */}
-              <label className="mt-8 self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="email">Streetname:</label>
-              <input type="text" className="mt-8 p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
+              <h3 className="mt-5 mb-2 text-center col-span-2 utsm:col-span-5 font-bold text-stone-600"> Delivery Address</h3>
+              <label className=" self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="email">Streetname:</label>
+              <input type="text" className=" p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
               <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="email">City:</label>
               <input type="text" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
               <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="email">Country:</label>
