@@ -5,11 +5,11 @@ import { BaseUser } from "./baseuser";
 
 export class User extends BaseUser{
     phonenumber: string;
-    birthdate: string;
+    birthdate: Date;
     orders: PastOrder[]
     adresses: address[];
     
-    constructor(name: string,email: string,password:string,phonenumber: string,birthdate: string,adresses: address[], ...orders:PastOrder[]){
+    constructor(name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]){
         super(name,email,password)
         this.phonenumber = phonenumber;
         this.birthdate = birthdate;

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { BrandDropdown, ColorDropdown } from '../components/Misc/Dropdown'
 import Grid from '../components/Structural/Grid'
 import { checkLatinCharacters, ToArray } from '../helper/utils'
@@ -145,7 +146,7 @@ const Dashboard = () => {
   return (
     <div className='bg-stone-200 m-4 rounded-md min-h-screen p-4'>
         <div className='text-center flex items-center justify-center gap-3'>
-          <Button desc='Add Product +' />
+          <Link to={'/addproduct'}> <Button desc='Add Product +' /></Link>
           <Button desc='Edit Batch' />
 
           <label htmlFor="brand">Brand:</label>

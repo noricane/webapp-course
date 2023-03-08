@@ -1,4 +1,6 @@
+import { address } from './../model/adress';
 import { Product, stockedSize } from "../model/product";
+import { PastOrder } from '../model/pastorder';
 
 const crypto = require('crypto');
 
@@ -79,11 +81,31 @@ export function isProduct(arg: any){
 }
 
 
+//Checks that this any object contains the correct data for a user to be instantiated
+export function isUser(arg: any){
+    let nameCheck:boolean    = arg?.name != null && typeof(arg.name)== "string"
+    let emailCheck:boolean   = arg?.email != null && typeof(arg.email)== "string"
+    let passwordCheck:boolean    = arg?.password != null && typeof(arg.password)== "string"
+    let phonenumberCheck:boolean   = arg?.phonenumber != null && typeof(arg.phonenumber)== "string"
+    let birthdateCheck:boolean   = arg?.birthdate != null && arg.birthdate instanceof Date
+    let addressCheck:boolean   = arg?.address != null && Array.isArray(arg?.address) && arrayType(arg?.address,"string")
+    let orderCheck:boolean   = arg?.orders != null && Array.isArray(arg?.orders) && arrayInstance(arg?.orders,PastOrder)
+    
+    
+
+
+    let checks = [nameCheck,emailCheck,passwordCheck,phonenumberCheck,birthdateCheck,addressCheck,orderCheck]
+    if (!nameCheck || !emailCheck || !passwordCheck || !phonenumberCheck || !birthdateCheck || !addressCheck || !orderCheck 
+        || Object.keys(arg).length > checks.length) {
+        return false
+    }
+    return true
+}
+
+
 /*
  * Turn the map<String, Object> to an Object so it can be converted to JSON
  */
-
-
 export const toObject = (map:any):any =>
     Array.from( 
         map.entries(), ([ k, v ]) =>
@@ -92,3 +114,26 @@ export const toObject = (map:any):any =>
                 : { key: k, value: v }
     )
   
+const arrayType = (arr:any[],type:string):boolean => {
+    let bool = true
+    if(arr.length == 0) {
+        return bool
+    }
+    arr.forEach(e => {
+        if(typeof(e) != type){
+            bool = false
+            return
+        }})
+    return bool
+}
+const arrayInstance = (arr:any[],type:any):boolean => {
+    let bool = true
+    if(arr.length == 0) {
+        return bool
+    }
+    arr.forEach(e => {
+        if(!(e instanceof type)){
+            bool = false
+        }})
+    return bool
+}

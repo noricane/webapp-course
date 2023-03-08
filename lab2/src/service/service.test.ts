@@ -1,4 +1,4 @@
-import { GENERALCOLOR } from './../helper/utils';
+import { GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { Product } from "../model/product";
 import { makeProductService } from "./ProductService";
 
@@ -13,8 +13,8 @@ test('Adds product to test_env and logs newly added product', async () => {
           description: "strfing",
           color: "string",
           generalColor:GENERALCOLOR.BLACK,
+          category:CATEGORY.LOW,
           price: 10,
-          category: "string",
           stock: [{
             size: 0,
             amount: 0,
