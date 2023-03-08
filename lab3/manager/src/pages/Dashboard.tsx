@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BrandDropdown, ColorDropdown } from '../components/Misc/Dropdown'
+import { ColorDropdown, GeneralDropdown } from '../components/Misc/Dropdown'
 import Grid from '../components/Structural/Grid'
 import { checkLatinCharacters, ToArray } from '../helper/utils'
 import { config } from '../model/config'
@@ -150,10 +150,10 @@ const Dashboard = () => {
           <Button desc='Edit Batch' />
 
           <label htmlFor="brand">Brand:</label>
-          <BrandDropdown onClick={dispatch} action={"set_brand"} state={state.brand} items={brands}>{state.brand == null ?`Brand ➤` : state.brand}</BrandDropdown>
+          <GeneralDropdown onClick={dispatch} action={"set_brand"} state={state.brand} items={brands}>{state.brand == null ?`Brand ➤` : state.brand}</GeneralDropdown>
           <label htmlFor="category">Category:</label>
           {/* <Dropdown items={categories.map(e => CATEGORY[e])} /> */}
-          <BrandDropdown onClick={dispatch} action={"set_category"} state={state.category} items={categories.map(e => CATEGORY[e])}>{state.category == null ?`Category ➤` : CATEGORY[state.category]}</BrandDropdown>
+          <GeneralDropdown onClick={dispatch} action={"set_category"} state={state.category} items={categories.map(e => CATEGORY[e])}>{state.category == null ?`Category ➤` : CATEGORY[state.category]}</GeneralDropdown>
           {/* <div className=' text-green'>
             <select className='bg-stone-50  h-10 rounded-lg px-3 w-32 text-center text-ellipsis       whitespace-nowrap text-stone-800'>
             <option value="none" selected disabled hidden>Choose an option</option>

@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react'
 import { GENERALCOLOR } from '../../model/misc';
 import { FilterState } from '../../pages/Dashboard';
 
-export const BrandDropdown = ({state,items,children,onClick,action }:{items:any[],children:ReactNode,state:any,onClick:Function,action:string}) => {
+export const GeneralDropdown = ({state,items,children,onClick,action }:{items:any[],children:ReactNode,state:any,onClick:Function,action:string}) => {
     const [open, setOpen] = useState<boolean>(false)
     return (
       <div className=''> 
