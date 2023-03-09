@@ -28,17 +28,22 @@ const  SignIn = () => {
         const resp = await axios.post(`${config.URL}/user/login`,{
           email: em,
           password: pw
-        }).catch((e:AxiosError) =>setError(e.message)   )
+        }).catch((e:AxiosError) =>setError(e.message))
+        if(resp != null &&  typeof(resp.data) == "string"){
+          console.log(resp.status);
+          
+          setError(resp.data)
+        }
         const object = JSON.parse(decodeURIComponent(Cookies.get('user') as string)) 
-        console.log("paresd",);
-        if(resp )
+        
         setUser(object != null ? object : undefined)
         
 
         
         
       }catch(err:any){
-        throw new Error(err)
+        console.log(err);
+        
       }
       
 
