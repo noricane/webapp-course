@@ -5,12 +5,13 @@ import { config } from "../model/config";
 import { sessionAtom } from "../model/jotai.config";
 import { useAtom } from "jotai";
 import ErrorSpan from "../components/Misc/ErrorSpan";
+import { useNavigate } from "react-router";
 
 
 
 const  SignIn = () => {
   const [,setUser] = useAtom(sessionAtom)    
-
+  const nav =useNavigate();
     const email = useRef<HTMLInputElement>(null)
     const password = useRef<HTMLInputElement>(null)
     const [error, setError] = useState<string>()
@@ -28,7 +29,9 @@ const  SignIn = () => {
         const resp = await axios.post(`${config.URL}/user/login`,{
           email: em,
           password: pw
-        }).catch((e:AxiosError) =>setError(e.message))
+        }).then(e => {console.log("response",e); return e}
+        ).catch((e:AxiosError) =>{
+          setError(e.response?.data == null ? e.message : e.response.data as string)})
         if(resp != null &&  typeof(resp.data) == "string"){
           console.log(resp.status);
           
@@ -69,10 +72,10 @@ const  SignIn = () => {
               <section className="flex flex-col w-full justify-center">
               <span className="w-full flex justify-center gap-4 mb-2"> 
                 <button type="submit" className="button transition-all rounded-sm bg-stone-800 p-2 px-4 font-bold text-stone-100 hover:bg-stone-600 active:bg-stone-100 active:text-stone-800">Log In</button>
-                <button className="button transition-all rounded-sm bg-stone-100 p-2 px-4 font-bold text-stone-800 hover:bg-stone-200 active:bg-stone-800 active:text-stone-100">Cancel</button>  
+                <button onClick={e => nav('/')} className="button transition-all rounded-sm bg-stone-100 p-2 px-4 font-bold text-stone-800 hover:bg-stone-200 active:bg-stone-800 active:text-stone-100">Cancel</button>  
               </span>
               {error && <ErrorSpan message={error}/>}
-              <button className="text-stone-600">forgot password?</button>
+              <button  className="text-stone-600">forgot password?</button>
             </section>   
 
                  
