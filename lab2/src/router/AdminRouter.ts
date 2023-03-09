@@ -30,13 +30,14 @@ admin_router.get("/", async (
 
 
 admin_router.post("/", async (
-    req: Request<{admin:any}, {}, {}>,
+    req: Request<{}, {}, {admin:any}>,
     res: Response< Admin | string>
 ) => {
     try {
-        const { admin } = req.params
-        if(admin == null || admin.name == null || admin.email == null || admin.password == null){
-            res.status(400).send("Bad GET request, id must be of type string");
+        const { admin } = req.body
+        if(admin == null || admin.name == null || admin.email == null || admin.password == null || typeof(admin.name) != "string" || typeof(admin.email) != "string" || typeof(admin.password) != "string"){
+            res.status(400).send("Bad GET request, admin must have correct arguments, must be of type string");
+            return
         }
         const newAdmin = new Admin(admin.name,admin.email,admin.password)
         const resp = await admin_service.addAdmin(newAdmin);

@@ -6,7 +6,7 @@ import Carousel from "../components/structural/Carousel";
 import { Product } from "../model/product";
 const Home = () => {
   function getProducts(){
-    const item:Product = {
+    const item = {
       id:"luh",
       name: "string",
       brand: "string",
@@ -29,8 +29,8 @@ const Home = () => {
     setRecommended(prev => [...prev,item, item, item, item, item, item, item, item,])
     setLatest(prev => [...prev, item, item, item, item, item, item, item,])
   }
-  const [recommended, setRecommended] = useState<Product[]>([]);
-  const [latest, setLatest] = useState<Product[]>([]);
+  const [recommended, setRecommended] = useState<any[]>([]);
+  const [latest, setLatest] = useState<any[]>([]);
 
   useEffect(()=>{
     getProducts()

@@ -2,6 +2,7 @@ import { GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { normalizeString, productConstructor } from '../helper/utils';
 import {Product} from '../model/product'
 
+/* Hardcoded method for initialization of shoe objects and then adding returning them in the correct Map form*/
 export function initShoes():Map<string,Map<string,Product>>{
     const map: Map<string,Map<string,Product>> = new Map();
     
@@ -43,13 +44,8 @@ export function initShoes():Map<string,Map<string,Product>>{
             let elems: string[] = []
             const newColor = normalizeString(e.color);
             const innerQuery: Product | undefined =  query.get(newColor);
-            console.log("before innerqery");
-            
             if( innerQuery == null){
                 query.set(newColor/**NORMALIZED STRING HERE */,e)
-                console.log("Added new color");
-                console.log("New map", query);
-                
                 return
             }return
 

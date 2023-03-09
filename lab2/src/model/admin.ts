@@ -6,9 +6,7 @@ export class Admin extends BaseUser{
     getType():string {
         return UserType[UserType.ADMIN]
     }
-    getId():number{
-        return super.id
-    }
+    
     
      constructor(name: string,email: string,password: string){
         super(name,email,password)
