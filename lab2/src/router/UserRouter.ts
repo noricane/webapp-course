@@ -18,6 +18,7 @@ type UserRequest = Request & {
     }
     session : {
         user ?: User
+        ooga ?: string
     }
 }
 
@@ -43,7 +44,9 @@ user_router.post("/login", async (
         }else{
             console.log("sending resp");
             
-            req.session.user = resp
+            console.log("response",JSON.stringify(resp));
+            
+            res.cookie('user',JSON.stringify(resp))
             res.status(200).send("Successfully logged in");
         }
     } catch (e: any) {

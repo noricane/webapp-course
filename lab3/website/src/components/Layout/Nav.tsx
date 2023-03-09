@@ -2,11 +2,19 @@ import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Link, useNavigate } from "react-router-dom";
 import { Twirl as Hamburger } from "hamburger-react";
 import ResponsiveMenu from "../Misc/ResponsiveMenu";
+import Cookies from "js-cookie";
+import { sessionAtom } from "../../model/jotai.config";
+import { useAtom } from "jotai";
+
+
+import LoggedInMenu from "../Misc/LoggedInMenu";
 
 const Nav = () => {
+  const [userCookie,] = useAtom(sessionAtom)
   const [isOpen, setOpen] = useState(false);
   const navigate = useNavigate();
-
+  useEffect(()=>console.log("COOOKIE",userCookie)
+  ,[])
   //Video should act as a link back to base url. This redirects user to homepage
   const homeButtonHandler = (
     e: React.MouseEvent<HTMLVideoElement, MouseEvent>
@@ -38,17 +46,24 @@ const Nav = () => {
             <li> <Link to={"/membersclub"}>Member's Club</Link> </li>
           </ul>
         </div>
-        <div className="absolute utsm:hidden [&>*]:hover:cursor-pointer right-0 mx-4 flex gap-2">
-          <Link to="/signup" className="hover:bg-black hover:text-stone-200  bg-stone-200 p-1 border-black border-4" >
-            Sign Up
-          </Link>
-          <Link to="/signin" className="bg-black text-stone-200  hover:bg-stone-200 hover:text-black p-1 border-black border-4" >
-            Sign In
-          </Link>
-        </div>
+        {/* Only Display these links(buttons) if user is not logged in */
+        userCookie == null &&
+          <div className="absolute utsm:hidden [&>*]:hover:cursor-pointer right-0 mx-4 flex gap-2">
+            <Link to="/signup" className="hover:bg-black hover:text-stone-200  bg-stone-200 p-1 border-black border-4" >
+              Sign Up
+            </Link>
+            <Link to="/signin" className="bg-black text-stone-200  hover:bg-stone-200 hover:text-black p-1 border-black border-4" >
+              Sign In
+            </Link>
+          </div>
+        }
+        {/* Only Display these links(buttons) if user is logged in */
+          userCookie != null &&
+          <div className="utsm:hidden flex justify-center items-center"><LoggedInMenu mobile={false} firstColor={["bg-stone-200","text-stone-200","#E7E5E4"]} secondColor={["bg-stone-900","text-stone-900","#1C1917"]} /></div>
+        }
       </div>
 
-      <ResponsiveMenu openState={isOpen} setOpenState={setOpen} />
+      <ResponsiveMenu loggedIn={userCookie} openState={isOpen} setOpenState={setOpen} />
     </nav>
   );
 };

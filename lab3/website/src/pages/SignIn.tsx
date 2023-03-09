@@ -1,11 +1,15 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import Cookies  from 'js-cookie';
 import { config } from "../model/config";
-
+import { sessionAtom } from "../model/jotai.config";
+import { useAtom } from "jotai";
 
 
 
 const  SignIn = () => {
+  const [,setUser] = useAtom(sessionAtom)    
+
     const email = useRef<HTMLInputElement>(null)
     const password = useRef<HTMLInputElement>(null)
     const [error, setError] = useState<string>()
@@ -17,14 +21,26 @@ const  SignIn = () => {
         return
       }
       setError(undefined)
-      const em:string = email.current.value;
-      const pw: string = password.current.value
-      const resp = await axios.post(`${config.URL}/user/login`,{
-        email: em,
-      password: pw
-      })
+      try{
+        const em:string = email.current.value;
+        const pw: string = password.current.value
+        const resp = await axios.post(`${config.URL}/user/login`,{
+          email: em,
+          password: pw
+        }).catch((e:AxiosError) =>setError(e.message)   )
+        const object = JSON.parse(decodeURIComponent(Cookies.get('user') as string)) 
+        console.log("paresd",);
+        if(resp )
+        setUser(object != null ? object : undefined)
+        
+
+        
+        
+      }catch(err:any){
+        throw new Error(err)
+      }
       
-      console.log(resp);
+
       
     }
     
@@ -46,10 +62,10 @@ const  SignIn = () => {
           
               <section className="flex flex-col w-full justify-center">
               <span className="w-full flex justify-center gap-4 mb-2"> 
-                <button type="submit" className="transition-all rounded-sm bg-stone-800 p-2 px-4 font-bold text-stone-100 hover:bg-stone-600 active:bg-stone-100 active:text-stone-800">Log In</button>
-                <button className="transition-all rounded-sm bg-stone-100 p-2 px-4 font-bold text-stone-800 hover:bg-stone-200 active:bg-stone-800 active:text-stone-100">Cancel</button>  
+                <button type="submit" className="button transition-all rounded-sm bg-stone-800 p-2 px-4 font-bold text-stone-100 hover:bg-stone-600 active:bg-stone-100 active:text-stone-800">Log In</button>
+                <button className="button transition-all rounded-sm bg-stone-100 p-2 px-4 font-bold text-stone-800 hover:bg-stone-200 active:bg-stone-800 active:text-stone-100">Cancel</button>  
               </span>
-
+              {error && <span className="text-red-500 font-bold w-full text-center">{error}</span>}
               <button className="text-stone-600">forgot password?</button>
             </section>   
 

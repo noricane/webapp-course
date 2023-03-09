@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Route, Routes } from "react-router";
 import Account from "./pages/Account";
 import Browse from "./pages/Browse";
@@ -7,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import ProductPage from "./pages/ProductPage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+
+axios.defaults.withCredentials = true;
 
 function App() {
   return (

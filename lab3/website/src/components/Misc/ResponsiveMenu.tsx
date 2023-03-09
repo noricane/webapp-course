@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import LoggedInMenu from './LoggedInMenu'
 
 const ResponsiveMenu = (props:any) => {
   return (
@@ -20,9 +21,14 @@ const ResponsiveMenu = (props:any) => {
 
 
 
+    {props.loggedIn == null &&
+    <>
     <Link to='/signup' className='sm:hidden hover:bg-stone-200 hover:text-black w-24 self-center bg-stone-900 p-1 border-stone-200 border-4'>Sign Up</Link>
     <Link to='/signin' className='sm:hidden hover:bg-stone-900 hover:text-stone-200 w-24 self-center bg-stone-200 text-black p-1 border-stone-200 border-4'>Sign In</Link>
-        
+    </>}
+    {props.loggedIn != null &&
+   <div className='sm:hidden flex justify-center items-center'> <LoggedInMenu mobile={true} firstColor={["bg-stone-200","text-stone-200","#E7E5E4"]} secondColor={["bg-stone-900","text-stone-900","#E7E5E4"]}  /></div>
+    }
 
   </div></div>
   )
