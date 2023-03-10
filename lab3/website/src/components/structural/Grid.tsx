@@ -1,27 +1,19 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { getProducts } from '../../api'
 import { config } from '../../model/config'
 import { Product } from '../../model/product'
 import ProductCard from './ProductCard'
 const Grid = () => {
     const [list,setList] = useState<Product[]>([])
     useEffect(()=>{
-        async function getTasks(){
-            try {
-              let arr:Product[]= []
-              const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`);
-              Array.from(data.values()).forEach((e:any) => {
-                e.value.forEach((element:any) => {
-                  arr.push(element.value)
-                })
-              })
-              setList(prev => [...prev,...arr])
-            } catch (error) {
-              
-            }
+       (async()=>{
+        const resp = await getProducts();
+        if(resp == undefined ){
+          return
         }
-        
-        getTasks();       
+        setList(resp)
+       })()       
     },[])
 
   return (

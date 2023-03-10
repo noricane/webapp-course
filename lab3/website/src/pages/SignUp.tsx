@@ -1,12 +1,19 @@
+import { useAtom } from "jotai";
+import Cookies from "js-cookie";
 import React,{ useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { registerUser } from "../api";
 import ErrorSpan from "../components/Misc/ErrorSpan";
+import { sessionAtom } from "../model/jotai.config";
+import { ProductError, User } from "../model/user";
 
 
 const SignUp = () => {
+    const [,setUser] = useAtom(sessionAtom)
     const [error,setError] = useState<string>()
     const name = useRef<HTMLInputElement>(null)
     const email = useRef<HTMLInputElement>(null)
+    const phone = useRef<HTMLInputElement>(null)
     const birthdate = useRef<HTMLInputElement>(null)
     const street = useRef<HTMLInputElement>(null)
     const city = useRef<HTMLInputElement>(null)
@@ -14,17 +21,61 @@ const SignUp = () => {
     const zip = useRef<HTMLInputElement>(null)
     const password1 = useRef<HTMLInputElement>(null)
     const password2 = useRef<HTMLInputElement>(null)
+    
     const nav = useNavigate()
     const submitHandler = ((e: React.FormEvent<HTMLFormElement>) => {
+      const refsArr = [name.current?.value, email.current?.value,phone.current?.value, street.current?.value, city.current?.value, country.current?.value, zip.current?.value, password1.current?.value, password2.current?.value]
+      const isValid = ():boolean => {
+        let bool = true
+        refsArr.forEach(e => {
+          if( e == null || typeof(e) != "string"|| e == ""){
+            bool = false
+          }
+        })
+        return bool
+      }
       e.preventDefault();
       console.log("in submithandler",password1.current?.value !==  password2.current?.value);
       
-      if(name.current?.value == "" || email.current?.value == "" || birthdate.current?.value == "" || password1.current?.value == "" || password2.current?.value == ""){
-        setError("Fields with * must be filled in")
+      if(birthdate.current?.value == null || !isValid){
+        setError("All Fields must be filled in")
       }
       if( password1.current?.value !==  password2.current?.value){
         setError("Passwords must match")
       }
+
+      (async ()=>{
+        console.log(email.current?.value);
+        
+        /* @ts-ignore */ // ask robin
+        const resp = await registerUser(name.current?.value,email.current?.value,phone.current?.value,birthdate.current?.value,street.current?.value,city.current?.value,country.current?.value,zip.current?.value,password1.current?.value).catch(e => console.log("Error encountered",e)
+        )
+        console.log("resp",resp);
+        
+        if (resp === true){
+          const cookie = Cookies.get('user')
+          console.log("cookie",cookie);
+          
+          if (cookie == null){return}
+          const object = JSON.parse(decodeURIComponent(cookie)) 
+          setUser(object)
+          nav('/')
+          return
+        }
+        if(typeof(resp) == "object"){
+          let str = "Unkown Error Occured"
+          str = (resp as object).toString()
+          setError(str) 
+        }
+        if(typeof(resp) == "string"){
+          setError(resp) 
+
+        }
+        
+
+        
+      })()
+      
     });
     const redirectHandler = ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {nav('/')});
     
@@ -37,15 +88,18 @@ const SignUp = () => {
           <form onSubmit={submitHandler}>
               <section  className="grid grid-cols-2  utsm:grid-cols-5 items-center justify-center gap-2 p-4">
               {/* Name, Email and Brithdate */}
-              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="name">*Name:</label>
+              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="name">Name:</label>
               <input ref={name} name="name"  type="text" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
               
-              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="email">*Email:</label>
-              <input ref={email} name="email" type="text" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
+              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="email">Email:</label>
+              <input ref={email} name="email" type="email" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
               
-              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="birthdate">*Birthdate:</label>
+              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="birthdate">Birthdate:</label>
               <input ref={birthdate} name="birthdate" type="date" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
 
+              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="phone">Phonenumber:</label>
+              <input ref={phone} name="phone" type="text" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
+              
               <span className="col-span-2 utsm:col-span-5 w-[80%] h-[1px] justify-self-center my-2 bg-stone-400 items-center"></span>
 
              
@@ -64,10 +118,10 @@ const SignUp = () => {
              
 
               {/* Password */}
-              <label className=" self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="password1">*Password:</label>
+              <label className=" self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="password1">Password:</label>
               <input ref={password1} name="password1" type="password" className=" p-1 px-2 max-w-[14rem] h-8  rounded-sm  bg-stone-50 utsm:col-span-3" />
 
-              <label className=" self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="password2">*Repeat Password:</label>
+              <label className=" self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="password2">Repeat Password:</label>
               <input ref={password2} name="password2" type="password" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm  bg-stone-50 utsm:col-span-3" />
               </section>
           

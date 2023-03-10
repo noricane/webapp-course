@@ -119,6 +119,8 @@ export class ProductService implements IProductService{
     }
     async getProductColor(id: string, color: string): Promise<ProductError |  Product> {
         const query = this.products.get(id);
+
+        
         if(query!=null){
             const color_query  = query.get(color)
             if(color_query!=null){

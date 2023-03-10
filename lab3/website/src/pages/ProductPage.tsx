@@ -1,42 +1,93 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { getProduct } from '../api';
 import ProductPageVariants from '../components/Misc/ProductPageVariants';
 import Carousel from '../components/structural/Carousel';
 import ProductImages from '../components/structural/ProductImages';
 import SizeList from '../components/structural/SizeList';
 import { config } from '../model/config';
+import { Product } from '../model/product';
+import { useLocation } from "react-router-dom";
+import { multiProduct } from '../model/user';
+import { cartAtom } from '../model/jotai.config';
+import { useAtom } from 'jotai';
+import axios from 'axios';
 
 const ProductPage = () => {
-    const Product = {
-        id:"helo",
-        name: "Name",
-        brand: "Brand",
-        description: "888 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, dolorem id modi, perspiciatis ullam possimus, assumenda quam quibusdam inventore consequuntur aliquam. Temporibus ipsam deserunt totam laborum beatae maxime, reiciendis consequuntur ex molestiae. Dicta minima molestias incidunt. Numquam distinctio a quis laboriosam, assumenda ducimus eveniet. Rerum placeat minus officiis possimus? Debitis.",
-        color: "Midnight",
-        generalColor:"BLACK",
-        category:"LOW",
-        price: 777,
-        stock: [{
-            size: 39,
-            amount: 999,
-          },{
-            size: 40,
-            amount: 0,
-          },{
-            size: 41,
-            amount: 4,
-          },{
-            size: 42,
-            amount: 999,
-          },{
-            size: 44,
-            amount: 29,
-          },],
-        price_factor: 1,
-        images: ["https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Top_970x.jpg?v=1676626230","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front-Side_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Back_970x.jpg?v=1676626230"],
-        isInStock:()=>true
-    };
+  const addToCart = () => {
+    console.log("adding");
+    
+    if(size == null || Product == null){      
+      return
+    }
+    if(cart != null && cart.filter(e => e.item == Product &&  e.size == size.size).length != 0){
+      console.log("here");
+      
+      const cartItem:multiProduct = cart.filter(e => e.item.id == Product.id && e.item.color == Product.color && e.size == size.size)[0]
 
-    if(false){
+      const rest:multiProduct[] = cart.filter(e => e.item.color != Product.color && e.item.id != Product.id && e.size != size.size)
+      cartItem.amount++
+
+      setCart([cartItem,...rest])
+      console.log(cart);
+      
+      
+    }else if(cart.length == 0 && Product != null){
+      console.log("empty");
+
+
+      setCart([{item:Product,size:size.size,amount:1}])
+    }else{
+      console.log("last");
+
+      setCart(prev => [...prev,{item:Product,size:size.size,amount:1}])
+    }
+
+  }
+  
+  
+  const location = useLocation()
+  const {pathname,search} = location
+  const id = pathname.split('/')[pathname.split('/').length-1]
+  const color = search.split('=')[search.split('=').length-1]
+  
+  
+  const [size, setSize] = useState<{size:number,amount:number}>() 
+  const [Product, setProduct] = useState<Product>() 
+  const [variants, setVariants] = useState<Product[]>() 
+  const [error, setError] = useState<boolean>(false) 
+  const [cart, setCart] = useAtom(cartAtom)
+
+  useEffect(()=>{console.log(cart)},[cart])
+    useEffect(()=>{
+      (async ()=>{
+        const p = await getProduct(id,color)
+        if(p == undefined){
+          setError(true)
+          return
+        }
+        setProduct(p)
+      })()
+    },[])
+
+   useEffect(()=>{
+    if(Product == null){return}
+      (async ()=>{
+        const {data}:{data:{key:string,value:Product}[]|string} = await axios.get(`${config.URL}/product/${Product.id}`)
+        if(typeof(data) == "string"){return}
+        const list:Product[] = []
+        console.log(data)
+        data.forEach(e => e.value.color != Product.color && list.push(e.value))
+
+        setVariants([Product,...list])
+
+  
+      })()
+      
+    },[Product])
+    if(Product == null){
+        return (<div className='utsm:min-h-screen h-[50rem] flex justify-center items-center font-oswald text-5xl'>Loading...</div>)
+    }
+    if(error){
         return (<div className='utsm:min-h-screen h-[50rem] flex justify-center items-center font-oswald text-5xl'>Erro message</div>)
     }
 
@@ -54,13 +105,13 @@ const ProductPage = () => {
             <span className='text-xl font-semibold mb-3'>{Product.price*Product.price_factor} {config.CURRENCY}</span>
 
 
-                <ProductPageVariants items={[Product,Product,Product,Product,Product,Product,]} />
+                <ProductPageVariants items={variants} />
 
 
             <section>{Product.description}</section>
 
-            <SizeList items={Product.stock} />
-            <button className='w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add To Cart +</button>
+            <SizeList  useSize={[size,setSize]} items={Product.stock} />
+            <button onClick={()=>addToCart()} className='w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add To Cart +</button>
 
         </article>
     </div>

@@ -1,5 +1,8 @@
+import { Product } from "./product";
+
 export type multiProduct={
-    id: number; //product id 
+    item: Product; //product id 
+    size:number;
     amount: number;
 }
 

@@ -83,15 +83,19 @@ export function isProduct(arg: any){
 
 //Checks that this any object contains the correct data for a user to be instantiated
 export function isUser(arg: any){
+    let arr = [arg?.street, arg?.city, arg?.country, arg?.zip,]
+    
+    
     let nameCheck:boolean    = arg?.name != null && typeof(arg.name)== "string"
     let emailCheck:boolean   = arg?.email != null && typeof(arg.email)== "string"
     let passwordCheck:boolean    = arg?.password != null && typeof(arg.password)== "string"
     let phonenumberCheck:boolean   = arg?.phonenumber != null && typeof(arg.phonenumber)== "string"
-    let birthdateCheck:boolean   = arg?.birthdate != null && arg.birthdate instanceof Date
-    let addressCheck:boolean   = arg?.address != null && Array.isArray(arg?.address) && arrayType(arg?.address,"string")
-    let orderCheck:boolean   = arg?.orders != null && Array.isArray(arg?.orders) && arrayInstance(arg?.orders,PastOrder)
-    let checks = [nameCheck,emailCheck,passwordCheck,phonenumberCheck,birthdateCheck,addressCheck,orderCheck]
-    if (!nameCheck || !emailCheck || !passwordCheck || !phonenumberCheck || !birthdateCheck || !addressCheck || !orderCheck 
+    let birthdateCheck:boolean   = arg?.birthdate != null && new Date(arg.birthdate) instanceof Date
+    let addressCheck:boolean   = arr.length != 0 && Array.isArray(arr) && arrayType(arr,"string")
+
+    let checks = [nameCheck,emailCheck,passwordCheck,phonenumberCheck,birthdateCheck,addressCheck]
+     
+    if (!nameCheck || !emailCheck || !passwordCheck || !phonenumberCheck || !birthdateCheck || !addressCheck /* || !orderCheck  */
         || Object.keys(arg).length > checks.length) {
         return false
     }

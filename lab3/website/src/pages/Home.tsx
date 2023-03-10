@@ -1,42 +1,30 @@
 import React, { useEffect, useState } from "react";
+import { getProducts } from "../api";
 import HomeHeader from "../components/Misc/HomeHeader";
 import Carousel from "../components/structural/Carousel";
-
-
 import { Product } from "../model/product";
+
+
 const Home = () => {
-  function getProducts(){
-    const item = {
-      id:"luh",
-      name: "string",
-      brand: "string",
-      description: "string",
-      color: "Blud Red",
-      generalColor:"red",
-      price: 10,
-      category: "string",isInStock:()=>false,
-      stock: [
-          {
-              size: 0,
-              amount: 0
-          }
-      ],
-      price_factor: 10,
-      images: [
-          "https://cdn.shopify.com/s/files/1/0367/8922/3483/products/Sneaker_1800x1200.png?v=1662223200"
-      ]
-    }
-    setRecommended(prev => [...prev,item, item, item, item, item, item, item, item,])
-    setLatest(prev => [...prev, item, item, item, item, item, item, item,])
-  }
+  
+
+
+
   const [recommended, setRecommended] = useState<any[]>([]);
   const [latest, setLatest] = useState<any[]>([]);
 
   useEffect(()=>{
-    getProducts()
-    
-    
-  },[])
+    (async()=>{
+     const resp = await getProducts();
+     if(resp == undefined ){
+       return
+     }
+     setRecommended(resp.filter((e:Product,indx:number) => indx%2==0))
+     setLatest(resp.filter((e:Product,indx:number) => indx%2!=0))
+    })()       
+ },[])
+  
+
   
 
 

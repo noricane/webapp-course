@@ -152,7 +152,7 @@ product_router.get("/", async (
 
 
 product_router.get("/:id", async (
-    req: Request<{color:string}, {}, {id:string}>,
+    req: Request<{color:string,id:string}, {}, {}>,
     res: Response<Product | string>,
     next:Function
 ) => {
@@ -167,7 +167,7 @@ product_router.get("/:id", async (
             
         }else{
 
-        const id: string = req.body.id
+        const id: string = req.params.id
         const color: string = req.query.color
         const resp = await product_service.getProductColor(id,color);
 

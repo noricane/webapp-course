@@ -8,6 +8,7 @@ require('dotenv').config()
 import express from "express";
 import cors from "cors";
 import session from "express-session";
+import * as path from "path";
 
 /**
 * App Variables
@@ -16,6 +17,15 @@ export const app = express();
 /**
 * App Configuration
 */
+
+/* app.use(Express.static(path.join(__dirname, '../../client/build')));
+
+
+app.get('/*', (req : Express.Request, res : Express.Response) => {
+
+ res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
+
+}); */
 
 app.use(session({
 secret : process.env.SESSION_KEY as string, //

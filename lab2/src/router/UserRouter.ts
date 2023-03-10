@@ -1,3 +1,4 @@
+import { address, addressType } from './../model/adress';
 import { ProductError } from './../service/UserService';
 import { arrayInstance, isMultiProducts } from './../helper/utils';
 import { PastOrder, multiProduct } from './../model/pastorder';
@@ -56,20 +57,26 @@ user_router.post("/login", async (
 
 
 user_router.post("/register", async (
-    req: Request<{}, {}, {user:any}>,
-    res: Response< User | string>
+    req: Request<{}, {}, {user:any}> & {session:{user?:User}},
+    res: Response< true | string>
 ) => {
     try {
         const { user } = req.body
-        if(user == null || !isUser(user)){
+        console.log((user));
+        console.log(isUser(user));
+        if(user == null /*||  !isUser(user) */){
+            
             res.status(400).send("Bad GET request, id must be of type string");
             return
         }
-        const newuser = new User(user.name,user.email,user.password,user.phonenumber,user.birthdate,user.address,user.orders)
+        const newuser = new User(user.name,user.email,user.password,user.phonenumber,user.birthdate,[new address(addressType.DELIVERY,user.street,user.city,user.country,user.zip)],user.orders)
         const resp = await user_service.addUser(newuser);
+        console.log("RESPONSEE IS ",resp);
+        
         if(resp instanceof User){
-            //Success, resp is the requested user!            
-            res.status(200).send(resp);
+            res.cookie('user',JSON.stringify(resp))
+            //Success, resp is the registered user!            
+            res.status(200).send(true);
         }else{
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);

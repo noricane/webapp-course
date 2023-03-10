@@ -11,7 +11,7 @@ class MapAndColor {
     constructor(public map: Map<string, Product>, public color: string) {}
 }
   
-interface Props {
+interface Props{
     item:(MapAndColor|Product);
     key:string,
 }

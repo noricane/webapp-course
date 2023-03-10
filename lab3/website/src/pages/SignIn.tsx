@@ -6,6 +6,7 @@ import { sessionAtom } from "../model/jotai.config";
 import { useAtom } from "jotai";
 import ErrorSpan from "../components/Misc/ErrorSpan";
 import { useNavigate } from "react-router";
+import { logInUser } from "../api";
 
 
 
@@ -25,24 +26,17 @@ const  SignIn = () => {
       setError(undefined)
       try{
         const em:string = email.current.value;
-        const pw: string = password.current.value
-        const resp = await axios.post(`${config.URL}/user/login`,{
-          email: em,
-          password: pw
-        }).then(e => {console.log("response",e); return e}
-        ).catch((e:AxiosError) =>{
-          setError(e.response?.data == null ? e.message : e.response.data as string)})
-        if(resp != null &&  typeof(resp.data) == "string"){
-          console.log(resp.status);
+        const pw: string = password.current.value;
+        (async()=>{
+          const resp = await logInUser(em,pw)
+          console.log(resp);
           
-          setError(resp.data)
-        }
-        const object = JSON.parse(decodeURIComponent(Cookies.get('user') as string)) 
-        
-        setUser(object != null ? object : undefined)
+          setUser(resp != null ? resp : undefined)
+          nav('/')
+        })()
         
 
-        
+               
         
       }catch(err:any){
         console.log(err);
