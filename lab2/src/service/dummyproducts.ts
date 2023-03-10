@@ -71,6 +71,6 @@ const createProduct = (name:string, brand: string, color: string,generalColor:GE
     const size = sizes[Math.floor(Math.random() * sizes.length)];
 
     const desc: string= "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores aspernatur ab reiciendis perspiciatis porro placeat saepe. Ea veritatis cupiditate vero!"
-    return new Product(name,brand,desc,color,generalColor,price,CATEGORY.LOW,size,.95,url)
+    return new Product(name,brand,desc,color,generalColor,price,CATEGORY.LOW,size,1,url)
 
 }

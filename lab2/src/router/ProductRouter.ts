@@ -38,9 +38,11 @@ product_router.get("/", async (
             return next()
             
         }
-        if (req.query.color == null && (typeof req.query.color != "string" || !Object.values(GENERALCOLOR).includes(req.query.color)) ||(req.query.category != null && typeof req.query.category != "string") ){
+
+        
+        if (req.query.color != null && (typeof req.query.color != "string" || !Object.values(GENERALCOLOR).includes(parseInt(req.query.color))) || (req.query.category != null && typeof req.query.category != "string") ){
             //400 Bad request, make sure the color and id is of type string.
-            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color/category query must be correct type and correct value ${req.query.color}`);
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- color/category query must be correct type and correct value ${req.query.co}`);
             return
 
         }
