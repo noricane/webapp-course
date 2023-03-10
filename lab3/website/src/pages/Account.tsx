@@ -1,17 +1,30 @@
 import { useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router'
 import PersonalInfo from '../components/Account/PersonalInfo'
 import PrevOrders from '../components/Account/PrevOrders'
 import ProfileSettings from '../components/Account/ProfileSettings'
 import ErrorSpan from '../components/Misc/ErrorSpan'
 import { sessionAtom } from '../model/jotai.config'
 
-const Account = ({PropPage=<PersonalInfo />}:{PropPage?:JSX.Element}) => {
+const Account = ({PropPage=PersonalInfo}:{PropPage?:() => JSX.Element}) => {
   const [CURRENT,SETCURRENT] = useState<JSX.Element>()
   const [user,] = useAtom(sessionAtom)
+  const location = useLocation();
+
   console.log(user);
   useEffect(()=>{
-  SETCURRENT(PropPage)
+    const COMPONENT = location.state?.ProfileSettings
+    if(COMPONENT != null && typeof(COMPONENT) == "function"){
+      console.log("component",COMPONENT);
+      
+      SETCURRENT(<COMPONENT/>)
+    }else{
+      console.log("component",COMPONENT);
+      
+      SETCURRENT(<PropPage />)
+    }
+    
 
   },[])
   if(user == null) {

@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router";
 import { sessionAtom } from "./model/jotai.config";
 import Account from "./pages/Account";
 import Browse from "./pages/Browse";
+import Cart from "./pages/Cart";
 
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -31,6 +32,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/browse" element={<Browse />} />
       <Route path="/account" element={<Account />} />
+      <Route path="/cart" element={<Cart />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/product/:id" element={<ProductPage />} />
