@@ -27,7 +27,7 @@ const ResponsiveMenu = (props:any) => {
     <Link to='/signin' className='sm:hidden hover:bg-stone-900 hover:text-stone-200 w-24 self-center bg-stone-200 text-black p-1 border-stone-200 border-4'>Sign In</Link>
     </>}
     {props.loggedIn != null &&
-   <div className='sm:hidden flex justify-center items-center'> <LoggedInMenu mobile={true} firstColor={["bg-stone-200","text-stone-200","#E7E5E4"]} secondColor={["bg-stone-900","text-stone-900","#E7E5E4"]}  /></div>
+   <div className='sm:hidden flex justify-center items-center'> <LoggedInMenu open={props.openState} mobile={true} firstColor={["bg-stone-200","text-stone-200","#E7E5E4"]} secondColor={["bg-stone-900","text-stone-900","#E7E5E4"]}  /></div>
     }
 
   </div></div>
