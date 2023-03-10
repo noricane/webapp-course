@@ -6,6 +6,7 @@ import { Product } from "../model/product";
 import { User } from '../model/user';
 import { productConstructor } from '../helper/utils';
 import { initShoes } from './dummyproducts';
+import { multiProduct } from '../model/pastorder';
 
 export interface IProductService {
     //Returns a list of all listed products
@@ -59,7 +60,9 @@ export class ProductError{
 }
 
 export class ProductService implements IProductService{
-   
+    processOrder(...order:multiProduct[]){
+       order.forEach(e => console.log(e))
+    }
     //productid:{"red":{red sneaker}, "green":{green sneaker},... }
     //products : Map<string,Map<string,Product>> = new Map();
     products : Map<string,Map<string,Product>> = initShoes();

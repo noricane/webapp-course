@@ -15,7 +15,9 @@ export function initShoes():Map<string,Map<string,Product>>{
     const p13 = createProduct("Travis Scott x Air Jordan 1 Low","Nike","OG SP Black Phantom",GENERALCOLOR.BLACK,10000,"https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Front_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Front-Side_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Back-Side_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Back_970x.jpg?v=1670490242","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-X-Travis-Scott-1-Low-OG-SP-Black-Phantom-Crepslocker-Sole_970x.jpg?v=1670490242");
     const p14 = createProduct("Dior x Air Jordan 1 Low","Nike","OG Grey",GENERALCOLOR.GRAY,149990,"https://cdn.shopify.com/s/files/1/1626/5391/products/DIOR-X-AIR-JORDAN-1-LOW-OG-GREY-SNEAKER-Crepslocker-Front_970x.jpg?v=1648204697");
     
-    const p200 = createProductCategory("Foam Runners","Yeezy","color",GENERALCOLOR.BEIGE,CATEGORY.HIGH,1,"");
+    const p200 = createProductCategory("1460 Bex ankle boots","Dr. Martens","Black",GENERALCOLOR.BLACK,CATEGORY.HIGH,2400,"https://cdn-images.farfetch-contents.com/18/16/77/50/18167750_39511025_1000.jpg","https://cdn-images.farfetch-contents.com/18/16/77/50/18167750_39511021_1000.jpg","https://cdn-images.farfetch-contents.com/18/16/77/50/18167750_39511020_1000.jpg","https://cdn-images.farfetch-contents.com/18/16/77/50/18167750_39511024_1000.jpg");
+    const p201 = createProductCategory("1460 Bex ankle boots","Dr. Martens","White",GENERALCOLOR.WHITE,CATEGORY.HIGH,2800,"https://cdn-images.farfetch-contents.com/18/11/24/01/18112401_38489716_1000.jpg","https://cdn-images.farfetch-contents.com/18/11/24/01/18112401_38491420_1000.jpg","https://cdn-images.farfetch-contents.com/18/11/24/01/18112401_38489714_1000.jpg","https://cdn-images.farfetch-contents.com/18/11/24/01/18112401_38518098_1000.jpg");
+    const p202 = createProductCategory("1460 Bex ankle boots","A-COLD-WALL* x Dr. Martens","White",GENERALCOLOR.WHITE,CATEGORY.HIGH,4000,"https://cdn-images.farfetch-contents.com/19/54/33/68/19543368_43561650_1000.jpg","https://cdn-images.farfetch-contents.com/19/54/33/68/19543368_43561649_1000.jpg","https://cdn-images.farfetch-contents.com/19/54/33/68/19543368_43561646_1000.jpg","https://cdn-images.farfetch-contents.com/19/54/33/68/19543368_43561648_1000.jpg");
     
     const p1000 = createProduct("Dunk Low","Off-White x Nike ","Lot 47 (White/Neutral Grey-Green Spark-Court Purple)",GENERALCOLOR.MULTICOLORED,7702 ,"https://cdn.shopify.com/s/files/1/1626/5391/products/Nike-x-Off-White-Dunk-Low-Lot-47-Crepslocker-Front_970x.jpg?v=1648146730");
     const p1001 = createProduct("Dunk Low","Off-White x Nike ","Lot 1 (White/Metallic Silver-Butter)",GENERALCOLOR.WHITE,18612 ,"https://cdn.shopify.com/s/files/1/1626/5391/products/Nike-x-Off-White-Dunk-Low-Lot-1-Crepslocker-Side_970x.jpg?v=1656786098");
@@ -36,7 +38,7 @@ export function initShoes():Map<string,Map<string,Product>>{
     const p6 = createProduct("Monogram Denim Sneaker","Louis Vuitton","Navy",GENERALCOLOR.BLUE,53495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Louis-Vuitton-LV-Monogram-Blue-Denim-Sneaker-Crepslocker-Front_a46429a1-c2f3-4478-9ccf-8fa31e2669bb_970x.jpg?v=1652172453");
     const p7 = createProduct("Monogram Denim Sneaker","Louis Vuitton","Black",GENERALCOLOR.BLACK,43495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Louis-Vuitton-LV-Monogram-Black-Denim-Sneaker-Front.jpg?v=1657542874");
     
-    const lp = [p11,p12,p13,p14,p33,p34,p5,p6,p7,p99,p97,p98,p1000,p1001,p1002,p1003,p1004,p1005,p1006,p1007,p1008,p1009]
+    const lp = [p11,p12,p13,p14,p33,p34,p5,p6,p7,p99,p97,p98,p200,p201,p202,p1000,p1001,p1002,p1003,p1004,p1005,p1006,p1007,p1008,p1009,]
 
     lp.forEach(e => {
         const query = map.get(e.id)
@@ -64,12 +66,11 @@ const createProductCategory = (name:string, brand: string, color: string,general
     return p
 }
 const createProduct = (name:string, brand: string, color: string,generalColor:GENERALCOLOR, price: number,...url:string[]):Product=>{
-    const luh =  [
-        {
-            size: 42,
-            amount: 42
-        }
-    ]
-    return new Product(name,brand,"Shoes",color,generalColor,price,CATEGORY.LOW,luh,.95,url)
+    const sizes =  [[{size: 43,amount: 42},{size: 44,amount: 42},{size: 45,amount: 42}],[{size: 40,amount: 42},{size: 41,amount: 0},{size: 43,amount: 0},{size: 44,amount: 42}],[{size: 35,amount: 42},{size: 36,amount: 42},{size: 37,amount: 42},{size: 38,amount: 42}],[{size: 41,amount: 42},{size: 42,amount: 42},{size: 43,amount: 42}], [ {size: 39,amount: 42},{size: 42,amount: 42},{size: 44,amount: 0},{size: 45,amount: 9} ]]
+
+    const size = sizes[Math.floor(Math.random() * sizes.length)];
+
+    const desc: string= "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Asperiores aspernatur ab reiciendis perspiciatis porro placeat saepe. Ea veritatis cupiditate vero!"
+    return new Product(name,brand,desc,color,generalColor,price,CATEGORY.LOW,size,.95,url)
 
 }

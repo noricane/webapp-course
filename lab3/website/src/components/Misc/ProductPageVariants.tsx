@@ -22,7 +22,7 @@ const ProductPageVariants = ({items}:{items:Product[]|undefined}) => {
         <div className='h-32  overflow-scroll flex items-center  gap-2 '>
             {items.map(e =>  <>{e.images.length > 0 ? <img onClick={() => {
               goToVariant(e.id,e.color)
-            }} src={e.images[0]} alt="" className='h-32   hover:brightness-95 active:brightness-75  hover:border-2 ' /> : <div>No image found</div>}</>)}
+            }} src={e.images[0]} alt="" className='h-32 w-32  hover:brightness-95 active:brightness-75 object-contain bg-white hover:border-2 ' /> : <div>No image found</div>}</>)}
         </div>
         </div>
     /* <Link to={`/product/${e.id}?color=${e.color}`}> */

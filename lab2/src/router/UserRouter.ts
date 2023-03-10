@@ -6,13 +6,14 @@ import express, { Request, Response } from "express";
 import { User } from "../model/user";
 import { makeUserService } from '../service/UserService';
 import { isUser } from '../helper/utils';
+import { product_service } from './ProductRouter';
 
 export const user_router = express.Router();
 
-const user_service = makeUserService();
+export const user_service = makeUserService(product_service);
 
 
-type UserRequest = Request & {
+export type UserRequest = Request & {
     body :{
         username:string, 
         password:string
@@ -35,6 +36,7 @@ user_router.post("/login", async (
             res.status(400).send("Bad GET request, login details must adhere to specification");
             return
         }
+
 
         const resp = await user_service.logInUser(email,password);
         if(resp instanceof ProductError){

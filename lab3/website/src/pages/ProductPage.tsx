@@ -19,12 +19,12 @@ const ProductPage = () => {
     if(size == null || Product == null){      
       return
     }
-    if(cart != null && cart.filter(e => e.item == Product &&  e.size == size.size).length != 0){
+    if(cart != null && cart.filter(e => e.item.id == Product.id && e.item.color == Product.color  &&  e.size == size.size).length != 0){
       console.log("here");
       
       const cartItem:multiProduct = cart.filter(e => e.item.id == Product.id && e.item.color == Product.color && e.size == size.size)[0]
 
-      const rest:multiProduct[] = cart.filter(e => e.item.color != Product.color && e.item.id != Product.id && e.size != size.size)
+      const rest:multiProduct[] = cart.filter(e => e.item.color != Product.color || e.item.id != Product.id || e.size != size.size)
       cartItem.amount++
 
       setCart([cartItem,...rest])
@@ -108,7 +108,7 @@ const ProductPage = () => {
                 <ProductPageVariants items={variants} />
 
 
-            <section>{Product.description}</section>
+            <section className='mt-3'>{Product.description}</section>
 
             <SizeList  useSize={[size,setSize]} items={Product.stock} />
             <button onClick={()=>addToCart()} className='w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add To Cart +</button>

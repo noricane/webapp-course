@@ -1,3 +1,5 @@
+import { ProductService } from './ProductService';
+import { CATEGORY, GENERALCOLOR } from './../helper/utils';
 import { addressType } from './../model/adress';
 import { multiProduct } from './../model/pastorder';
 import { stockedSize } from '../model/product';
@@ -9,6 +11,7 @@ import { initShoes } from './dummyproducts';
 import { PastOrder } from '../model/pastorder';
 import { Admin } from '../model/admin';
 import { address } from '../model/adress';
+import { product_service } from '../router/ProductRouter';
 
 export interface IUserService {
     logInUser(mail: string,password:string) : Promise<User|ProductError>;
@@ -62,9 +65,12 @@ export class UserService implements IUserService{
             return new ProductError(404,"Email or password was not found")
         }
     }
+
+    productService:ProductService;
     users: Map<string,User> = new Map<string,User>()
     admins: Map<number,Admin> = new Map<number,Admin>()
-    constructor(){
+    constructor(service:ProductService){
+        this.productService=service;
         const user = new User("James Brown","jb@gmail.com","jb123","0731231234",new Date(1978),[new address(addressType.DELIVERY,"Saxophonestreet 45","New York","USA","4423")])
         this.users.set(user.email,user)
     }
@@ -99,10 +105,17 @@ export class UserService implements IUserService{
             return new ProductError(400, "User already exists")
         }
     }
+
+    processOrder(...order:multiProduct[]){
+        this.productService.processOrder(...order)
+       
+    }
+    
     async addUserOrder(id: string, ...order: multiProduct[]): Promise<true | ProductError> {
         const query = this.users.get(id)
         if(query != null){
-            query.addOrder(...order)
+            const processed =  this.processOrder(...order);
+            query.addOrder()
             return true
         }else{
             return new ProductError(400, "User doesn't exists")
@@ -139,6 +152,6 @@ export class UserService implements IUserService{
    
 }
 
-export function makeUserService(): UserService{
-    return new UserService();
+export function makeUserService(service:ProductService): UserService{
+    return new UserService(service);
 }

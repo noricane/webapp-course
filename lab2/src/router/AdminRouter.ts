@@ -6,10 +6,46 @@ import { User } from "../model/user";
 import { Admin } from "../model/admin";
 
 import { makeProductService, ProductError } from '../service/ProductService';
-import { makeUserService } from '../service/UserService';
+import { makeAdminService } from '../service/AdminService';
+import { UserRequest, user_service } from './UserRouter';
 
-const admin_service = makeUserService();
+
+const admin_service = makeAdminService(user_service);
 export const admin_router = express.Router();
+
+
+admin_router.post("/login", async (
+    req: UserRequest,
+    res: Response< User | string>
+) => {
+    try {
+        console.log("logging in");
+        
+        const { email,password } = req.body
+        if(email == null || password == null || typeof(email)  != "string" || typeof(password)  != "string"){
+            res.status(400).send("Bad GET request, login details must adhere to specification");
+            return
+        }
+
+
+        const resp = await admin_service.logInUser(email,password);
+        if(resp instanceof ProductError){
+            //Error
+            console.log("error met");
+            res.status(resp.code).send(resp.message);
+            //Success, resp is the requested user!            
+        }else{
+            console.log("sending resp");
+            
+            console.log("response",JSON.stringify(resp));
+            
+            res.cookie('admin',JSON.stringify(resp))
+            res.status(200).send("Successfully logged in");
+        }
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
 
 admin_router.get("/", async (
     req: Request<{}, {}, {}>,
@@ -54,7 +90,7 @@ admin_router.post("/", async (
 });
 
 admin_router.delete("/:id", async (
-    req: Request<{id:number}, {}, {}>,
+    req: Request<{id:string}, {}, {}>,
     res: Response< Admin | string>
 ) => {
     try {

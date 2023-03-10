@@ -56,14 +56,15 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
         <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>
         </div>
         <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
+            <div className='font-bold text-lg mb-2  whitespace-nowrap max-h-4 text-ellipsis'>{product.brand} </div>
             <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>{product.name} </span>
             <br /><span className='text-stone-600 text-lg font-semibold'>{product.color}</span>
             <div className='flex items-center justify-between my-2'>
                 <Price price={product.price} pricefactor={product.price_factor}/>
 
                 <div className='flex gap-2'>
-                    <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button>
-                    <button className='w-12 h-12 bg-stone-200  rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all'><AiOutlineInfoCircle size={27.5}  className='fill-stone-500 ml-auto mr-auto' /></button>
+                {product != null ? <ProductLink color={product.color} id={product.id}> <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button> </ProductLink> :  <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>BUY</button>}
+
                 </div>
             </div>
         </div>

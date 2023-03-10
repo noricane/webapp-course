@@ -8,7 +8,7 @@ import { isProduct, productConstructor } from '../helper/utils';
 import { makeProductService, ProductError } from '../service/ProductService';
 
 
-const product_service = makeProductService();
+export const product_service = makeProductService();
 
 export const product_router = express.Router();
 
