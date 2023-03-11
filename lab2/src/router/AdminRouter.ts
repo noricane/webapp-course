@@ -16,7 +16,7 @@ export const admin_router = express.Router();
 
 admin_router.post("/login", async (
     req: UserRequest,
-    res: Response< User | string>
+    res: Response< Admin | string>
 ) => {
     try {
         console.log("logging in");
@@ -39,7 +39,7 @@ admin_router.post("/login", async (
             
             console.log("response",JSON.stringify(resp));
             
-            res.cookie('admin',JSON.stringify(resp))
+            res.cookie('user',JSON.stringify(resp));
             res.status(200).send("Successfully logged in");
         }
     } catch (e: any) {

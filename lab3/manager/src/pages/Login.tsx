@@ -1,19 +1,60 @@
-import React from "react";
+import { useAtom } from "jotai";
+import Cookies from "js-cookie";
+import React, { forwardRef, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { logInUser } from "../components/api";
 import Card from "../components/Structural/Card";
+import { sessionAtom } from "../model/jotai.config";
 const Login = () => {
+  const nav = useNavigate();
+  const email = useRef<HTMLInputElement>(null)
+    const password = useRef<HTMLInputElement>(null)
+    const [error, setError] = useState<string>()
+    const [session,setSession] = useAtom(sessionAtom)
+    const loginHandler = () => {
+
+      if (email.current?.value == null || password.current?.value == null){
+        setError("Email and Password must be non empty")
+        return
+      }
+      setError(undefined)
+      try{
+        const em:string = email.current.value;
+        const pw: string = password.current.value;
+        (async()=>{
+          const resp = await logInUser(em,pw)
+          console.log(resp);
+          
+          setSession(resp != null ? resp : undefined)
+          nav('/dashboard')
+        })()
+        
+
+               
+        
+      }catch(err:any){
+        console.log(err);
+        
+      }
+      
+
+      
+    }
+
+   
   return (
     <div className=" font-bold font-oswald flex items-center ">
       <Card>
 
         <h1 className="font-oswald text-3xl font-bold my-24">ADMIN LOGIN</h1>
         <form className="flex flex-col  justify-center gap-6">
-            <Input title="USERNAME" type="text" />
+            <Input ref={email} title="USERNAME" type="text" />
 
-            <Input title="PASSWORD" type="password" />
+            <Input ref={password} title="PASSWORD" type="password" />
 
             <span className="[&>button]:mx-2 utxs:[&>button]:my-2">
-                <Button title="LOG IN" onClick={function(){}}/>
-                <Button title="CANCEL" onClick={function(){}}/>
+                <Button title="LOG IN" onClick={(e:React.FormEvent<HTMLFormElement>)=>loginHandler()}/>
+                {error && <span className="text-red-500 font-bold text-center w-full">{error}</span>}
             </span>
         </form>
       </Card>
@@ -29,21 +70,21 @@ export default Login;
 
 export const Button = ({title,onClick}:{title:string,onClick:Function}) => {
   return (
-    <button className="bg-stone-300 w-36 h-10 hover:bg-stone-400 active:bg-stone-50 active:text-stone-800" onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>
+    <button type="submit" className="bg-stone-300 w-36 h-10 hover:bg-stone-400 active:bg-stone-50 active:text-stone-800" onClick={(e:React.MouseEvent)=>
         {
-            e.preventDefault(); 
+            e.preventDefault()
             onClick()
         }}>{title}</button>
   )
 }
 
 
- const Input = ({type,title}: {type:string, title:string} ) => {
+ const Input = forwardRef(function Input({type,title}: {type:string, title:string} , ref:(React.LegacyRef<HTMLInputElement> | undefined)){
     const titleLowerCase = title.toLowerCase()
   return (
     <div className="flex utxs:flex-col  self-center items-center justify-center">
         <label htmlFor={`${titleLowerCase}`} className=" text-lg ">{title}</label>
-            <input type={`${type}`} name={`${titleLowerCase}`} id={`${titleLowerCase}`} className="bg-stone-50 h-8 utxs:w-48 p-2 w-64 ml-4" />
+            <input ref={ref} type={`${type}`} name={`${titleLowerCase}`} id={`${titleLowerCase}`} className="bg-stone-50 h-8 utxs:w-48 p-2 w-64 ml-4" />
     </div>
   )
-}
+})

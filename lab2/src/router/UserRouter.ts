@@ -20,7 +20,6 @@ export type UserRequest = Request & {
     }
     session : {
         user ?: User
-        ooga ?: string
     }
 }
 

@@ -1,10 +1,12 @@
 import axios from 'axios'
+import { useAtom } from 'jotai'
 import React, { useEffect, useReducer, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ColorDropdown, GeneralDropdown } from '../components/Misc/Dropdown'
 import Grid from '../components/Structural/Grid'
-import { checkLatinCharacters, ToArray } from '../helper/utils'
+import { checkLatinCharacters, GeneralColorToArray } from '../helper/utils'
 import { config } from '../model/config'
+import { sessionAtom } from '../model/jotai.config'
 import { CATEGORY, GENERALCOLOR } from '../model/misc'
 import { Product } from '../model/product'
 
@@ -93,22 +95,24 @@ const Dashboard = () => {
     }
 }
   useEffect(()=>{
-    
+   
     getTasks();   
     getBrands();   
+    
   },[])
   
   
   const initialState: FilterState = {
     brand:null,category:null,color:null
 }
-
+  const nav = useNavigate()
+  const [session,] = useAtom(sessionAtom)
   const [state, dispatch] = useReducer(reducer ,initialState);
   const [prevState,setPrevState] = useState<FilterState>({brand:null,category:null,color:null})
 
   const [brands, setBrands] = useState<string[]>([])
   const categories:CATEGORY[] =[CATEGORY.LOW,CATEGORY.MID,CATEGORY.HIGH]
-  const colors :string[] = ToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
+  const colors :string[] = GeneralColorToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   
   const [items, setItems] = useState<Product[]>()
   const [filtered, setFiltered] = useState<Product[]>()

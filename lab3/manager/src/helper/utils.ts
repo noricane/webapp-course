@@ -5,7 +5,7 @@ import { EnumType } from "typescript";
 const StringIsNumber = (value:string) => isNaN(Number(value)) === false;
 
 //Turn Enum to array to be able to search
-export function ToArray() {
+export function GeneralColorToArray() {
     return Object.keys(GENERALCOLOR)
         .filter(StringIsNumber)
         .map((key:any) => GENERALCOLOR[key]); //??any
@@ -16,3 +16,4 @@ export function ToArray() {
 export function checkLatinCharacters(str: string):string{
     return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
 }
+
