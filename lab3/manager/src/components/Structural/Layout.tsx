@@ -7,11 +7,19 @@ import { sessionAtom } from "../../model/jotai.config";
 const Layout = ({ children }: any) => {
 
   const [session,setSession] = useAtom(sessionAtom)
-  
+  const nav = useNavigate()
   
   return (
     <div className="bg-stone-50 min-h-screen">
-      <Link to={'/'}>
+      <Link to='onclick overrides this' onClick={(e)=>{
+        e.preventDefault();
+        if(session == null){
+          nav('/')
+        }else{
+          nav('/dashboard')
+
+        }
+      }}>
         <video
           onClick={() => {}}
           muted

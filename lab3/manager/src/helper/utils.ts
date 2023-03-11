@@ -1,4 +1,4 @@
-import { GENERALCOLOR } from './../model/misc';
+import { GENERALCOLOR, CATEGORY } from './../model/misc';
 import { EnumType } from "typescript";
 
 //Check if value of string is number
@@ -9,6 +9,12 @@ export function GeneralColorToArray() {
     return Object.keys(GENERALCOLOR)
         .filter(StringIsNumber)
         .map((key:any) => GENERALCOLOR[key]); //??any
+}
+//Turn Enum to array to be able to search
+export function CategoryToArray() {
+    return Object.keys(CATEGORY)
+        .filter(StringIsNumber)
+        .map((key:any) => CATEGORY[key]); //??any
 }
 
 //This regex essentially expels everything that is not included in the alphabet.
