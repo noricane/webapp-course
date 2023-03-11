@@ -122,6 +122,11 @@ user_router.post("/order", async (
     try {
         const { id } = req.params
         const { items } = req.body
+        console.log(req.body);
+
+        console.log(Array.isArray(items));
+        console.log(isMultiProducts(items));
+        
         if(items == null || !Array.isArray(items) || !isMultiProducts(items)){
             res.status(400).send("Bad GET request, orders must adhere to specification");
             return

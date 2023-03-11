@@ -1,4 +1,5 @@
-import axios, { AxiosError } from "axios";
+import { multiProduct } from './../model/user';
+import axios, { Axios, AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { config } from "../model/config";
 import { Product } from "../model/product";
@@ -73,4 +74,18 @@ export async function logInUser(em:string,pw:string):Promise<any>{
       const object = JSON.parse(decodeURIComponent(Cookies.get('user') as string)) 
       return object
 
+}
+
+export async function processOrder(order:multiProduct[]):Promise<string> {
+  try {
+    let msg = ""
+    const resp = await axios.post(`${config.URL}/user/order`,{items:order}).catch((e:AxiosError) =>  typeof e.response?.data == "string" ? msg = e.response.data : msg = "Unknown error occured")
+    console.log(resp);
+    return msg
+    
+  } catch (error) {
+    console.log(error);
+    return error as string
+    
+  }
 }

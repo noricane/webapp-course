@@ -142,7 +142,7 @@ export const arrayInstance = (arr:any[],type:any):boolean => {
 export const isMultiProducts = (list:any[]):boolean => {
     let bool = true;
     list.forEach(e => {
-        if(e.id == null || e.amount == null){
+        if(e.item.id == null || e.amount == null){
             bool= false
         }
     })

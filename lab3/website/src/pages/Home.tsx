@@ -40,7 +40,7 @@ const Home = () => {
       <div className="text-center h-[40rem] flex justify-center items-center text-stone-50 font-mono  flex-col">
       <img
         style={{left:300}}
-          className="bg-stone-300  h-full opacity-80  w-screen object-cover"
+          className="bg-stone-300  h-full opacity-80 mix-blend-luminosity  w-screen object-cover"
           src={"media/scrollshoes.png"}
         />
       <div className="py-8 utlg:w-[90vw] w-[50rem] gap-4 flex-col flex justify center absolute bg-stone-700 mx-auto utlg:px-8 p-4">

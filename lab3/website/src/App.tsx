@@ -10,6 +10,9 @@ import Browse from "./pages/Browse";
 import Cart from "./pages/Cart";
 
 import Home from "./pages/Home";
+import Jargon from "./pages/Jargon";
+import MembersClub from "./pages/MembersClub";
+import News from "./pages/News";
 import NotFound from "./pages/NotFound";
 import ProductPage from "./pages/ProductPage";
 import SignIn from "./pages/SignIn";
@@ -26,6 +29,9 @@ function App() {
     if(cookie != null){
     const object = JSON.parse(decodeURIComponent(cookie)) 
       setUser(object)
+    }else{
+    Cookies.set('cart',JSON.stringify([]))
+      
     }
     try{
       const cartcookie = JSON.parse(decodeURIComponent(Cookies.get('cart') as string))
@@ -47,11 +53,15 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/browse" element={<Browse />} />
+      <Route path="/news" element={<News />} />
+      <Route path="/membersclub" element={<MembersClub />} />
       <Route path="/account" element={<Account />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/product/:id" element={<ProductPage />} />
+      <Route path="/jargon" element={<Jargon />} />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -114,11 +114,12 @@ export class UserService implements IUserService{
     async addUserOrder(id: string, ...order: multiProduct[]): Promise<true | ProductError> {
         const query = this.users.get(id)
         if(query != null){
+            //Need error handlling, this will break on concurrency
             const processed =  this.processOrder(...order);
-            query.addOrder()
+            query.addOrder(...order)
             return true
         }else{
-            return new ProductError(400, "User doesn't exists")
+            return new ProductError(400, "User doesn't exist")
         }
     }
     async removeUser(id: string): Promise<ProductError | User> {
