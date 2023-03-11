@@ -162,7 +162,7 @@ const Browse = () => {
 
 
         </div>
-        <Grid items={items}/>
+        <Grid items={filtered}/>
     </div>
   )
 }
