@@ -140,24 +140,39 @@ const Browse = () => {
   
   
   return (
-    <div className=' m-4 rounded-md min-h-screen p-4'>
-        <div className='text-center flex items-center justify-center gap-3'>
+    <div className='  rounded-md min-h-screen '>
+        <div className='text-center sm:h-36 flex utsm:flex-col h-auto items-center bg-stone-300 p-3 justify-center gap-3'>
 
-          <label htmlFor="brand">Brand:</label>
+         <span className='grid grid-cols-2 sm:flex utsm:w-full gap-2'>
+         <label className='self-center justify-self-end ' htmlFor="brand">Brand:</label>
+          <span className='justify-self-start'>
           <GeneralDropdown onClick={dispatch} action={"set_brand"} state={state.brand} items={brands}>{state.brand == null ?`Brand ➤` : state.brand}</GeneralDropdown>
-          <label htmlFor="category">Category:</label>
+          </span>
+         </span>
+
+         <span className='grid grid-cols-2 sm:flex utsm:w-full gap-2'>
+
+
+          <label className='self-center justify-self-end ' htmlFor="category">Category:</label>
           {/* <Dropdown items={categories.map(e => CATEGORY[e])} /> */}
+          <span className='justify-self-start'>
+
           <GeneralDropdown onClick={dispatch} action={"set_category"} state={state.category} items={categories.map(e => CATEGORY[e])}>{state.category == null ?`Category ➤` : CATEGORY[state.category]}</GeneralDropdown>
+          </span>
+          </span>
           {/* <div className=' text-green'>
             <select className='bg-stone-50  h-10 rounded-lg px-3 w-32 text-center text-ellipsis       whitespace-nowrap text-stone-800'>
             <option value="none" selected disabled hidden>Choose an option</option>
              {categories.map(e => CATEGORY[e]).map(e =>  <option value={`${e}`}>{e}</option>)}
             </select>
           </div> */}
+         <span className='grid grid-cols-2 sm:flex utsm:w-full gap-2'>
 
-          <label htmlFor="category">Color:</label>
-          <ColorDropdown onClick={dispatch} action={"set_color"} state={state.color} items={colors} >Colors</ColorDropdown>
-
+            <label className='self-center justify-self-end ' htmlFor="category">Color:</label>
+            <span className='justify-self-start'>
+              <ColorDropdown onClick={dispatch} action={"set_color"} state={state.color} items={colors} >Colors</ColorDropdown>
+            </span>
+          </span>
           <Button desc='Filter Selection' onClick={filterHandler} />
 
 

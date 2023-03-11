@@ -1,9 +1,17 @@
+import { useAtom } from "jotai";
 import React from "react";
 import { Link } from "react-router-dom";
+import { sessionAtom } from "../model/jotai.config";
 
 const MembersClub = () => {
+    const [user,] = useAtom(sessionAtom)
+
+    if(user != null){
+        return <div className="min-h-[65vh] flex justify-center items-center text-center  text-stone-200 bg-gradient-to-b from-stone-900 to-[#010105] font-oswald text-3xl ">Personalized member page should be here</div>
+    }
+    
   return (
-    <div className="min-h-[65vh] flex-col flex gap-4 bg-stone-900">
+    <div className="min-h-[65vh] flex-col flex gap-4  bg-gradient-to-b from-stone-900 to-[#010105] ">
       <h1 className="w-full text-center font-oswald text-4xl mt-4 text-stone-50">
         Member's Club
       </h1>
@@ -12,7 +20,7 @@ const MembersClub = () => {
         Club - join today and never miss a beat!
       </h2>
 
-      <article className="text-center h-80% mb-4 rounded-lg text-stone-100 flex flex-col justify-center items-center gap-2 utsm:mx-2 max-w-[40rem] mx-auto bg-stone-700 p-8">
+      <article className="text-center h-80% mb-4 rounded-lg text-stone-100 flex flex-col justify-center items-center gap-2 utsm:mx-2 max-w-[40rem] mx-auto bg-stone-700 utxs:p-2 p-8">
         <h3 className="font-oswald text-xl">Eclusive deals</h3>
         <section className="font-light mb-4">
           As a member of the Brandname Member's Club, you'll get access to

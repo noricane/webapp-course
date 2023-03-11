@@ -80,9 +80,9 @@ const SignUp = () => {
     const redirectHandler = ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {nav('/')});
     
     return (
-      <div className="min-h-[50rem] flex justify-center items-center">
+      <div className="min-h-[50rem]  flex justify-center items-center">
 
-        <section className="bg-stone-300  absolute h-[70%] rounded-md mx-auto min-h-[45rem] min-w-[300px] w-[80%] max-w-[55rem] flex flex-col justify-center gap-4">
+        <section className="bg-stone-300  absolute h-[70%] rounded-md mx-auto min-h-[45rem] min-w-[319px] w-[95%] sm:w-[80%] max-w-[55rem] flex flex-col justify-center gap-4">
           <h2 className="text-center font-oswald font-bold text-2xl">Sign Up</h2>
 
           <form onSubmit={submitHandler}>
@@ -97,7 +97,7 @@ const SignUp = () => {
               <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="birthdate">Birthdate:</label>
               <input ref={birthdate} name="birthdate" type="date" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
 
-              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="phone">Phonenumber:</label>
+              <label className="self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="phone">Phone nr.:</label>
               <input ref={phone} name="phone" type="text" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm bg-stone-50 utsm:col-span-3" />
               
               <span className="col-span-2 utsm:col-span-5 w-[80%] h-[1px] justify-self-center my-2 bg-stone-400 items-center"></span>
@@ -121,7 +121,7 @@ const SignUp = () => {
               <label className=" self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="password1">Password:</label>
               <input ref={password1} name="password1" type="password" className=" p-1 px-2 max-w-[14rem] h-8  rounded-sm  bg-stone-50 utsm:col-span-3" />
 
-              <label className=" self-center justify-self-end font-bold text-lg utsm:col-span-2" htmlFor="password2">Repeat Password:</label>
+              <label className=" self-center justify-self-end font-bold text-md utsm:col-span-2" htmlFor="password2">Repeat Password:</label>
               <input ref={password2} name="password2" type="password" className="p-1 px-2 max-w-[14rem] h-8  rounded-sm  bg-stone-50 utsm:col-span-3" />
               </section>
           

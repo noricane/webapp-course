@@ -41,7 +41,7 @@ export const ColorDropdown = ({state,items,children,onClick,action}:{items:any[]
 
 const MenuButton = ({children,onClick}:{children:ReactNode,onClick:Function})=>{
 
-  return <button onClick={()=>onClick()} className='h-10 w-28 rounded-lg bg-white px-2 overflow-hidden inline-block text-ellipsis whitespace-nowrap' >{children}</button>
+  return <button onClick={()=>onClick()} className='h-10 w-28 rounded-sm bg-white px-2 overflow-hidden inline-block text-ellipsis whitespace-nowrap' >{children}</button>
 }
 
 /*  <div className=' text-green'>
