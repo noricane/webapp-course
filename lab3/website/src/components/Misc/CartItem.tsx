@@ -25,6 +25,10 @@ const CartItem = ({mp}:{mp:multiProduct}) => {
       case '-':
         if(amount > 0){
           cartItem.amount--
+          if(cartItem.amount == 0){
+            setCart([...cart.slice(0,index),...cart.slice(index+1,)])
+            return
+          }
           setCart([...cart.slice(0,index),cartItem,...cart.slice(index+1,)])
         }
         break;

@@ -7,7 +7,7 @@ import SizeList from '../components/structural/SizeList';
 import { config } from '../model/config';
 import { Product } from '../model/product';
 import { useLocation } from "react-router-dom";
-import { multiProduct } from '../model/user';
+import { multiProduct, stockedSize } from '../model/user';
 import { cartAtom } from '../model/jotai.config';
 import { useAtom } from 'jotai';
 import axios from 'axios';
@@ -23,7 +23,6 @@ const ProductPage = () => {
       console.log("here");
       
       const cartItem:multiProduct = cart.filter(e => e.item.id == Product.id && e.item.color == Product.color && e.size == size.size)[0]
-
       const rest:multiProduct[] = cart.filter(e => e.item.color != Product.color || e.item.id != Product.id || e.size != size.size)
       cartItem.amount++
 
@@ -32,9 +31,6 @@ const ProductPage = () => {
       
       
     }else if(cart.length == 0 && Product != null){
-      console.log("empty");
-
-
       setCart([{item:Product,size:size.size,amount:1}])
     }else{
       console.log("last");
@@ -111,7 +107,7 @@ const ProductPage = () => {
             <section className='mt-3'>{Product.description}</section>
 
             <SizeList  useSize={[size,setSize]} items={Product.stock} />
-            <button onClick={()=>addToCart()} className='w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add To Cart +</button>
+            <button onClick={()=>{size?.amount != 0 && addToCart()}} className='w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add To Cart +</button>
 
         </article>
     </div>
