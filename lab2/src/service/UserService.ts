@@ -107,8 +107,8 @@ export class UserService implements IUserService{
     }
 
     /* Processes order through product_service */
-    processOrder(...order:multiProduct[]):multiProduct[]{
-        return this.productService.processOrder(...order)
+    async processOrder(...order:multiProduct[]):Promise<multiProduct[]>{
+        return await this.productService.processOrder(...order)
     }
     
     /* Processes order through product_service and then add's order to user */
@@ -116,8 +116,10 @@ export class UserService implements IUserService{
         const query = this.users.get(id)
         if(query != null){
             
-            const processed =  this.processOrder(...order);
-
+            const processed =  await this.processOrder(...order);
+            console.log(order);
+            console.log("lenproc",processed);
+            
             if(processed.length == order.length){
                 const order = query.addOrder(...processed)
                 return order

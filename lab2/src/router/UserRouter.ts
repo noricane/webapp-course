@@ -119,8 +119,8 @@ user_router.post("/order", async (
     res: Response< PastOrder | multiProduct[] | string>
 ) => {
     try {
-        const { id } = req.params
-        const { items } = req.body
+
+        const { items,id } = req.body
         console.log(req.body);
         console.log("user",req.session.user);
         
@@ -131,11 +131,13 @@ user_router.post("/order", async (
             res.status(400).send("Bad GET request, orders must adhere to specification");
             return
         }
-
+        console.log("finna add order");
+        
         const resp = await user_service.addUserOrder(id,...items);
+        console.log("resp",resp);
         if(Array.isArray(resp)){
-            //Success, resp is the requested user!            
-            res.status(409).send(resp);
+            //I'd rather not have to send a 200 since it technically isn't accepted
+            res.status(200).send(resp);
         }else if(resp instanceof PastOrder){
             res.status(200).send(resp);
         }else{

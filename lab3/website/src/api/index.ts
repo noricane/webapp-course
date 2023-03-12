@@ -1,5 +1,5 @@
 import { multiProduct } from './../model/user';
-import axios, { Axios, AxiosError } from "axios";
+import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { config } from "../model/config";
 import { Product } from "../model/product";
@@ -76,16 +76,27 @@ export async function logInUser(em:string,pw:string):Promise<any>{
 
 }
 
-export async function processOrder(order:multiProduct[]):Promise<string> {
+export async function processOrder(email:string,order:multiProduct[]):Promise<string | multiProduct[] | {id:number, items:multiProduct[]}> {
   try {
     let msg = ""
-    const resp = await axios.post(`${config.URL}/user/order`,{items:order}).catch((e:AxiosError) =>  typeof e.response?.data == "string" ? msg = e.response.data : msg = "Unknown error occured")
-    console.log(resp);
+    const resp = await axios.post(`${config.URL}/user/order`,{id:email,items:order})
+    if(resp?.data.id != null && resp?.data.items != null){
+        return resp.data
+    }else if(Array.isArray(resp.data)){
+      return resp.data
+    }
+    
     return msg
     
-  } catch (error) {
-    console.log(error);
-    return error as string
+  } catch (e:any) {  
+    console.log(e.data);
+    
+    let msg = ""
+    typeof e.response?.data == "string" ? msg = e.response.data : msg = "Unknown error occured"
+    if(msg != ""){
+      return msg
+    }
+    return e as string
     
   }
 }

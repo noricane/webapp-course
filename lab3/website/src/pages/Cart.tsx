@@ -3,18 +3,33 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { processOrder } from '../api'
 import CartItem from '../components/Misc/CartItem'
-import { cartAtom } from '../model/jotai.config'
+import { cartAtom, sessionAtom } from '../model/jotai.config'
 
 const Cart = () => {
     const nav = useNavigate()
     const [cart,setCart] = useAtom(cartAtom)
     const [error, setError] = useState<string>()
+    const [session, setSession] = useAtom(sessionAtom)
     const purchaseHandler = () => {
         (async()=>{
-            const resp = await processOrder(cart)
+            if(session == null){return}
+            const resp = await processOrder(session.email,cart)
+            console.log(resp);
+            
             if(typeof resp == "string"){
                 setError(resp)
+            }else if(Array.isArray(resp)){
+                console.log(resp);
+                console.log("setting");
+                
+                setCart(resp)
+            
+            }else if(resp.id && resp.items){
+                console.log("success!!!");
+                
             }
+
+            
         })()
     }
     
@@ -26,10 +41,10 @@ const Cart = () => {
     
     }
   return (
-    <div className=' min-h-[35rem] utsm:p-4 max-w-[1000px] mx-auto flex flex-col gap-4 p-8 bg-stone-300 m-12 rounded-xl'>
+    <div className=' min-h-[35rem] utsm:p-4  mx-auto flex flex-col gap-4 p-8 bg-stone-300 m-12 rounded-xl'>
         <span className='w-full text-3xl font-bold text-center font-oswald'>Cart</span>
         <div className='h-[32rem] flex px-4 flex-col gap-4 rounded-3xl overflow-scroll'>
-            {cart.map(e => <CartItem mp={e}/>)}
+            {cart.map(e => <CartItem  mp={e}/>)}
         </div>
         <div className='flex justify-center items-center mt-5 gap-8'>
         <button onClick={purchaseHandler} className='button bg-stone-800 h-12 w-48 button transition-all rounded-sm  p-2 px-4 font-bold text-stone-100 hover:bg-stone-700  active:bg-stone-50 active:text-stone-800'>Confirm Choices</button>

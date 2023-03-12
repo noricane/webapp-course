@@ -3,6 +3,7 @@ import React from 'react'
 import { cartAtom } from '../../model/jotai.config';
 import { multiProduct } from '../../model/user'
 import Price from './Price';
+import { TiDeleteOutline } from "react-icons/ti";
 
 const CartItem = ({mp}:{mp:multiProduct}) => {
 
@@ -50,12 +51,15 @@ const CartItem = ({mp}:{mp:multiProduct}) => {
         </div>
         <span className=' utsm:col-span-5 sm:col-span-3 sm:order-3 flex justify-center items-center utsm:order-2 '>
           <div className='w-28 h-16 grid grid-cols-3 bg-stone-200 rounded-sm'>
+
             <span className='col-span-1 gap-[1px] flex flex-col'>
               <button onClick={()=>amountHandler('+')} className='h-full border-[1px] border-stone-2200 bg-stone-300 rounded-sm hover:bg-stone-400 active:text-stone-50 active:bg-stone-800'>+</button>
               <button onClick={()=>amountHandler('-')} className='h-full border-[1px] border-stone-2200 bg-stone-300 rounded-sm hover:bg-stone-400 active:text-stone-50 active:bg-stone-800'>-</button>
             </span>
             <span className='flex items-center col-span-2 justify-center'>{amount}</span>
           </div>
+          <TiDeleteOutline className='cursor-pointer text-stone-500 hover:text-stone-800 transition-colors ml-2 font-bold' onClick={()=>{setCart(prev => prev.filter(e => e.item.id != mp.item.id || e.size != mp.size))}}  size={40} />
+
         </span>
     </section>
   )

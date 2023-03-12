@@ -7,6 +7,7 @@ import { User } from '../model/user';
 import { productConstructor } from '../helper/utils';
 import { initShoes } from './dummyproducts';
 import { multiProduct } from '../model/pastorder';
+import { LongWithoutOverridesClass } from 'bson';
 
 export interface IProductService {
     //Returns a list of all listed products
@@ -60,23 +61,52 @@ export class ProductError{
 }
 
 export class ProductService implements IProductService{
-
-
-    processOrder(...order:multiProduct[]):multiProduct[]{
+     processOrder(...order:multiProduct[]):multiProduct[]{
         const result:multiProduct[] = []
-        order.forEach(e => {
-            const query = this.getProductColor(e.item.id,e.item.color);
+        let processable = true;
+        order.forEach(async e => {
+            /* First check if we can process this order and then process it. If order is invalid 
+            e.g you want to buy 44/44 shoes while someone has just bought one. Return an error instead of buying 43 */
+            const query = await this.getProductColor(e.item.id,normalizeString(e.item.color));
+            /* Check that query is valid */
             if(query instanceof Product && query.stock.find(elem => elem.size == e.size) != null){
                 const find = query.stock.find(elem => elem.size == e.size)
+
                 if(find == null){return}
-                if(find.amount >= e.amount){
-                    const index = query.stock.indexOf(find);
-                    const list = query.stock
-                    query.setStock([...list.slice(0,index),{size:e.size,amount:find.amount-e.amount},...list.slice(index+1,)])
+
+                if(find.amount < e.amount){
+                    processable = false;
                 }
             }
         })
 
+        if(!processable){            
+            return []
+        }
+        order.forEach(async e => {
+            /* First check if we can process this order and then process it. If order is invalid 
+            e.g you want to buy 44/44 shoes while someone has just bought one. Return an error instead of buying 43 */
+            const query = await this.getProductColor(e.item.id,normalizeString(e.item.color));
+
+            
+            if(query instanceof Product && query.stock.find(elem => elem.size == e.size) != null){
+                const find = query.stock.find(elem => elem.size == e.size)
+
+                if(find == null){return}
+                console.log("not null");
+                
+                if(find.amount >= e.amount){
+                    const index = query.stock.indexOf(find);
+                    const list = query.stock
+                    const stock = {size:e.size,amount:find.amount-e.amount}
+                    console.log("indexof", index);
+                    query.setStock([...list.slice(0,index),stock,...list.slice(index+1,)])
+                    result.push(e)
+                }
+            }
+        })
+        console.log("resraiosdaoisdj",result);
+        
         return result;
     }
     
