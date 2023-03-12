@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { TiDeleteOutline } from "react-icons/ti";
 
-const ProductImages = ({images}:{images:string[]}) => {
+const ProductImages = ({images,setImages}:{images:string[],setImages?:Function}) => {
     const [selected, setSelected] = useState<string>()
+    const [deleteVisible, setDeleteVisible] = useState<boolean>(false)
+
     useEffect(()=>{
         images.length > 0 && setSelected(images[0])
     },[images])
@@ -14,8 +17,9 @@ const ProductImages = ({images}:{images:string[]}) => {
 
   return (
     <>
-        <div className=' shadow-lg bg-white flex items-center rounded-t-xl overflow-hidden justify-center'>
-            <img src={selected} className=" sm:h-[50vw] object-contain " alt="" />
+        <div onMouseEnter={()=>setDeleteVisible(true)} onMouseLeave={()=>setDeleteVisible(false)} className='cursor-pointer shadow-lg bg-white flex items-center  rounded-t-xl overflow-hidden justify-center'>
+            <TiDeleteOutline className={`${deleteVisible ? 'opacity-50' : 'opacity-0'} transition-all text-red-500 absolute`}   id='delete' size={150} />
+            <img src={selected} onClick={()=>setImages && setImages((prev:string[]) => prev.filter(e => e != selected))} className=" sm:h-[50vw] object-contain " alt="" />
         </div>
         <div className='h-[1px] bg-stone-300'></div>
         <div className='flex shadow-lg   md:h-[10vw] h-24 overflow-scroll bg-stone-300 rounded-b-xl'>

@@ -39,78 +39,62 @@ const AddProduct = () => {
 
   return (
     <>
-    <div className='min-h-[50rem] bg-blue-300 p-8 grid grid-cols-2 relative -z-[0] utsm:flex utsm:flex-col'>
+    <div className='min-h-[50rem] bg-stone-200 m-4 rounded-md p-8 grid grid-cols-2 relative -z-[0] utmd:flex utmd:flex-col'>
         <div id='images'>
-            <ProductImages images={images}/>
+            <ProductImages setImages={setImages} images={images}/>
         </div>
 
         {/* Product Brand and Name */}
         <article className='p-8 grid grid-cols-2 gap-2' id='info'>
-        <label htmlFor="brand" className='flex p-1 items-center font-bold col-span-1 bg-blue-500'>Brand: &nbsp;</label>
-        <input name={'brand'} className='text-2xl text-stone-700 h-10 rounded-sm col-span-1 font-oswald' value={brand} onChange={e=>setBrand(e.target.value)}/>
-        
-        <label htmlFor="" className='flex p-1 items-center font-bold bg-blue-500'>Name: &nbsp;</label>
-        <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={name} onChange={e=>setName(e.target.value)}/>
+            <label htmlFor="brand" className='justify-end flex p-1 h-10 items-center font-bold col-span-1 '>Brand: &nbsp;</label>
+            <input name={'brand'} className='text-2xl text-stone-700 h-10 rounded-sm col-span-1 font-oswald' value={brand} onChange={e=>setBrand(e.target.value)}/>
+
+            <label htmlFor="name" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Name: &nbsp;</label>
+            <input name="name" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={name} onChange={e=>setName(e.target.value)}/>
 
 
-        {/* Color and general color */}
-        <label htmlFor="" className='flex p-1 items-center font-bold bg-blue-500'>
-            Color: &nbsp;
-            <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={color} onChange={e=>setColor(e.target.value)}/>
+            {/* Color and general color */}
+            <label htmlFor="color" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Color: &nbsp;</label>
+            <input name="color" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={color} onChange={e=>setColor(e.target.value)}/>
 
-        </label>
-        <label htmlFor="" className='flex p-1 items-center font-bold bg-blue-500'>
-            General Color: &nbsp;
-             <ColorDropdown color={generalColor} setColor={setGeneralColor}  colors={colors} />
-
-        </label>
-        <label htmlFor="" className='flex p-1 items-center font-bold bg-blue-500'>
-            Category: &nbsp;
-
+            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>General Color: &nbsp;</label>
+            <ColorDropdown color={generalColor} setColor={setGeneralColor}  colors={colors} />
+            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Category: &nbsp;</label>
             <div>
-            <button onClick={()=>{setCategoryOpen(prev => !prev)}} className='w-48 h-10 bg-stone-50  relative z-10 rounded-sm '>{category == null ? 'Categories':category}</button>
-            <ul className={`${!categoryOpen && 'hidden' } w-48 h-12 bg-stone-50 rounded-sm border-2 flex justify-around items-center absolute`}>
-                {categories.map(e=><li onClick={()=>{setCategory(categories.indexOf(e)+"");setCategoryOpen(false)}} className='hover:bg-stone-200 border-2  px-1 rounded-lg'>{e}</li>)}
-               
-            </ul>
-
+                <button onClick={()=>{setCategoryOpen(prev => !prev)}} className='w-full h-10 bg-white  relative z-10 rounded-sm '>{category == null ? 'Categories':category}</button>
+                <ul className={`${!categoryOpen && 'hidden' } w-48 h-12 bg-stone-50 rounded-sm border-2 flex justify-around items-center absolute`}>
+                    {categories.map(e=><li onClick={()=>{setCategory(categories.indexOf(e)+"");setCategoryOpen(false)}} className='hover:bg-stone-200 border-2  px-1 rounded-lg'>{e}</li>)}
+                </ul>
             </div>
-        </label>
 
-        {/* Descritpion and Price */}
-        <label htmlFor="" className='flex p-1 items-center font-bold bg-blue-500'>
-            Description: &nbsp;
+            {/* Descritpion and Price */}
+            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Description: &nbsp;</label>
             <input className='text-2xl text-stone-700 h-10  rounded-sm font-oswald' value={desc} onChange={e=>setDesc(e.target.value)}/>
-
-        </label>
-        <label htmlFor="" className='flex p-1 items-center font-bold bg-blue-500'>
-            Price: &nbsp;
+            
+            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Price: &nbsp;</label>
             <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={price} onChange={e=>setPrice(prev => {
-                if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
-                    return prev
-                }
-                return e.target.value
-            })}/>
+                    if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
+                        return prev
+                    }
+                    return e.target.value
+                })}/>
 
-        </label>
-        <label htmlFor="" className='flex p-1 text-sm items-center font-bold bg-blue-500'>
-            Discount &#40;%&#41;: &nbsp;
+
+            <label htmlFor="" className='justify-end flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
             <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={priceFactor} onChange={e=>setPriceFactor(prev => {
-                if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
-                    return prev
-                }
-                return e.target.value
-            })}/>
+                    if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
+                        return prev
+                    }
+                    return e.target.value
+                })}/>
 
-
-        </label>
-
-        {/* Add Product Images */}
-        <label htmlFor="" className='flex p-1 items-center font-bold bg-blue-500'>
-            Image: &nbsp;
-            <input className='text-2xl text-stone-700 h-10 font-oswald rounded-l-sm' value={link} onChange={e=>setLink(e.target.value)}/>
-            <button onClick={()=>{setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 w-8'>+</button>
-        </label>
+            {/* Add Product Images */}
+            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>
+                Image: &nbsp;
+            </label>
+            <span className='flex w-full'>
+                <input className='text-2xl text-stone-700 h-10 w-full font-oswald rounded-l-sm' value={link} onChange={e=>setLink(e.target.value)}/>
+            <button onClick={()=>{setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button></span>
             {/* <h1 className='text-4xl font-oswald font-bold'>{Product.name}</h1>
             <h3 className='text-xl text-stone-500 font-oswald'>"{Product.color}"</h3>
             <span className='text-xl font-semibold mb-3'>{Product.price*Product.price_factor} {config.CURRENCY}</span> */}
@@ -122,7 +106,7 @@ const AddProduct = () => {
             <section className='mt-3'>{Product.description}</section> */}
 
 
-            <button onClick={()=>{}} className='w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add Product +</button>
+            <button onClick={()=>{}} className='col-span-2 mt-4 justify-self-center w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add Product +</button>
 
         </article>
     </div>
@@ -144,7 +128,7 @@ const ColorDropdown = (props:any) => {
     const {color,setColor,colors} = props
   return (
     <div>
-        <button onClick={()=>{setOpen(prev => !prev)}} className='h-10 w-36 rounded-sm bg-white px-2 overflow-hidden inline-block text-ellipsis whitespace-nowrap' >{color == null ? `Color ►` : GENERALCOLOR[colors.indexOf(color)]}</button>
+        <button onClick={()=>{setOpen(prev => !prev)}} className='h-10 w-full rounded-sm bg-white px-2 overflow-hidden inline-block text-ellipsis whitespace-nowrap' >{color == null ? `Color ►` : GENERALCOLOR[colors.indexOf(color)]}</button>
 
       <div className={`${open ? '' :'hidden'} absolute z-20 w-56  max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
         {colors.map((e:any) => <button onClick={() => e != color ? setColor(e) : setColor(undefined)} className={`p-2 m-1 ${color == e? 'bg-stone-900 text-white active:bg-white  active:text-black border-stone-900 hover:bg-stone-600': 'hover:bg-stone-200 bg-white active:bg-stone-900 active:border-stone-900 active:text-white border-stone-200' } border-2  rounded-md leading-[.25rem]`} m-1><span className={`h-4 w-4 inline-block border-black border`} style={{background:`${e.toLowerCase() == 'multicolored' ? 'linear-gradient(90deg, red, yellow, green, blue)': e}`}}></span> {e}</button>)}
