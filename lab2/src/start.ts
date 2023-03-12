@@ -1,11 +1,12 @@
 import { admin_router } from './router/AdminRouter';
 import { user_router } from './router/UserRouter';
 import { product_router } from './router/ProductRouter';
+
 /**
 * Required External Modules
 */
 require('dotenv').config()
-import express from "express";
+import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import session from "express-session";
 import * as path from "path";
@@ -18,14 +19,10 @@ export const app = express();
 * App Configuration
 */
 
-/* app.use(Express.static(path.join(__dirname, '../../client/build')));
-
-
-app.get('/*', (req : Express.Request, res : Express.Response) => {
-
- res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
-
-}); */
+app.use(express.static(path.join(__dirname, '../../lab3/website/build')));
+app.get('/*', (req : Request, res : Response) => {
+ res.sendFile(path.join(__dirname, '../../lab3/website/build', 'index.html'));
+});
 
 app.use(session({
 secret : process.env.SESSION_KEY as string, //
