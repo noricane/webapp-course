@@ -20,6 +20,7 @@ function App() {
   const [session,setSession] = useAtom(sessionAtom)    
   const nav = useNavigate()
   
+  
   useEffect(()=>{
     const cookie = Cookies.get('user') as string
     if(cookie != null){
@@ -28,13 +29,13 @@ function App() {
     }else{
       nav('/')
     }
-  },[session])
+  },[])
 
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/addproduct/:id" element={<AddProduct />} />
+      <Route path="/addproduct" element={<AddProduct />} />
       <Route path="/edit/:id" element={<EditProduct />} />
       <Route path="/addvariant/:id" element={<AddVariant />} />
       <Route path="/dashboard" element={<Dashboard />} />

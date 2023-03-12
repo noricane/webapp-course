@@ -38,6 +38,8 @@ const Layout = ({ children }: any) => {
           e.preventDefault();
           Cookies.remove('user');
           setSession(undefined);
+          nav('/')
+          nav(0)
 
         }}>Log Out</button>}
         {/* relative mt-[-1rem] */}

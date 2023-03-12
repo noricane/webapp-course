@@ -67,6 +67,41 @@ export async function addProduct(
     return error as string;
   }
 }
+export async function editProduct(
+  name: string,
+  brand: string,
+  description: string,
+  color: string,
+  generalColor: GENERALCOLOR,
+  category: CATEGORY,
+  price: number,
+  price_factor: number,
+  stock: stockedSize[],
+  images: string[]
+): Promise<true | string> {
+  try {
+    let msg = true;
+    const resp = await axios.put(`${config.URL}/product/`, {
+      productInformation: {
+        name: name,
+        brand: brand,
+        description: description,
+        color: color,
+        generalColor: generalColor,
+        category: category,
+        price: price,
+        price_factor: price_factor,
+        stock: stock,
+        images: images,
+      },
+    });
+    console.log(resp);
+    
+    return msg;
+  } catch (error) {
+    return error as string;
+  }
+}
 
 export async function getProduct(id:string,color:string):Promise<Product | undefined>{
   try {

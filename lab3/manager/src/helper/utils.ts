@@ -23,3 +23,7 @@ export function checkLatinCharacters(str: string):string{
     return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
 }
 
+export const checkString = (str:string | undefined):boolean =>{
+    if(str == null || str == "") return false;
+    return true
+  }

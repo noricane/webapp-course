@@ -9,7 +9,7 @@ import axios from 'axios';
 import { sessionAtom } from '../model/jotai.config';
 import ProductImages from '../components/Structural/ProductImages';
 import { MenuButton } from '../components/Misc/Dropdown';
-import { CategoryToArray, GeneralColorToArray } from '../helper/utils';
+import { CategoryToArray, checkString, GeneralColorToArray } from '../helper/utils';
 import { GENERALCOLOR } from '../model/misc';
 import { addProduct } from '../components/api';
 
@@ -36,10 +36,7 @@ const AddProduct = () => {
   const colors :string[] = GeneralColorToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   const categories :string[] = CategoryToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
 
-  const checkString = (str:string | undefined):boolean =>{
-    if(str == null || str == "") return false;
-    return true
-  }
+ 
     
   const submitHandler = () => {
 
@@ -50,7 +47,7 @@ const AddProduct = () => {
     (async () => {
       let pf = 1- parseInt(priceFactor)/100 > 0 &&1- parseInt(priceFactor)/100 <= 1 ? 1- parseInt(priceFactor)/100 : 1 
       /* @ts-ignore - Typescript doesn't realize that we've checked name etc in the checkString function. */
-      const resp = await addProduct(name,brand,desc,color,generalColor,category,parseInt(price),pf,sizeList,images)
+      const resp = await addProduct(name,brand,desc,color,generalColor+"",category+"",parseInt(price),pf,sizeList,images)
       console.log("Respoinse",resp);
       
     })()
@@ -83,7 +80,7 @@ const AddProduct = () => {
             <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Category: &nbsp;</label>
             <div>
                 <button onClick={()=>{setCategoryOpen(prev => !prev)}} className='w-full h-10 bg-white  relative z-10 rounded-sm '>{category == null ? 'Categories':category}</button>
-                <ul className={`${!categoryOpen && 'hidden' } w-48 h-12 bg-stone-50 rounded-sm border-2 flex justify-around items-center absolute`}>
+                <ul className={`${!categoryOpen && 'hidden' } w-48 h-12 z-[15] bg-stone-50 rounded-sm border-2 flex justify-around items-center absolute`}>
                     {categories.map(e=><li onClick={()=>{setCategory(categories.indexOf(e)+"");setCategoryOpen(false)}} className='hover:bg-stone-200 border-2  px-1 rounded-lg'>{e}</li>)}
                 </ul>
             </div>
@@ -113,7 +110,7 @@ const AddProduct = () => {
             <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
             <span className='flex w-full'>
               <input className='text-2xl text-stone-700 h-10 w-full font-oswald rounded-l-sm' value={link} onChange={e=>setLink(e.target.value)}/>
-              <button onClick={()=>{setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
+              <button onClick={()=>{ link!= null && setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
             </span>
             {/* Add Stocked Size Images */}
             <label className='justify-end flex p-1 h-10 items-center font-bold '>Stock: &nbsp;</label>
@@ -129,7 +126,18 @@ const AddProduct = () => {
                 }
                 const input:number[] = inputs.split("-").filter(e => !isNaN(parseInt(e))).map(e => parseInt(e))
 
-                setSizeList(prev => [...prev,{size:input[0],amount:input[1]}])
+                setSizeList(prev => {
+                  const obj = {size:input[0],amount:input[1]}
+                  let find = prev.find(e => e.size == input[0])
+                  console.log("haha");
+                  
+                  if(find != null){
+                    console.log("heeh");
+                    return [...prev.filter(e=>e.size!=input[0]),obj].sort((a,b)=>  a.size - b.size)
+                  }
+
+                  return [...prev,obj].sort((a,b)=>  a.size - b.size)
+                })
                 
               }} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
               </div>

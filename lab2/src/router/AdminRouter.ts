@@ -43,6 +43,8 @@ admin_router.post("/login", async (
             res.status(200).send("Successfully logged in");
         }
     } catch (e: any) {
+
+        
         res.status(500).send(e.message);
     }
 });

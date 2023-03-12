@@ -12,10 +12,58 @@ import { MenuButton } from '../components/Misc/Dropdown';
 import { CategoryToArray, GeneralColorToArray } from '../helper/utils';
 import { GENERALCOLOR } from '../model/misc';
 import { addProduct, getProduct } from '../components/api';
+import TextArea from '../components/HTML/TextArea';
+import Input from '../components/HTML/Input';
 
 const AddProduct = () => {
-  
-     
+  /* Ignore if you want -- Declaring local components to reduce html clutter*/
+  const Stock = () => {
+   return (<>
+    <div className='flex relative'>
+              <button onClick={()=>{setSizeOpen(prev => !prev)}} className='w-full h-10 bg-white  relative z-10 rounded-sm '>Sizes</button>
+              <button onClick={()=>{
+                setError(undefined)
+                const inputs = prompt("Enter  size and stock separated by a - eg. size:42 stock:55 = 42-55");
+                if(inputs == null || (inputs.split("-").length>2 || inputs.split("-").length<2)){
+                  setError("Input incorrect")
+                  return
+                }
+                const input:number[] = inputs.split("-").filter(e => !isNaN(parseInt(e))).map(e => parseInt(e))
+
+                setSizeList(prev => {
+                  const obj = {size:input[0],amount:input[1]}
+                  let find = prev.find(e => e.size == input[0])
+                  console.log("haha");
+                  
+                  if(find != null){
+                    console.log("heeh");
+                    return [...prev.filter(e=>e.size!=input[0]),obj].sort((a,b)=>  a.size - b.size)
+                  }
+
+                  return [...prev,obj].sort((a,b)=>  a.size - b.size)
+                })
+                
+              }} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
+              </div>
+              
+              <div> 
+                <ul className={`${!sizeOpen && 'hidden' } w-52 min-h-12 max-h-56 bg-stone-50 rounded-sm border-2 gap-2 px-2 py-4 flex flex-col overflow-scroll justify-around items-center absolute`}>
+                    {sizeList.map(e=><li onClick={()=>{setSizeList(prev => prev.filter(elem => elem != e));}} className='hover:bg-stone-200 border-2  cursor-pointer px-1 rounded-lg'>Size: {e.size} - Stock: {e.amount}</li>)}
+                </ul>
+              </div></>)
+  }
+
+  const CategoryComp = () => {
+    return (
+      <div>
+                  <button onClick={()=>{setCategoryOpen(prev => !prev)}} className='w-full h-10 bg-white  relative z-10 rounded-sm '>{category == null ? 'Categories':category}</button>
+                  <ul className={`${!categoryOpen && 'hidden' } w-48 h-12 bg-stone-50 z-[15] rounded-sm border-2 flex justify-around items-center absolute`}>
+                      {categories.map(e=><li onClick={()=>{setCategory(categories.indexOf(e)+"");setCategoryOpen(false)}} className='hover:bg-stone-200 border-2  px-1 rounded-lg'>{e}</li>)}
+                  </ul>
+              </div>
+    )
+  }
+  /* ------------------------------------------------------------------------------------------------------------------ */
   const location = useLocation()
   const {pathname,search} = location
   const idParam = pathname.split('/')[pathname.split('/').length-1]
@@ -52,6 +100,7 @@ const AddProduct = () => {
         return
       }
       setProduct(p)
+      setDesc(p.description);
     })()
   },[])
 
@@ -65,13 +114,11 @@ const AddProduct = () => {
         console.log(data)
         data.forEach(e => e.value.color != Product.color && list.push(e.value))
 
-        setVariants([Product,...list])
+        setVariants([Product,...list]);
 
-
-        setDesc(Product.description);
-        setImages(Product.images);})()
-  
-      },[])
+        
+        })()
+  },[Product])
   
   const checkString = (str:string | undefined):boolean =>{
     if(str == null || str == "") return false;
@@ -103,81 +150,63 @@ const AddProduct = () => {
 
         {/* Product Brand and Name */}
         <article className='p-8 grid grid-cols-2 gap-2' id='info'>
-            <label htmlFor="brand" className='justify-end flex p-1 h-10 items-center font-bold col-span-1 '>Brand: &nbsp;</label>
-            <input name={'brand'} className='text-2xl text-stone-700 h-10 rounded-sm col-span-1 font-oswald' value={Product?.brand} />
-
+            <label htmlFor="brand"  className='justify-end flex p-1 h-10 items-center font-bold col-span-1 '>Brand: &nbsp;</label>
+            <Input name="brand" disabled={true} value={Product?.brand}/>
             <label htmlFor="name" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Name: &nbsp;</label>
-            <input name="name" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={Product?.name}/>
+            <Input name="name" disabled={true} value={Product?.name}/>
+           
 
 
             {/* Color and general color */}
             <label htmlFor="color" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Color: &nbsp;</label>
-            <input name="color" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={color} onChange={e=>setColor(e.target.value)}/>
-
+            <Input name="color" value={color} onChange={setColor}/>
+            
             <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>General Color: &nbsp;</label>
             <ColorDropdown color={generalColor} setColor={setGeneralColor}  colors={colors} />
 
+            {/* Category */}
             <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Category: &nbsp;</label>
-            <div>
-                <button onClick={()=>{setCategoryOpen(prev => !prev)}} className='w-full h-10 bg-white  relative z-10 rounded-sm '>{category == null ? 'Categories':category}</button>
-                <ul className={`${!categoryOpen && 'hidden' } w-48 h-12 bg-stone-50 rounded-sm border-2 flex justify-around items-center absolute`}>
-                    {categories.map(e=><li onClick={()=>{setCategory(categories.indexOf(e)+"");setCategoryOpen(false)}} className='hover:bg-stone-200 border-2  px-1 rounded-lg'>{e}</li>)}
-                </ul>
-            </div>
+            <CategoryComp />
 
-            {/* Descritpion and Price */}
-            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Description: &nbsp;</label>
-            <input className='text-2xl text-stone-700 h-10  rounded-sm font-oswald' value={desc} onChange={e=>setDesc(e.target.value)}/>
-            
-            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Price: &nbsp;</label>
-            <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={price} onChange={e=>setPrice(prev => {
-                    if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
-                        return prev
-                    }
-                    return e.target.value
-                })}/>
-
-
-            <label htmlFor="" className='justify-end flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
-            <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={priceFactor} onChange={e=>setPriceFactor(prev => {
-                    if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
-                        return prev
-                    }
-                    return e.target.value
-                })}/>
-
-            {/* Add Product Images */}
-            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
-            <span className='flex w-full'>
-              <input className='text-2xl text-stone-700 h-10 w-full font-oswald rounded-l-sm' value={link} onChange={e=>setLink(e.target.value)}/>
-              <button onClick={()=>{setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
-            </span>
-            {/* Add Stocked Size Images */}
+            {/* Add Stocked Size */}
             <label className='justify-end flex p-1 h-10 items-center font-bold '>Stock: &nbsp;</label>
             <span className='flex flex-col w-full'>
-              <div className='flex relative'>
-              <button onClick={()=>{setSizeOpen(prev => !prev)}} className='w-full h-10 bg-white  relative z-10 rounded-sm '>Sizes</button>
-              <button onClick={()=>{
-                setError(undefined)
-                const inputs = prompt("Enter  size and stock separated by a - eg. size:42 stock:55 = 42-55");
-                if(inputs == null || (inputs.split("-").length>2 || inputs.split("-").length<2)){
-                  setError("Input incorrect")
-                  return
-                }
-                const input:number[] = inputs.split("-").filter(e => !isNaN(parseInt(e))).map(e => parseInt(e))
-
-                setSizeList(prev => [...prev,{size:input[0],amount:input[1]}])
-                
-              }} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
-              </div>
-              
-              <div> 
-                <ul className={`${!sizeOpen && 'hidden' } w-48 min-h-12 bg-stone-50 rounded-sm border-2 gap-2 py-4 flex flex-col overflow-scroll justify-around items-center absolute`}>
-                    {sizeList.map(e=><li onClick={()=>{setSizeList(prev => prev.filter(elem => elem != e));}} className='hover:bg-stone-200 border-2  cursor-pointer px-1 rounded-lg'>Size: {e.size} - Stock: {e.amount}</li>)}
-                </ul>
-              </div>
+              <Stock/>
            
             </span>
+
+            {/* Descritpion and Price */}
+            <label htmlFor="desc" className='justify-end flex p-1 h-10 items-center font-bold '>Description: &nbsp;</label>
+            <TextArea name="desc" value={desc} onChange={setDesc}/>      
+
+
+            <label htmlFor="price" className='justify-end flex p-1 h-10 items-center font-bold '>Price: &nbsp;</label>
+            <Input name="price" value={price} onChange={(e:string)=>setPrice(prev => {
+                    if(prev != null && prev?.length < e.length && isNaN(parseInt(e.slice(prev?.length,)))){
+                        return prev
+                    }
+                    return e
+                })}/>
+
+
+
+            <label htmlFor="priceFactor" className='justify-end flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
+            <Input name="priceFactor" value={priceFactor} onChange={(e:string)=>setPriceFactor(prev => {
+                    if(prev != null && prev?.length < e.length && isNaN(parseInt(e.slice(prev?.length,)))){
+                        return prev
+                    }
+                    return e})}/>
+           
+
+            {/* Add Product Images */}
+            <label htmlFor="link" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
+            <span className='flex w-full'>
+              <input className='py-1 px-2 text-2xl text-stone-700 h-10 w-full font-oswald rounded-l-sm' value={link} onChange={e=>setLink(e.target.value)}/>
+
+
+              <button onClick={()=>{setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
+            </span>
+         
           
 
 
@@ -191,6 +220,7 @@ const AddProduct = () => {
     
     </>
   )
+  
 }
 
 export default AddProduct
@@ -212,4 +242,8 @@ const ColorDropdown = (props:any) => {
     </div>  
   )
 }
+
+
+
+
 

@@ -255,18 +255,27 @@ product_router.post("/", async (
 
 //TODO, is this good practice to have id outside url??
 product_router.put("/", async (
-    req: Request<{}, {}, {id:string, color:string,size:number, amount:number}>,
+    req: Request<{}, {}, {productInformation : productConstructor }>,
     res: Response<string>
 ) => {
     try {
-        const { id, color, size, amount } = req.body
-        const stocked:stockedSize = {size,amount}
-        if ( typeof(id) != "string" || typeof(color)!="string" || typeof(size) != "number" || typeof(amount) != "number" ){
-            res.status(400).send(`Bad PUT call to ${req.originalUrl} --- fields do not adhere to restock api specification`);
-            return
+        console.log("in here boy");
+        console.log((req.body.productInformation));
+        console.log("here");
+        console.log(isProduct(req.body.productInformation));
+        console.log("Here?");
+        
+        if (!isProduct(req.body.productInformation)) {
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- description does not adhere to constructor for product`);
+            return;
         }
-        const resp = await product_service.restockProduct(id,color,stocked)
-        if (resp === true){
+        console.log("in here again boy");
+        const description: productConstructor= req.body.productInformation;
+        
+        const resp = await product_service.editProduct(description);
+        console.log("resp",resp);
+
+        if (resp instanceof Product){
             res.status(200).send("Successfully restocke")
         }else{
             res.status(resp.code).send(resp.message)
@@ -274,6 +283,8 @@ product_router.put("/", async (
 
     }
     catch (e: any) {
+
+        
         res.status(500).send(e.message);
     }
 })

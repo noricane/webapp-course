@@ -66,7 +66,7 @@ export function isProduct(arg: any){
     let brandCheck:boolean   = arg?.brand != null && typeof(arg.brand)== "string"
     let descCheck:boolean    = arg?.description != null && typeof(arg.description)== "string"
     let colorCheck:boolean   = arg?.color != null && typeof(arg.color)== "string"
-    let generalColorCheck:boolean   = arg?.generalColor != null && Object.values(GENERALCOLOR).includes(arg?.generalColor.toUpperCase())
+    let generalColorCheck:boolean   = arg?.generalColor != null && Object.keys(GENERALCOLOR).includes(arg?.generalColor.toUpperCase())
     let categoryCheck:boolean= arg?.category != null && Object.keys(CATEGORY).includes(arg?.category.toUpperCase())
     let priceCheck:boolean   = arg?.price != null && typeof(arg.price)== "number"
     let pfactorCheck:boolean = arg?.price_factor != null && typeof(arg.price_factor)== "number"
@@ -74,7 +74,7 @@ export function isProduct(arg: any){
     let urlCheck:boolean = arg?.images != null &&  Array.isArray(arg.images)
 
     let checks = [nameCheck,brandCheck,descCheck,colorCheck,generalColorCheck,categoryCheck,priceCheck,pfactorCheck,stockCheck,urlCheck]
- 
+
 
     if (!nameCheck || !brandCheck || !descCheck || !colorCheck || !generalColorCheck || !categoryCheck || !priceCheck 
         || !pfactorCheck || !stockCheck || !urlCheck||Object.keys(arg).length > checks.length) {            

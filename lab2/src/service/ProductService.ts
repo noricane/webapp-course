@@ -1,4 +1,4 @@
-import { CATEGORY, checkLatinCharacters } from './../helper/utils';
+import { CATEGORY, checkLatinCharacters, normalizeString } from './../helper/utils';
 import { GENERALCOLOR } from '../helper/utils';
 import { stockedSize } from '../model/product';
 import { Product } from "../model/product";
@@ -32,7 +32,7 @@ export interface IProductService {
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
-    restockProduct(id: string, color:string, instructions : {size:number ,amount:number}): Promise<boolean|ProductError> 
+    editProduct(desc:Object): Promise<Product|ProductError> 
 
     // Removes a product with the given id from stock,
     // and returns the removed Map<string(id),Product> object
@@ -104,7 +104,7 @@ export class ProductService implements IProductService{
     }
 
     async getProducts(): Promise<Map<string,Map<string,Product>>|ProductError> {
-              
+               
         if(this.products.size > 0){
             console.log("Sending products",this.products);
             return this.products; //Send an array of Map<string,product> instead?
@@ -122,7 +122,8 @@ export class ProductService implements IProductService{
     }
     async getProductColor(id: string, color: string): Promise<ProductError |  Product> {
         const query = this.products.get(id);
-
+        console.log("Query here",query);
+        
         
         if(query!=null){
             const color_query  = query.get(color)
@@ -163,7 +164,46 @@ export class ProductService implements IProductService{
         
         
     }
-    async restockProduct(id: string, color:string, new_stock : stockedSize  ): Promise<true|ProductError> {
+    async editProduct(desc: productConstructor): Promise<Product|ProductError> {   
+        const {color} = desc;
+        const item = new Product(desc.name, desc.brand, desc.description, desc.color,desc.generalColor, desc.price, desc.category, desc.stock, desc.price_factor, desc.images);
+
+        const findEntry = this.products.get(item.id);
+        if(findEntry != null){
+            if(findEntry.get(normalizeString(color))!=null){
+                //color exists, update it
+                findEntry.set(normalizeString(color),item)
+            }else{
+                return new ProductError(409,"Product colorway not found, did you mean to add?")
+            }
+        }else{
+            //Product doesn't exist
+            return new ProductError(409,"Product not found, did you mean to add?")
+        } 
+        return item;
+        /* const {color} = desc;
+        const item = new Product(desc.name, desc.brand, desc.description, desc.color,desc.generalColor, desc.price, desc.category, desc.stock, desc.price_factor, desc.images);
+
+        const findEntry = this.products.get(item.id);
+        console.log("find",findEntry);
+        
+        if(findEntry != null){
+            if(findEntry.get(color)!=null){
+                //color exists, update it to requested item
+                findEntry.set(color,item)
+            }else{
+                return new ProductError(404,"Color not found")
+            }
+        }{
+            return new ProductError(404,"Product not found")
+        }
+        return item; */
+        
+        
+    }
+
+    //Probably will be discarded in favor of editProduct
+    /* async restockProduct(id: string, color:string, new_stock : stockedSize  ): Promise<true|ProductError> {
         const {size, amount} = new_stock
         const query = this.products.get(id);
          
@@ -186,7 +226,7 @@ export class ProductService implements IProductService{
         }
         
         return new ProductError(404,"Product was not found")
-    }
+    } */
     async removeProduct(id: string):  Promise<Map<string,Product>|ProductError>  {
         const query = this.products.get(id);
         if(query != null){

@@ -8,14 +8,14 @@ const Price = (props:any) => {
 
     if(price*pricefactor < price){
         return <div><div className='w-auto [&>*]:h-2.5 mb-3 gap-2 flex flex-wrap px-0 font-semibold'> 
-        <span className='line-through text-stone-500'>{`${price}${config.CURRENCY} `}</span><span className=''>{`${price*pricefactor}${config.CURRENCY} `}</span>
+        <span className='line-through text-stone-500'>{`${price}${config.CURRENCY} `}</span><span className=''>{`${((price*pricefactor).toLocaleString()).replace(',','.')} ${config.CURRENCY} `}</span>
        </div>
         <div>{pricefactor < 1 && <Badge  info={`${(100-pricefactor*100)}% Off`}/>}</div></div>
     }
     
     return (
       <div className='w-auto [&>*]:h-2.5 mb-3 gap-2 flex flex-wrap px-0 font-semibold'> 
-  <span className=''>{`${price.toLocaleString()}${config.CURRENCY} `}</span></div>
+  <span className=''>{`${price.toLocaleString().replace(',','.')} ${config.CURRENCY} `}</span></div>
 
   )
 }
