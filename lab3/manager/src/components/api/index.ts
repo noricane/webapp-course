@@ -3,6 +3,7 @@ import { GENERALCOLOR, CATEGORY } from "./../../model/misc";
 import axios, { AxiosError } from "axios";
 import { config } from "../../model/config";
 import Cookies from "js-cookie";
+import { Product } from "../../model/product";
 
 export async function logInUser(em: string, pw: string): Promise<any> {
   const resp = await axios
@@ -64,5 +65,20 @@ export async function addProduct(
     return msg;
   } catch (error) {
     return error as string;
+  }
+}
+
+export async function getProduct(id:string,color:string):Promise<Product | undefined>{
+  try {
+    let arr:Product[]= []
+    const {data}:{data:Product} =  await axios.get(`${config.URL}/product/${id}?color=${color}`);
+
+    
+    if (data != null) {
+      return data
+  }
+    return undefined
+  } catch (error) {
+    
   }
 }
