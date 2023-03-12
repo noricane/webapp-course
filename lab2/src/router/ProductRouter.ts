@@ -259,12 +259,6 @@ product_router.put("/", async (
     res: Response<string>
 ) => {
     try {
-        console.log("in here boy");
-        console.log((req.body.productInformation));
-        console.log("here");
-        console.log(isProduct(req.body.productInformation));
-        console.log("Here?");
-        
         if (!isProduct(req.body.productInformation)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description does not adhere to constructor for product`);
             return;

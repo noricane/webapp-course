@@ -5,11 +5,13 @@ import { User } from "../model/user";
 
 export interface IAdminService {
     logInUser(mail: string,password:string) : Promise<Admin|ProductError>;
-    //Returns a list of all listed products
+
     getUsers() : Promise<User[]|ProductError>;
 
     addAdmin(admin:Admin): Promise<Admin|ProductError> //Change name of ProductError type?
+
     removeAdmin(email:string): Promise<Admin|ProductError> 
+
     getAdmin(email:string) : Promise<Admin|ProductError>;
 }
 
@@ -24,6 +26,7 @@ export class ProductError{
 }
 
 export class AdminService implements IAdminService{
+    /* Logs in admin if there is an entry in admin map that matches email and password  */
     async logInUser(mail: string, password: string): Promise<Admin | ProductError> {
         const admin = await this.getAdmin(mail)
         if (admin instanceof Admin){
@@ -37,21 +40,25 @@ export class AdminService implements IAdminService{
         }
     }
 
+    /* Dependency injection to retrieve all users if the admin would like to manipulate them.*/
     userService:UserService;
+    /* Map of admins in the form of <email,Admin> */
     admins: Map<string,Admin> = new Map<string,Admin>()
+
     constructor(service:UserService){
         this.userService=service;
         const user = new Admin("Michael Jackson","mj@gmail.com","mj123")
         this.admins.set(user.email,user)
     }
    
-    
+    /* Returns list of users from userService */
     async getUsers(): Promise<User[]> {
         return Array.from(this.userService.users.values())
     }
+
+    /* Returns admin if found, this method seems a little weird, TODO */
     async getAdmin(mail: string): Promise<ProductError | Admin> {
         const query: Admin | undefined = this.admins.get(mail);
-
         if(query != undefined){
             return query;
         }else{
@@ -60,7 +67,7 @@ export class AdminService implements IAdminService{
     }
    
 
-
+    /* Removes admin if found */
     async removeAdmin(email:string): Promise<ProductError | Admin> {
         const query = this.admins.get(email)
         if(query != null){
@@ -70,6 +77,8 @@ export class AdminService implements IAdminService{
             return new ProductError(404, "Admin not found")
         }
     }
+
+    /* Adds admin if not found */
     async addAdmin(admin: Admin): Promise<ProductError | Admin> {
         const query = this.admins.get(admin.email)
         if(query == null){
@@ -78,10 +87,7 @@ export class AdminService implements IAdminService{
         }else{
             return new ProductError(400, "Admin already exists")
         }
-    }
-    
-   
-   
+    }   
 }
 
 
