@@ -23,9 +23,10 @@ export class User extends BaseUser{
     addAddress(desc:any){
         this.adresses.push(new address(desc.type,desc.street,desc.city,desc.country, desc.zip))
     }
-    addOrder(...multi:multiProduct[]){
+    addOrder(...multi:multiProduct[]):PastOrder{
         const item:PastOrder = new PastOrder(Date.now(),multi)
         this.orders.push(item)
+        return item
     }
     
     getType():string {
