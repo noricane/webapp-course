@@ -142,7 +142,7 @@ export class ProductService implements IProductService{
 
     async addProduct(desc: productConstructor): Promise<Product|ProductError> {   
         const {color} = desc;
-        const item = new Product(desc.name, desc.brand, desc.description, desc.color,desc.generalColor, desc.price, desc.category, desc.stock, desc.price_factor, desc.url);
+        const item = new Product(desc.name, desc.brand, desc.description, desc.color,desc.generalColor, desc.price, desc.category, desc.stock, desc.price_factor, desc.images);
 
         const findEntry = this.products.get(item.id);
         if(findEntry != null){

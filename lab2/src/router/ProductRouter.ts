@@ -229,7 +229,7 @@ product_router.post("/", async (
 ) => {
     try {
 
-        
+     
         if (!isProduct(req.body.productInformation)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description does not adhere to constructor for product`);
             return;
@@ -238,7 +238,9 @@ product_router.post("/", async (
 
         const resp = await product_service.addProduct(description);
         if(resp instanceof Product){
+            console.log("successfully created");
             //Success, resp contains products!
+            
             res.status(200).send(resp);
         }else{
             //Resp is of type ProductError

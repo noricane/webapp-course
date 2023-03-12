@@ -12,11 +12,11 @@ const Price = (props:any) => {
        </div>
         <div>{pricefactor < 1 && <Badge  info={`${(100-pricefactor*100)}% Off`}/>}</div></div>
     }
-
-  return (
-
-       <>{price}</>
     
+    return (
+      <div className='w-auto [&>*]:h-2.5 mb-3 gap-2 flex flex-wrap px-0 font-semibold'> 
+  <span className=''>{`${price.toLocaleString()}${config.CURRENCY} `}</span></div>
+
   )
 }
 

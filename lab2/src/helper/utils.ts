@@ -57,7 +57,7 @@ export type productConstructor= {
     category:CATEGORY;
     stock:stockedSize[];
     price_factor:number;
-    url: string[];
+    images: string[];
 }
 /* Check that object is of type productConstructtor couldn't think of better way */
 
@@ -67,14 +67,17 @@ export function isProduct(arg: any){
     let descCheck:boolean    = arg?.description != null && typeof(arg.description)== "string"
     let colorCheck:boolean   = arg?.color != null && typeof(arg.color)== "string"
     let generalColorCheck:boolean   = arg?.generalColor != null && Object.values(GENERALCOLOR).includes(arg?.generalColor.toUpperCase())
-    let categoryCheck:boolean= arg?.category != null && Object.values(CATEGORY).includes(arg?.category.toUpperCase())
+    let categoryCheck:boolean= arg?.category != null && Object.keys(CATEGORY).includes(arg?.category.toUpperCase())
     let priceCheck:boolean   = arg?.price != null && typeof(arg.price)== "number"
     let pfactorCheck:boolean = arg?.price_factor != null && typeof(arg.price_factor)== "number"
     let stockCheck:boolean = arg?.stock != null && Array.isArray(arg.stock)
-    let urlCheck:boolean = arg?.url != null &&  Array.isArray(arg.url)
-    let checks = [nameCheck,brandCheck,descCheck,colorCheck,categoryCheck,priceCheck,pfactorCheck,stockCheck,urlCheck]
+    let urlCheck:boolean = arg?.images != null &&  Array.isArray(arg.images)
+
+    let checks = [nameCheck,brandCheck,descCheck,colorCheck,generalColorCheck,categoryCheck,priceCheck,pfactorCheck,stockCheck,urlCheck]
+ 
+
     if (!nameCheck || !brandCheck || !descCheck || !colorCheck || !generalColorCheck || !categoryCheck || !priceCheck 
-        || !pfactorCheck || !stockCheck || !urlCheck||Object.keys(arg).length > checks.length) {
+        || !pfactorCheck || !stockCheck || !urlCheck||Object.keys(arg).length > checks.length) {            
         return false
     }
     return true
