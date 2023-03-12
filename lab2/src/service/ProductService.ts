@@ -61,9 +61,23 @@ export class ProductError{
 
 export class ProductService implements IProductService{
 
-    /* TODO */
-    processOrder(...order:multiProduct[]){
-       order.forEach(e => console.log(e))
+
+    processOrder(...order:multiProduct[]):multiProduct[]{
+        const result:multiProduct[] = []
+        order.forEach(e => {
+            const query = this.getProductColor(e.item.id,e.item.color);
+            if(query instanceof Product && query.stock.find(elem => elem.size == e.size) != null){
+                const find = query.stock.find(elem => elem.size == e.size)
+                if(find == null){return}
+                if(find.amount >= e.amount){
+                    const index = query.stock.indexOf(find);
+                    const list = query.stock
+                    query.setStock([...list.slice(0,index),{size:e.size,amount:find.amount-e.amount},...list.slice(index+1,)])
+                }
+            }
+        })
+
+        return result;
     }
     
     /* The collection of products is represented as a Map with the id of the product that leads to a map with all the product's color variations */

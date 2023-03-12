@@ -27,7 +27,7 @@ export interface IUserService {
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
-    addUserOrder(id: string, ...order: multiProduct[]): Promise<true|ProductError> 
+    addUserOrder(id: string, ...order: multiProduct[]): Promise<multiProduct[]|ProductError> 
 
     
     removeUser(id:string): Promise<User|ProductError> 
@@ -107,18 +107,23 @@ export class UserService implements IUserService{
     }
 
     /* Processes order through product_service */
-    processOrder(...order:multiProduct[]){
-        this.productService.processOrder(...order)
+    processOrder(...order:multiProduct[]):multiProduct[]{
+        return this.productService.processOrder(...order)
     }
     
     /* Processes order through product_service and then add's order to user */
-    async addUserOrder(id: string, ...order: multiProduct[]): Promise<true | ProductError> {
+    async addUserOrder(id: string, ...order: multiProduct[]): Promise<multiProduct[] | ProductError> {
         const query = this.users.get(id)
         if(query != null){
             //Need error handlling, this will break on concurrency
+            console.log("here");
+            
             const processed =  this.processOrder(...order);
             query.addOrder(...order)
-            return true
+            if(processed.length == order.length){
+                return order
+            }
+            return []
         }else{
             return new ProductError(400, "User doesn't exist")
         }

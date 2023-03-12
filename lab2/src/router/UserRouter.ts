@@ -116,13 +116,14 @@ user_router.get("/order", async (
 
 user_router.post("/order", async (
     req: Request & {body:{items:multiProduct[]}, session: {user?: User}},
-    res: Response< PastOrder | string>
+    res: Response< PastOrder | multiProduct[] | string>
 ) => {
     try {
         const { id } = req.params
         const { items } = req.body
         console.log(req.body);
-
+        console.log("user",req.session.user);
+        
         console.log(Array.isArray(items));
         console.log(isMultiProducts(items));
         
@@ -132,9 +133,11 @@ user_router.post("/order", async (
         }
 
         const resp = await user_service.addUserOrder(id,...items);
-        if(resp === true){
+        if(Array.isArray(resp)){
             //Success, resp is the requested user!            
-            res.status(200).send("Successfully added order");
+            res.status(409).send(resp);
+        }else if(resp instanceof PastOrder){
+            res.status(200).send(resp);
         }else{
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);

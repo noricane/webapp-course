@@ -1,3 +1,4 @@
+
 import { GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { hashize } from "../helper/utils";
 
@@ -29,7 +30,9 @@ export class Product{
     isInStock(){
         return !(this.stock.length == 0)
     }
-
+    setStock(list:stockedSize[]){
+        this.stock = list
+    }
     constructor(name:string, brand:string,description:string, color:string,generalColor:GENERALCOLOR,price:number,category:CATEGORY,stock:stockedSize[],price_factor:number, url:string[]){
         this.id = hashize(brand.concat(name));//different brands may have the exact same modelname
         this.name =name;

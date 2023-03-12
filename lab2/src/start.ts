@@ -19,10 +19,11 @@ export const app = express();
 * App Configuration
 */
 
+/* 
 app.use(express.static(path.join(__dirname, '../../lab3/website/build')));
 app.get('/*', (req : Request, res : Response) => {
  res.sendFile(path.join(__dirname, '../../lab3/website/build', 'index.html'));
-});
+}); */
 
 app.use(session({
 secret : process.env.SESSION_KEY as string, //

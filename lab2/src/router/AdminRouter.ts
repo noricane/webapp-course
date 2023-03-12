@@ -30,21 +30,15 @@ admin_router.post("/login", async (
 
         const resp = await admin_service.logInUser(email,password);
         if(resp instanceof ProductError){
-            //Error
-            console.log("error met");
+            //Error met        
             res.status(resp.code).send(resp.message);
-            //Success, resp is the requested user!            
         }else{
-            console.log("sending resp");
-            
-            console.log("response",JSON.stringify(resp));
+            //Success, resp is the requested user!            
             
             res.cookie('user',JSON.stringify(resp));
             res.status(200).send("Successfully logged in");
         }
-    } catch (e: any) {
-
-        
+    } catch (e: any) {        
         res.status(500).send(e.message);
     }
 });
