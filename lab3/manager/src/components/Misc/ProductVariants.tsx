@@ -39,7 +39,7 @@ const PopUp = ({items,setCurrent,parentImage}:{items:Product[],setCurrent:Functi
         }} id='variants' className={`h-0 w-full relative z-10 bottom-0 overflow-x-scroll overflow-y-hidden bg-stone-100 opacity-50 transition-all ${error && 'flex justify-center items-center font-bold text-red-800'}`}>
             {items.length == 0 && 'Error'}
             <ul className='flex w-fit h-full items-center gap-3 px-4'>
-                {items.length != 0 && items.map(e => <li className='h-14 w-14 bg-stone-50'><ProductLink id={e.id} color={e.color}><img className='h-full w-full object-cover' onMouseEnter={()=>setCurrent(e.images[0])} src={e.images[0]} onMouseLeave={()=>setCurrent(parentImage)} alt="" /></ProductLink></li>)}
+                {items.length != 0 && items.map(e => <li className='h-14 w-14 bg-stone-50'><ProductLink to='edit' id={e.id} color={e.color}><img className='h-full w-full object-cover' onMouseEnter={()=>setCurrent(e.images[0])} src={e.images[0]} onMouseLeave={()=>setCurrent(parentImage)} alt="" /></ProductLink></li>)}
             </ul>
         </div>
     )

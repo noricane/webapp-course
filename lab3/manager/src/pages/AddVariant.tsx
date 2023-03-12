@@ -11,17 +11,25 @@ import ProductImages from '../components/Structural/ProductImages';
 import { MenuButton } from '../components/Misc/Dropdown';
 import { CategoryToArray, GeneralColorToArray } from '../helper/utils';
 import { GENERALCOLOR } from '../model/misc';
-import { addProduct } from '../components/api';
+import { addProduct, getProduct } from '../components/api';
 
 const AddProduct = () => {
   
      
-  
+  const location = useLocation()
+  const {pathname,search} = location
+  const idParam = pathname.split('/')[pathname.split('/').length-1]
+  const colorParam = search.split('=')[search.split('=').length-1]
+  const nav = useNavigate()
+
+  const [Product, setProduct] = useState<Product>() 
+  const [variants, setVariants] = useState<Product[]>([]) 
+
 
   const [sizeList, setSizeList] = useState<{size:number,amount:number}[]>([]) 
   const [sizeOpen, setSizeOpen] = useState<boolean>(false) 
-  const [name, setName] = useState<string>() 
-  const [brand, setBrand] = useState<string>() 
+
+
   const [color, setColor] = useState<string>() 
   const [generalColor, setGeneralColor] = useState<string>() 
   const [category, setCategory] = useState<string>() 
@@ -36,6 +44,35 @@ const AddProduct = () => {
   const colors :string[] = GeneralColorToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   const categories :string[] = CategoryToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
 
+  useEffect(()=>{
+    (async ()=>{
+      const p = await getProduct(idParam,colorParam)
+      if(p == undefined){
+        setError("true")
+        return
+      }
+      setProduct(p)
+    })()
+  },[])
+
+
+  useEffect(()=>{
+    if(Product == null){return}
+      (async ()=>{
+        const {data}:{data:{key:string,value:Product}[]|string} = await axios.get(`${config.URL}/product/${Product.id}`)
+        if(typeof(data) == "string"){return}
+        const list:Product[] = []
+        console.log(data)
+        data.forEach(e => e.value.color != Product.color && list.push(e.value))
+
+        setVariants([Product,...list])
+
+
+        setDesc(Product.description);
+        setImages(Product.images);})()
+  
+      },[])
+  
   const checkString = (str:string | undefined):boolean =>{
     if(str == null || str == "") return false;
     return true
@@ -43,14 +80,14 @@ const AddProduct = () => {
     
   const submitHandler = () => {
 
-    if(sizeList.length == 0 || !checkString(name) || !checkString(brand) || !checkString(color) || colors.filter(e => e.toLowerCase()==generalColor?.toLowerCase()).length == 0 ||category == null || categories[parseInt(category as string)]==null || !checkString(desc) || price == null || isNaN(parseInt(price)) || priceFactor == null || isNaN(parseInt(priceFactor)) || images.length ==0    ){
+    if(sizeList.length == 0  || !checkString(color) || colors.filter(e => e.toLowerCase()==generalColor?.toLowerCase()).length == 0 ||category == null || categories[parseInt(category as string)]==null || !checkString(desc) || price == null || isNaN(parseInt(price)) || priceFactor == null || isNaN(parseInt(priceFactor)) || images.length ==0    ){
       setError("Input nonvalid")
       return
     }
     (async () => {
       let pf = 1- parseInt(priceFactor)/100 > 0 &&1- parseInt(priceFactor)/100 <= 1 ? 1- parseInt(priceFactor)/100 : 1 
       /* @ts-ignore - Typescript doesn't realize that we've checked name etc in the checkString function. */
-      const resp = await addProduct(name,brand,desc,color,generalColor,category,parseInt(price),pf,sizeList,images)
+      const resp = await addProduct(Product.name,Product.brand,desc,color,generalColor,category,parseInt(price),pf,sizeList,images)
       console.log("Respoinse",resp);
       
     })()
@@ -67,10 +104,10 @@ const AddProduct = () => {
         {/* Product Brand and Name */}
         <article className='p-8 grid grid-cols-2 gap-2' id='info'>
             <label htmlFor="brand" className='justify-end flex p-1 h-10 items-center font-bold col-span-1 '>Brand: &nbsp;</label>
-            <input name={'brand'} className='text-2xl text-stone-700 h-10 rounded-sm col-span-1 font-oswald' value={brand} onChange={e=>setBrand(e.target.value)}/>
+            <input name={'brand'} className='text-2xl text-stone-700 h-10 rounded-sm col-span-1 font-oswald' value={Product?.brand} />
 
             <label htmlFor="name" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Name: &nbsp;</label>
-            <input name="name" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={name} onChange={e=>setName(e.target.value)}/>
+            <input name="name" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={Product?.name}/>
 
 
             {/* Color and general color */}

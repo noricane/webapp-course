@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import Cookies from "js-cookie";
-import React, { forwardRef, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logInUser } from "../components/api";
 import Card from "../components/Structural/Card";
@@ -11,8 +11,9 @@ const Login = () => {
     const password = useRef<HTMLInputElement>(null)
     const [error, setError] = useState<string>()
     const [session,setSession] = useAtom(sessionAtom)
+    useEffect(() => {if(session!=null){nav('/dashboard')}}, [session])
     const loginHandler = () => {
-
+      
       if (email.current?.value == null || password.current?.value == null){
         setError("Email and Password must be non empty")
         return

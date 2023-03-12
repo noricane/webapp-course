@@ -28,7 +28,7 @@ const Layout = ({ children }: any) => {
           autoPlay
           className="hover:cursor-pointer h-28 mx-auto md:left-0 video mix-blend-darken"
         >
-          <source src={"media/logohb.mp4"} type="video/mp4" />
+          <source src={ window.location.protocol + "//" + window.location.host + "/media/logohb.mp4" } type="video/mp4" />
           <p>Aesthetic video loop of logo</p>
         </video>
         <div className="text-center  text-2xl font-oswald font-bold ">
@@ -36,8 +36,9 @@ const Layout = ({ children }: any) => {
         </div>
         {session && <button className="h-12 w-36 absolute z-10 top-12 mr-12 bg-stone-800 text-stone-50 active:bg-stone-200 active:text-stone-800 font-oswald text-xl rounded-sm right-0" onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
           e.preventDefault();
-          Cookies.remove('user')
-          setSession(undefined)
+          Cookies.remove('user');
+          setSession(undefined);
+
         }}>Log Out</button>}
         {/* relative mt-[-1rem] */}
       </Link>

@@ -71,9 +71,9 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
             <div className='flex items-center justify-between my-2'>
                 <Price price={product.price} pricefactor={product.price_factor}/>
 
-                <div className='flex gap-2'>
+                <div className='flex flex-col justify-end items-end gap-2'>
                 <ProductLink to='edit' color={product.color} id={product.id}> <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>EDIT</button></ProductLink>
-                <ProductLink to='addvariant' color={product.color} id={product.id}> <button className='w-20 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>Add Variant</button></ProductLink>
+                <ProductLink to='addvariant' color={product.color} id={product.id}> <button className='w-48 h-12  bg-stone-800 border-2 text-xl border-stone-900 font-[750] hover:font-[900] text-stone-100 rounded-sm shadow-sm hover:shadow-md hover:scale-110 transition-all '>Add Variant</button></ProductLink>
 
                 </div>
             </div>
