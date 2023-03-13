@@ -1,3 +1,4 @@
+import { multiProduct } from './../model/pastorder';
 import { toObject, GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { stockedSize } from './../model/product';
 
@@ -6,6 +7,7 @@ import express, { Request, Response } from "express";
 import { Product } from "../model/product";
 import { isProduct, productConstructor } from '../helper/utils';
 import { makeProductService, ProductError } from '../service/ProductService';
+import { User } from '../model/user';
 
 
 export const product_service = makeProductService();
@@ -21,6 +23,45 @@ product_router.get("/brands", async (
         const resp = await product_service.getBrands()
         res.status(200).send(resp)
     }catch (e: any) {
+        res.status(500).send(e.message);
+    }
+}) 
+
+
+product_router.post("/updatecart", async (
+    req: Request & {
+        body:{clientlist:multiProduct[]}
+        cookies: {user?: User}},
+    res: Response<multiProduct[] | string>,
+    next:Function
+) => {
+    try {
+        console.log("herer");
+        
+        /* const user = req.cookies?.user
+        if(user == null || !(user instanceof User)){
+            console.log("no user");
+            res.status(400).send("Bad GET request, user is not logged in");
+            return
+        } */
+        if(req.body.clientlist == null || !Array.isArray(req.body.clientlist)){
+            res.status(400).send("Bad GET request, cart is not formatted in a correct way");
+            return
+        }
+
+        
+
+
+        
+        const resp = await product_service.updateClientList(req.body.clientlist)
+        console.log("resp is");
+        resp.forEach(e=> console.log(e.item.stock));
+        
+        
+        res.status(200).send(resp)
+    }catch (e: any) {
+        console.log(e);
+        
         res.status(500).send(e.message);
     }
 }) 

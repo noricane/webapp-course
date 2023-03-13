@@ -7,7 +7,7 @@ import SizeList from '../components/structural/SizeList';
 import { config } from '../model/config';
 import { Product } from '../model/product';
 import { useLocation } from "react-router-dom";
-import { multiProduct, stockedSize } from '../model/user';
+import { multiProduct, stockedSize } from '../model/types';
 import { cartAtom } from '../model/jotai.config';
 import { useAtom } from 'jotai';
 import axios from 'axios';

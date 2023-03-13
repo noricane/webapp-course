@@ -1,16 +1,18 @@
 import { useAtom } from 'jotai'
+import Cookies from 'js-cookie'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { processOrder } from '../api'
 import CartItem from '../components/Misc/CartItem'
 import { cartAtom, orderAtom, sessionAtom } from '../model/jotai.config'
+import { PastOrder, User } from '../model/types'
 
 const Cart = () => {
     const nav = useNavigate()
     const [cart,setCart] = useAtom(cartAtom)
     const [error, setError] = useState<string>()
     const [session, setSession] = useAtom(sessionAtom)
-    const [order, setOrder] = useAtom(orderAtom)
+    const [, setOrder] = useAtom(orderAtom)
     const purchaseHandler = () => {
         (async()=>{
             if(session == null){return}
@@ -25,18 +27,37 @@ const Cart = () => {
                 setError("One or more items just became unavailable, please try again")
                 setCart(prev => Array.isArray(resp) ? resp : prev)
             
-            }else if(resp.id && resp.items.length>0){
-                setOrder({id:resp.id,items:resp.items})
-              /*   nav(`/success/`)
-                nav(0) */
+            }else if(resp.id && resp.items.length>0 && session != null){
+                let newOrder:PastOrder = {id:resp.id,items:resp.items}
+                setOrder(prev => {
+                    console.log("in here");
+                    
+
+                    console.log(newOrder);
+                    
+                    return newOrder
+                })
+
+                setSession(prev =>  {
+                    if(prev == null){return}
+                    const orders = Array.isArray(prev.orders) ? [...prev.orders] : [];
+                    orders.push(newOrder)
+                    console.log("list",orders);
+                    Cookies.set('user',JSON.stringify({...prev,orders:orders}))
+                    return {...prev,orders:orders}
+                })
+
+
+                
+                nav(`/success`)
                 console.log("success!!!");
                 
             }
 
             
-        })().then()
+        })()
     }
-    
+
     if(cart.length == 0){
         return <div className='min-h-[70vh] p-8 bg-stone-300 m-12 rounded-xl flex flex-col justify-center items-center font-oswald text-3xl'>
             Cart is empty

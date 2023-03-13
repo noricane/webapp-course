@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import { registerUser } from "../api";
 import ErrorSpan from "../components/Misc/ErrorSpan";
 import { sessionAtom } from "../model/jotai.config";
-import { ProductError, User } from "../model/user";
+import { ProductError, User } from "../model/types";
 
 
 const SignUp = () => {

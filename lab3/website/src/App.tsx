@@ -3,8 +3,10 @@ import { useAtom } from "jotai";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router";
+import { getUserInfo } from "./api";
+import { updateCart } from "./helper/utils";
 import { cartAtom, sessionAtom } from "./model/jotai.config";
-import { multiProduct } from "./model/user";
+import { multiProduct } from "./model/types";
 import Account from "./pages/Account";
 import Browse from "./pages/Browse";
 import Cart from "./pages/Cart";
@@ -28,23 +30,34 @@ function App() {
   useEffect(()=>{
     const cookie = Cookies.get('user') as string
     if(cookie != null){
-    const object = JSON.parse(decodeURIComponent(cookie)) 
+      const object = JSON.parse(decodeURIComponent(cookie))
+      sessionStorage.setItem('user',object)
       setUser(object)
     }else{
     Cookies.set('cart',JSON.stringify([]))
       
     }
-    try{
-      const cartcookie = JSON.parse(decodeURIComponent(Cookies.get('cart') as string))
-      if(cartcookie != null){
-        setCart(cartcookie)
-      }
-    }catch(error){console.log(error);    }
+    (async () => {
+      try{
+        const cartcookie = JSON.parse(decodeURIComponent(Cookies.get('cart') as string))
+        
+        if(cartcookie != null){
+          const updatedCart = await updateCart(cartcookie)
+          if(Array.isArray(updatedCart) ){
+            setCart(updatedCart)
+          }else{
+            setCart([])
+          }
+        }
+        
+      }catch(error){console.log(error);    }
+    })()
   },[])
+
   useEffect(()=>{
     console.log("in app");
     
-    if(cart.length == 0) {return}
+    if(cart.length == 0) {Cookies.set('cart',JSON.stringify([]))}
     Cookies.set('cart',JSON.stringify(cart))
     console.log(JSON.parse(decodeURIComponent(Cookies.get('cart') as string)));
 
@@ -61,7 +74,7 @@ function App() {
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/product/:id" element={<ProductPage />} />
-      <Route path="/success:id" element={<Success />} />
+      <Route path="/success" element={<Success />} />
       <Route path="/jargon" element={<Jargon />} />
 
       <Route path="*" element={<NotFound />} />

@@ -1,5 +1,5 @@
 import { ProductService } from './ProductService';
-import { CATEGORY, GENERALCOLOR } from './../helper/utils';
+import { arraysEqual, CATEGORY, GENERALCOLOR } from './../helper/utils';
 import { addressType } from './../model/adress';
 import { multiProduct } from './../model/pastorder';
 import { stockedSize } from '../model/product';
@@ -29,6 +29,7 @@ export interface IUserService {
     // and returns true if restock was successful
     addUserOrder(id: string, ...order: multiProduct[]): Promise<PastOrder |{error:true,items: multiProduct[]}|ProductError> 
 
+    addNewsLetterMail(email:string):true
     
     removeUser(id:string): Promise<User|ProductError> 
 
@@ -65,7 +66,12 @@ export class UserService implements IUserService{
     productService:ProductService;
     /* Map of users in the form of <email,User> */
     users: Map<string,User> = new Map<string,User>()
+    newsletterList: string[] = []
 
+    addNewsLetterMail(email: string): true {
+        this.newsletterList.push(email)
+        return true
+    }
     
     constructor(service:ProductService){
         this.productService=service;
@@ -107,7 +113,7 @@ export class UserService implements IUserService{
     }
 
     /* Processes order through product_service */
-    async processOrder(...order:multiProduct[]):Promise<multiProduct[]|{error:true, items:multiProduct[]}>{
+    async processOrder(...order:multiProduct[]):Promise<multiProduct[]>{
         return await this.productService.processOrder(...order)
     }
     
@@ -120,11 +126,16 @@ export class UserService implements IUserService{
             console.log(order);
             console.log("lenproc",processed);
             
-            if(Array.isArray(processed)){
-                const order = query.addOrder(...processed)
-                return order
+            if(processed.length == order.length){
+                let unchanged = arraysEqual(order,processed);
+                if(!unchanged){
+                    return {error:true,items:processed}
+                }
+                
+                const addOrder = query.addOrder(...processed)
+                return addOrder
             }
-            return processed
+            return {error:true,items:processed}
         }else{
             return new ProductError(400, "User doesn't exist")
         }

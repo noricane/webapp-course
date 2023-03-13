@@ -1,8 +1,11 @@
 import React from 'react'
+import { User } from '../../model/types'
 
-const ProfileSettings = () => {
+const ProfileSettings = ({user}:{user:User}) => {
   return (
-    <div>ProfileSettings</div>
+    <div>
+      {user.email}
+    </div>
   )
 }
 

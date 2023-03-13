@@ -11,6 +11,9 @@ import { multiProduct } from '../model/pastorder';
 export interface IProductService {
     //Returns a list of all listed products
     getProducts() : Promise<Map<string,Map<string,Product>>|ProductError>;
+    
+    //Returns a list of updated products
+    updateClientList(list:multiProduct[]) : Promise<multiProduct[]|ProductError>;
 
     //Returns list of brands
     getBrands(): Promise<string[]>;
@@ -86,7 +89,7 @@ export class ProductService implements IProductService{
                       result.push(e)
                     } else {
                       processable = false;
-                      pending.push({size:e.size,item:e.item,amount:find.amount});
+                      pending.push({size:e.size,item:query ,amount:find.amount});
 
                     }
                   } 
@@ -121,6 +124,23 @@ export class ProductService implements IProductService{
     brands: string[] = ["Nike","Louis Vuitton","Adidas","Yeezy", "Maison Margiela","Off-White x Nike"]
     constructor(){
         console.log("Initialized shoe collection",this.products);
+    }
+    async updateClientList(clientList: multiProduct[]): Promise<multiProduct[]> {
+        console.log("hello");
+        
+        const list: multiProduct[]=[];
+        clientList.forEach(e => {
+            const query = this.products.get(e.item.id)?.get(normalizeString(e.item.color))
+            if(query==null){return}
+            const findsize = query.stock.filter(elem => elem.size == e.size )[0]
+            if(findsize == null){return;} //probably because server initializes random sizes every time
+            let size = findsize.amount < e.amount? findsize.amount : e.amount 
+            list.push({item:query, size:e.size, amount:size})
+        })
+
+        console.log("Sending products",this.products);
+        return list; 
+
     }
 
     /* Returns list of products within the given category */

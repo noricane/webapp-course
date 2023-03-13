@@ -1,9 +1,9 @@
-import { multiProduct } from './../model/user';
+import { multiProduct } from '../model/types';
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { config } from "../model/config";
 import { Product } from "../model/product";
-import { ProductError, User } from "../model/user";
+import { ProductError, User } from "../model/types";
 
 
 export async function getProducts():Promise<Product[] | undefined>{
@@ -19,6 +19,18 @@ export async function getProducts():Promise<Product[] | undefined>{
       return arr
     } catch (error) {
       
+    }
+}
+export async function getProductCollection(list:multiProduct[]):Promise<multiProduct[] | undefined>{
+    try {
+
+      const {data}:{data:multiProduct[]} =  await axios.post(`${config.URL}/product/updatecart`,{
+        clientlist:list,
+        /* Send cookie in body? */
+      });
+      return data
+    } catch (error) {
+      return undefined
     }
 }
 export async function getProduct(id:string,color:string):Promise<Product | undefined>{
@@ -59,19 +71,41 @@ export async function  registerUser(name:string,email:string,phonenumber:string,
       }
 }
 
+export async function getUserInfo(em:string):Promise<any>{
+  const resp = await axios.get(`${config.URL}/user/${em}`,{
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true
+  }).catch((e:AxiosError) =>{
+    throw new Error (e.response?.data == null ? e.message : e.response.data as string)})
+  
+  const cookie = Cookies.get('user') as string;
+  if(cookie == null){return {}}
+  const object = JSON.parse(decodeURIComponent(cookie)) 
+  console.log("object",object);
+  
+  return object
+}
 export async function logInUser(em:string,pw:string):Promise<any>{
 
     const resp = await axios.post(`${config.URL}/user/login`,{
         email: em,
         password: pw
-      }).then(e => {console.log("response",e); return e}
-      ).catch((e:AxiosError) =>{
+      },{
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      }).catch((e:AxiosError) =>{
         throw new Error (e.response?.data == null ? e.message : e.response.data as string)})
-      if(resp != null &&  typeof(resp.data) == "string" && resp.status != 200){
-        throw new Error(resp.data);
-        
-      }
-      const object = JSON.parse(decodeURIComponent(Cookies.get('user') as string)) 
+      
+      
+      const cookie = Cookies.get('user') as string;
+      if(cookie == null){return {}}
+      const object = JSON.parse(decodeURIComponent(cookie)) 
+      console.log("object",object);
+      
       return object
 
 }

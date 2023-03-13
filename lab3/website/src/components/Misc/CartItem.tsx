@@ -1,9 +1,10 @@
 import { useAtom } from 'jotai';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { cartAtom } from '../../model/jotai.config';
-import { multiProduct } from '../../model/user'
+import { multiProduct } from '../../model/types'
 import Price from './Price';
 import { TiDeleteOutline } from "react-icons/ti";
+import Cookies from 'js-cookie';
 
 const CartItem = ({mp}:{mp:multiProduct}) => {
 
@@ -35,6 +36,11 @@ const CartItem = ({mp}:{mp:multiProduct}) => {
         break;
     }
   } 
+  useEffect(()=>{
+    if(amount == 0){
+      setCart(prev => prev.filter(e => e.item.id != mp.item.id || e.size != mp.size))
+    }
+  },[])
   const [cart,setCart] = useAtom(cartAtom)
   let {item,size,amount} = mp;
   return (
@@ -58,7 +64,14 @@ const CartItem = ({mp}:{mp:multiProduct}) => {
             </span>
             <span className='flex items-center col-span-2 justify-center'>{amount}</span>
           </div>
-          <TiDeleteOutline className='cursor-pointer text-stone-500 hover:text-stone-800 transition-colors ml-2 font-bold' onClick={()=>{setCart(prev => prev.filter(e => e.item.id != mp.item.id || e.size != mp.size))}}  size={40} />
+          <TiDeleteOutline className='cursor-pointer text-stone-500 hover:text-stone-800 transition-colors ml-2 font-bold' onClick={()=>{
+            setCart(prev => {
+              const newList = prev.filter(e => e.item.id != mp.item.id || e.size != mp.size);
+              Cookies.set('cart',JSON.stringify(newList));             
+              return newList
+              })}
+            
+            }  size={40} />
 
         </span>
     </section>

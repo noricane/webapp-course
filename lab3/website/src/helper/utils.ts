@@ -1,6 +1,8 @@
+import { multiProduct } from '../model/types';
 
 import { EnumType } from "typescript";
 import { GENERALCOLOR } from "../model/product";
+import { getProductCollection } from '../api';
 
 //Check if value of string is number
 const StringIsNumber = (value:string) => isNaN(Number(value)) === false;
@@ -16,4 +18,17 @@ export function ToArray() {
 //Used to check if brand names are similar. Nike == NIKE == nike© == Nike™ etc. To avoid duplications.
 export function checkLatinCharacters(str: string):string{
     return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
+}
+
+export async function updateCart(list:multiProduct[]):Promise<string | multiProduct[]>{
+    try{
+        if(list.length == 0){
+            return []
+        }
+        const res = await getProductCollection(list)
+        return Array.isArray(res) ? res : 'undefined'
+    }catch(e){
+        return e as string
+
+    }
 }

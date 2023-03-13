@@ -10,7 +10,7 @@ interface BaseUser {
 }
 
 
-interface PastOrder{
+export interface PastOrder{
     id:number;
     items: multiProduct[];
 
@@ -30,7 +30,7 @@ export enum UserType {
     ADMIN,
     CUSTOMER
 }
- enum addressType {
+export enum addressType {
     BILLING,
     DELIVERY
 }

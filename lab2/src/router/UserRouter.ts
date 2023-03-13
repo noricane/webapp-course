@@ -88,28 +88,6 @@ user_router.post("/register", async (
 });
 
 
-user_router.get("/order", async (
-    req: Request & {session: {user?: User}},
-    res: Response< PastOrder[] | string>
-) => {
-    try {
-        const { user } = req.session
-        if(user == null || !(user instanceof User)){
-            res.status(400).send("Bad GET request, user is not logged in");
-            return
-        }
-        const resp = await user_service.getUserOrders(user.email);
-        if(Array.isArray(resp)){
-            //Success, resp is the requested user!            
-            res.status(200).send(resp);
-        }else{
-            //Resp is of type ProductError
-            res.status(resp.code).send(resp.message);
-        }
-    } catch (e: any) {
-        res.status(500).send(e.message);
-    }
-});
 
 
 
@@ -163,8 +141,11 @@ user_router.get("/:id", async (
             return
         }
         const resp = await user_service.getUser(id);
+        console.log("response is",resp);
+        
         if(resp instanceof User){
-            //Success, resp is the requested user!            
+            //Success, resp is the requested user!           
+            res.cookie('user',resp) 
             res.status(200).send(resp);
         }else{
             //Resp is of type ProductError

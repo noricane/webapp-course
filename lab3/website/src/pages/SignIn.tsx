@@ -29,7 +29,8 @@ const  SignIn = () => {
         const pw: string = password.current.value;
         (async()=>{
           const resp = await logInUser(em,pw)
-          console.log(resp);
+          console.log("in signin",resp);
+          console.log("cookie",Cookies.get('user'));
           
           setUser(resp != null ? resp : undefined)
           nav('/')
