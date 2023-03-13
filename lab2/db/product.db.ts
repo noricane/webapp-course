@@ -6,7 +6,7 @@ import { Product } from '../src/model/product';
 import { CATEGORY, GENERALCOLOR, } from '../src/helper/utils';
 
 
-const productSchema : Schema = new Schema({
+export const productSchema : Schema = new Schema({
 
     id:{type:String, required:true}, 
     name:{type:String, required:true},

@@ -7,7 +7,7 @@ import { User } from "../src/model/user";
 
 
 import { conn } from "./conn";
-import { productModel } from "./product.db";
+import { productModel, productSchema } from "./product.db";
 
 
 
@@ -24,7 +24,7 @@ const userSchema : Schema = new Schema({
         {
             id:Number,
             items: [
-                {item: productModel,
+                {item: productSchema,
                 size:Number,
                 amount: Number,}
             ]
@@ -34,7 +34,7 @@ const userSchema : Schema = new Schema({
 
     adresses: {type:[
         { id: Number,
-         type: addressType,
+         type: {type:String, enum:addressType, required:true},
          street: String,
          city: String,
          country: String, 

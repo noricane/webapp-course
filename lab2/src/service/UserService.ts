@@ -106,19 +106,25 @@ export class UserService implements IUserService{
     async addUser(user: User): Promise<ProductError | User> {
         const query = this.users.get(user.email)
         if(query == null){
-            userModel.create({
+            return userModel.create({
                 id:user.getId(),
                 name:user.getName(),
                 email:user.email,
                 password:user.getPassword(),
+                birthdate:user.birthdate,
                 phonenumber:user.phonenumber,
                 orders:[...user.orders],
                 adresses:[...user.adresses],
-
+            }).then(e => {
+                return user
+            }).catch(e => {
+                /* Duplicate key error code is 11000, don't know what other errors may arise */
+                console.log(e);
+                return new ProductError(500, e.code == 11000 ? 'Email already exists' : e.message)
             })
-            console.log(userModel.find(user));
+
             
-            return user
+            
         }else{
             return new ProductError(400, "User already exists")
         }
