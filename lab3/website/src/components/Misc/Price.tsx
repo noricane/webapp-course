@@ -2,12 +2,15 @@ import React from "react";
 import { config } from "../../model/config";
 import Badge from "./Badge";
 
-const Price = (props: any) => {
+/* Component for displaying price or discounted price */
+const Price = (props: {price:number,pricefactor:number,gap?:boolean}) => {
   const price = props.price;
   const pricefactor = props.pricefactor;
+  
   if (price == -1) {
     return <div className="font-bold text-stone-500">Out of Stock</div>;
   }
+
   if (price * pricefactor < price) {
     return (
       <div className={`${props?.gap && 'utsm:flex-col utsm:flex utsm:gap-2' }`}>

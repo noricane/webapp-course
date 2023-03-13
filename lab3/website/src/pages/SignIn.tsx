@@ -30,9 +30,13 @@ const  SignIn = () => {
         (async()=>{
           const resp = await logInUser(em,pw)
           console.log("in signin",resp);
-          console.log("cookie",Cookies.get('user'));
-          
-          setUser(resp != null ? resp : undefined)
+
+          if(Cookies.get('user') || typeof resp != "string" && resp?.id != null){
+            setUser(JSON.parse(decodeURIComponent(Cookies.get('user') as string)))
+            nav('/')
+            return
+          }
+          setUser(undefined)
           nav('/')
         })()
         

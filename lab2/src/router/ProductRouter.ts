@@ -149,8 +149,8 @@ product_router.get("/", async (
     if(categoryList !=null && colorList !=null){
         /* @ts-ignore  for some reason TS still thinks categoryList might be null*/
         console.log("SE#NDING",colorList.filter(e => categoryList.includes(e)));
-        /* @ts-ignore  for some reason TS still thinks categoryList might be null*/
         
+        /* @ts-ignore  for some reason TS still thinks categoryList might be null*/
         res.status(200).send( colorList.filter(e => categoryList.includes(e)))
     }else if (colorList != null){
         res.status(200).send( colorList)
@@ -167,7 +167,7 @@ product_router.get("/", async (
 
 product_router.get("/", async (
     req: Request<{}, {}, {}>,
-    res: Response<Map<string, Map<string, Product>> | string | JSON>
+    res: Response<Map<string, Map<string, Product>> | string>
 ) => {
     try {
 
@@ -179,6 +179,7 @@ product_router.get("/", async (
             //Success, resp contains products! 
             const res_obj = toObject(resp)
             console.log("res_obj", res_obj);
+            
             res.status(200).send(res_obj);
             
         }else{

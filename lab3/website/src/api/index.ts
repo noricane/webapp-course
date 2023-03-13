@@ -5,25 +5,37 @@ import { config } from "../model/config";
 import { Product } from "../model/product";
 import { ProductError, User } from "../model/types";
 
-
-export async function getProducts():Promise<Product[] | undefined>{
+/* 
+Get all products from backend*/
+export async function getProducts():Promise<Product[]>{
     try {
       let arr:Product[]= []
       const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`);
+
+      //Add all map entries to arr to return, should be in server but bugs were met while doing so, TODO try again
       Array.from(data.values()).forEach((e:any) => {
         e.value.forEach((element:any) => {
           arr.push(element.value)
         })
       })
-      if( arr.length == 0 ) {return undefined}
+
+      //Return array of all products if no error was met
       return arr
     } catch (error) {
-      
+      console.log(error);
+      return []
     }
 }
+
+/* Update a list of multiProducts[], this will return the same 
+list assuming that nothing has been deleted on the server. 
+post request returns a list of multiProducts[], 
+for each element
+  if original  elements.amount less than or equal to server's value the same element is returned 
+  else, a new element with amount set to the amount of available items is returned
+ */
 export async function getProductCollection(list:multiProduct[]):Promise<multiProduct[] | undefined>{
     try {
-
       const {data}:{data:multiProduct[]} =  await axios.post(`${config.URL}/product/updatecart`,{
         clientlist:list,
         /* Send cookie in body? */
@@ -33,6 +45,9 @@ export async function getProductCollection(list:multiProduct[]):Promise<multiPro
       return undefined
     }
 }
+
+/* 
+Return a specific product if it is found */
 export async function getProduct(id:string,color:string):Promise<Product | undefined>{
     try {
       let arr:Product[]= []
@@ -48,6 +63,7 @@ export async function getProduct(id:string,color:string):Promise<Product | undef
     }
 }
 
+/* Register user and return true if successful else return  response string */
 export async function  registerUser(name:string,email:string,phonenumber:string,birthdate:Date,street:string,city:string,country:string,zip:string,password:string):Promise<true | string>{
     try {
         let message = ""
@@ -60,12 +76,12 @@ export async function  registerUser(name:string,email:string,phonenumber:string,
         console.log("data after get",data);
         
         if (data === true) {
-            return true
+          return true
             
-      }else{
-        const {message } = data
-        return message
-      }
+        }else{
+          const {message } = data
+          return message
+        }
       } catch (error:any) {
         return error
       }
@@ -79,17 +95,24 @@ export async function getUserInfo(em:string):Promise<any>{
     withCredentials: true
   }).catch((e:AxiosError) =>{
     throw new Error (e.response?.data == null ? e.message : e.response.data as string)})
+  console.log("email",em);
+  
+  console.log("getuserinfo resp",resp);
   
   const cookie = Cookies.get('user') as string;
-  if(cookie == null){return {}}
+  if(cookie == null){return false}
   const object = JSON.parse(decodeURIComponent(cookie)) 
   console.log("object",object);
   
   return object
 }
-export async function logInUser(em:string,pw:string):Promise<any>{
 
-    const resp = await axios.post(`${config.URL}/user/login`,{
+/* 
+Function for logging in user, takes an email and password as input and sends them to backend
+Result is either a string or a User object */
+export async function logInUser(em:string,pw:string):Promise<string | User>{
+
+    const {data} = await axios.post(`${config.URL}/user/login`,{
         email: em,
         password: pw
       },{
@@ -101,15 +124,16 @@ export async function logInUser(em:string,pw:string):Promise<any>{
         throw new Error (e.response?.data == null ? e.message : e.response.data as string)})
       
       
-      const cookie = Cookies.get('user') as string;
-      if(cookie == null){return {}}
-      const object = JSON.parse(decodeURIComponent(cookie)) 
-      console.log("object",object);
       
-      return object
+      return data
 
 }
 
+/* 
+sends a request to the server to process that an order is valid, 
+validity means that the order element's amount values don't exceed what is stocked in the server and of course that the items exist
+if request is processed as valid it will return {id:order id  and items:list of purchacesd items} 
+if error is met a string will be returned*/
 export async function processOrder(email:string,order:multiProduct[]):Promise<string | multiProduct[] | {id:number, items:multiProduct[]}> {
   try {
     let msg = ""
@@ -134,3 +158,21 @@ export async function processOrder(email:string,order:multiProduct[]):Promise<st
     
   }
 }
+
+/* 
+Simple function for adding a newsletter subscriber */
+export async function newsletterRequest(email:string):Promise<boolean> {
+  try {
+    console.log("eamils is",email);
+    
+    const resp = await axios.post(`${config.URL}/user/newsletter`,{email:email})
+    console.log("resp",resp);    
+    return true
+    
+  } catch (e:any) {  
+    console.log(e.data);
+    return false
+    
+  }
+}
+

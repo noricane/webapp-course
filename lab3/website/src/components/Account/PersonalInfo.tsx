@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { addressType, User } from '../../model/types'
 
+
+/* Personal info section of the Account page */
 const PersonalInfo = ({user}:{user:User}) => {
   const [deliveryAddresses, setDeliveryAddresses] =useState<JSX.Element[]>([])
   const [billingAddresses, setBillingAddresses] =useState<JSX.Element[]>([])
+
+  /* Populate address arrays with relevant html on component first render */
   useEffect(()=>{
     user.adresses.map(e =>{ 
       if(e.type == addressType['DELIVERY'] ){
@@ -26,8 +30,8 @@ const PersonalInfo = ({user}:{user:User}) => {
         )
       }
     })
-  }
-      ,[])
+  },[])
+  /* Show addresses or 'No adresses found' depending on the state of the address lists */
   return (
     <div className='w-full h-[100%]  py-8 px-4 bg-stone-200 '>
     <div className='w-full h-[100%] items-center mx-auto bg-stone-300 rounded-lg py-4 flex flex-col'>
@@ -47,7 +51,6 @@ const PersonalInfo = ({user}:{user:User}) => {
         </section>
         <section className='mt-4'>
         <h2>Billing Addresses</h2>
-          {deliveryAddresses.length > 0 ? deliveryAddresses : <span className='font-light text-stone-700'>No adresses found</span>}
           {billingAddresses.length > 0 ? billingAddresses : <span className='font-light text-stone-700'>No adresses found</span>}
         </section>
       </div>

@@ -1,22 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { getProducts } from "../api";
+import React, { useEffect, useRef, useState } from "react";
+import { getProducts, newsletterRequest } from "../api";
 import HomeHeader from "../components/Misc/HomeHeader";
 import Carousel from "../components/structural/Carousel";
 import { Product } from "../model/product";
 
 
 const Home = () => {
-  
+  /* Same as footer code for adding an email to the newsletter  */
+  //reference to access user input in email input
+  const email = useRef<HTMLInputElement>(null)
+  //Response
+  const [message,setMessage] = useState<string|undefined>(undefined)
+
+  //Add to newsletter
+  const addNewsletter = (e: React.FormEvent<HTMLFormElement>) => {
+   //Reset error message
+    setMessage(undefined)
+    e.preventDefault();
+    /* send request to server with newsletterRequest function and await response */
+    (async()=>{
+      if(email.current?.value != null){
+        const resp = await newsletterRequest(email.current.value)
+        if(resp == true){
+          setMessage('Sucessfully added')
+          email.current.value = ""
+        }else{
+          setMessage('Error occured, please try again later')
+        }
+      }
+    })()
+  }
 
 
-
+  /* Just for optics, show two different lists since they claim to display two possibly different things */
   const [recommended, setRecommended] = useState<any[]>([]);
   const [latest, setLatest] = useState<any[]>([]);
 
   useEffect(()=>{
     (async()=>{
      const resp = await getProducts();
-     if(resp == undefined ){
+     if(resp.length == 0 ){
        return
      }
      setRecommended(resp.filter((e:Product,indx:number) => indx%2==0))
@@ -27,7 +50,7 @@ const Home = () => {
 
   
 
-
+ /*  Homepage JSX */
   return (
     <>
       <div className="shadow-md">
@@ -48,24 +71,20 @@ const Home = () => {
         <h1 className="font-bold text-white font-oswald text-xl">SIGN UP TO OUR NEWS LETTER</h1></span>
         <div>Sign up to our newsletter to get the latest and greatest! <br />
           Never miss out on exclusive offers, latest releases and hot sneaker news!</div>
-       <form action="">
+       <form onSubmit={addNewsletter}>
        <span>
        <label htmlFor="email" className="text-stone-50 font-bold"> Email </label>
-        <input id="email"  className="h-9 utlg:w-[90%] w-96 bg-stone-900 border-2 border-stone-300 text-white p-2" type="email" placeholder="Enter your email" />
-
+        <input id="email" ref={email} type="email" className="h-9 utlg:w-[90%] w-96 bg-stone-900 border-2 border-stone-300 text-white p-2"  placeholder="Enter your email" />
        </span> <br />
-       <button className="mt-4 hover:bg-stone-900 h-12 w-32 border active:bg-stone-50 active:text-stone-900">Subscribe</button>
+       <button type="submit" className="mt-4 hover:bg-stone-900 h-12 w-32 border active:bg-stone-50 active:text-stone-900">Subscribe</button>
        </form>
+       {message && <span className='font-bold'>{message}</span>}
        <span className="text-xs">By subscribing you agree to our Privacy Policy</span>
-        </div>
-      
-        
+        </div>        
       </div>
-
       <div className="h-[42rem] flex flex-col justify-end  bg-stone-800  ">
         <h1 className="text-stone-50 text-2xl text-center relative font-bold top-8 font-oswald">S H O P &nbsp; O U R &nbsp; L A T E S T &nbsp; A R R I V A L S</h1>
-        <Carousel items={latest} id="latest"/>
-
+          <Carousel items={latest} id="latest"/>
         </div>
 
         <div className="w-full h-[1px] bg-stone-600"></div>

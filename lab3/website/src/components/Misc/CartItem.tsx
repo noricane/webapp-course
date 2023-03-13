@@ -6,22 +6,22 @@ import Price from './Price';
 import { TiDeleteOutline } from "react-icons/ti";
 import Cookies from 'js-cookie';
 
+
+
+/* Cart Item Component, appears while on cart page and cart isn't empty */
 const CartItem = ({mp}:{mp:multiProduct}) => {
 
+  /* Handle user amount change and reject if amount is not allowed */
   const amountHandler = (arg:string) =>{
     const query = item.stock.find(e => e.size ==size)
     if(query == null){return}
     const index = cart.indexOf(mp)
     const cartItem:multiProduct = cart[index]
-
-    
-
     switch (arg) {
       case '+':
          if(amount < query.amount){
           cartItem.amount++
-          setCart([...cart.slice(0,index),cartItem,...cart.slice(index+1,)])
-           
+          setCart([...cart.slice(0,index),cartItem,...cart.slice(index+1,)]) 
         }
         break;
       case '-':
@@ -36,13 +36,20 @@ const CartItem = ({mp}:{mp:multiProduct}) => {
         break;
     }
   } 
+
+  
+  
+  let {item,size,amount} = mp;
+  const [cart,setCart] = useAtom(cartAtom)
+
+  /* Remove item if amount is 0 on component's first load */
   useEffect(()=>{
     if(amount == 0){
       setCart(prev => prev.filter(e => e.item.id != mp.item.id || e.size != mp.size))
     }
   },[])
-  const [cart,setCart] = useAtom(cartAtom)
-  let {item,size,amount} = mp;
+  
+  
   return (
     <section className='w-full rounded-sm grid grid-cols-10  bg-white border-2 border-stone-400  h-auto'>
         <img className='utsm:col-span-5 sm:col-span-3 order-1 object-contain utsm:h-36 h-36 place-self-center bg-white  w-auto utxs:place-self-start' src={mp.item.images[0]} alt="" />
@@ -65,6 +72,7 @@ const CartItem = ({mp}:{mp:multiProduct}) => {
             <span className='flex items-center col-span-2 justify-center'>{amount}</span>
           </div>
           <TiDeleteOutline className='cursor-pointer text-stone-500 hover:text-stone-800 transition-colors ml-2 font-bold' onClick={()=>{
+            //Remove item from cart and update cookie onclick
             setCart(prev => {
               const newList = prev.filter(e => e.item.id != mp.item.id || e.size != mp.size);
               Cookies.set('cart',JSON.stringify(newList));             

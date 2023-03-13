@@ -23,6 +23,27 @@ export type UserRequest = Request & {
     }
 }
 
+user_router.post("/newsletter", async (
+    req: UserRequest&{body:{email:string}},
+    res: Response< string>
+) => {
+    try {
+        const { email } = req.body
+        if(typeof email != "string"){
+            res.status(400).send("Bad request, email is not valid");
+        }
+        
+        const resp = user_service.addNewsLetterMail(email)
+        console.log("email",resp);
+        if (resp == true){
+            
+            res.status(200).send("Sucessfully added mail");
+            
+        }
+    } catch (e: any) {
+        res.status(500).send(e.message);
+    }
+});
 user_router.post("/login", async (
     req: UserRequest,
     res: Response< User | string>
@@ -70,7 +91,7 @@ user_router.post("/register", async (
             res.status(400).send("Bad GET request, id must be of type string");
             return
         }
-        const newuser = new User(user.name,user.email,user.password,user.phonenumber,user.birthdate,[new address(addressType.DELIVERY,user.street,user.city,user.country,user.zip)],user.orders)
+        const newuser = new User(user.name,user.email,user.password,user.phonenumber,user.birthdate,[new address(addressType.DELIVERY,user.street,user.city,user.country,user.zip)])
         const resp = await user_service.addUser(newuser);
         console.log("RESPONSEE IS ",resp);
         
@@ -141,11 +162,12 @@ user_router.get("/:id", async (
             return
         }
         const resp = await user_service.getUser(id);
+        console.log("email",id);
         console.log("response is",resp);
         
         if(resp instanceof User){
             //Success, resp is the requested user!           
-            res.cookie('user',resp) 
+            res.cookie('user',JSON.stringify(resp)) 
             res.status(200).send(resp);
         }else{
             //Resp is of type ProductError

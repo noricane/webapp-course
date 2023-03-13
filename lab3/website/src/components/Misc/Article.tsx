@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react'
 
+
+/* Simple article component displayed in /news page*/
 const Article = ({title,image,children}:{title:string,image:string,children:ReactNode}) => {
   return (
     <article onClick={()=>alert("You've met a dead end (Not Implemented functionality)")} className='cursor-pointer hover:bg-stone-700  grid grid-cols-9 grid-rows-3 h-40 w-auto gap-1 bg-stone-800 border-[1px] border-stone-600 rounded-md p-2 '>

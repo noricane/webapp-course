@@ -83,7 +83,7 @@ export class UserService implements IUserService{
     async getUser(mail: string): Promise<ProductError | User> {
         const query: User | undefined = this.users.get(mail);
 
-        if(query != undefined){
+        if(query != null){
             return query;
         }else{
             return new ProductError(404, "No user found with that email")

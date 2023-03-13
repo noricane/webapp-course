@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 
 
 /* Copy pasted hook from stack overflow to detect clicks outside component */
-
-
 export default function useComponentVisible(initialIsVisible:boolean) {
     const [isComponentVisible, setIsComponentVisible] = useState(initialIsVisible);
     const ref = useRef<any>(null);

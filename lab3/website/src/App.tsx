@@ -28,19 +28,25 @@ function App() {
   const [cart,setCart] = useAtom(cartAtom)    
 
   useEffect(()=>{
-    const cookie = Cookies.get('user') as string
+    /* const cookie = Cookies.get('cart') as string
+    console.log(cookie);
+    
     if(cookie != null){
       const object = JSON.parse(decodeURIComponent(cookie))
-      sessionStorage.setItem('user',object)
+      console.log(object);
+      
+      Cookies.set('user',object)
       setUser(object)
     }else{
     Cookies.set('cart',JSON.stringify([]))
       
-    }
+    } */
     (async () => {
       try{
         const cartcookie = JSON.parse(decodeURIComponent(Cookies.get('cart') as string))
-        
+        const usercookie = JSON.parse(decodeURIComponent(Cookies.get('user') as string))
+        if(usercookie != null){
+          setUser(usercookie)}
         if(cartcookie != null){
           const updatedCart = await updateCart(cartcookie)
           if(Array.isArray(updatedCart) ){
@@ -49,7 +55,20 @@ function App() {
             setCart([])
           }
         }
-        
+        if(usercookie != null){
+          setUser(usercookie)
+          const resp = await getUserInfo(usercookie?.email)
+          if(resp.id == usercookie.id){
+            console.log("before problem");
+            
+            Cookies.set('user',JSON.stringify(resp))
+            setUser(resp)
+
+          }
+          console.log("resp is ",resp);
+
+          
+        }
       }catch(error){console.log(error);    }
     })()
   },[])

@@ -46,8 +46,8 @@ const Cart = () => {
                     Cookies.set('user',JSON.stringify({...prev,orders:orders}))
                     return {...prev,orders:orders}
                 })
-
-
+                Cookies.set('cart',JSON.stringify([]))
+                setCart([])
                 
                 nav(`/success`)
                 console.log("success!!!");
