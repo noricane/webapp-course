@@ -3,13 +3,14 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { processOrder } from '../api'
 import CartItem from '../components/Misc/CartItem'
-import { cartAtom, sessionAtom } from '../model/jotai.config'
+import { cartAtom, orderAtom, sessionAtom } from '../model/jotai.config'
 
 const Cart = () => {
     const nav = useNavigate()
     const [cart,setCart] = useAtom(cartAtom)
     const [error, setError] = useState<string>()
     const [session, setSession] = useAtom(sessionAtom)
+    const [order, setOrder] = useAtom(orderAtom)
     const purchaseHandler = () => {
         (async()=>{
             if(session == null){return}
@@ -18,19 +19,22 @@ const Cart = () => {
             
             if(typeof resp == "string"){
                 setError(resp)
-            }else if(Array.isArray(resp)){
+            }else if(Array.isArray(resp) || resp.id && resp.items.length==0){
                 console.log(resp);
                 console.log("setting");
-                
-                setCart(resp)
+                setError("One or more items just became unavailable, please try again")
+                setCart(prev => Array.isArray(resp) ? resp : prev)
             
-            }else if(resp.id && resp.items){
+            }else if(resp.id && resp.items.length>0){
+                setOrder({id:resp.id,items:resp.items})
+              /*   nav(`/success/`)
+                nav(0) */
                 console.log("success!!!");
                 
             }
 
             
-        })()
+        })().then()
     }
     
     if(cart.length == 0){

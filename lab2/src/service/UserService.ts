@@ -27,7 +27,7 @@ export interface IUserService {
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
-    addUserOrder(id: string, ...order: multiProduct[]): Promise<PastOrder | multiProduct[]|ProductError> 
+    addUserOrder(id: string, ...order: multiProduct[]): Promise<PastOrder |{error:true,items: multiProduct[]}|ProductError> 
 
     
     removeUser(id:string): Promise<User|ProductError> 
@@ -107,12 +107,12 @@ export class UserService implements IUserService{
     }
 
     /* Processes order through product_service */
-    async processOrder(...order:multiProduct[]):Promise<multiProduct[]>{
+    async processOrder(...order:multiProduct[]):Promise<multiProduct[]|{error:true, items:multiProduct[]}>{
         return await this.productService.processOrder(...order)
     }
     
     /* Processes order through product_service and then add's order to user */
-    async addUserOrder(id: string, ...order: multiProduct[]): Promise< PastOrder | multiProduct[] | ProductError> {
+    async addUserOrder(id: string, ...order: multiProduct[]): Promise< PastOrder | {error:true, items:multiProduct[]} | ProductError> {
         const query = this.users.get(id)
         if(query != null){
             
@@ -120,7 +120,7 @@ export class UserService implements IUserService{
             console.log(order);
             console.log("lenproc",processed);
             
-            if(processed.length == order.length){
+            if(Array.isArray(processed)){
                 const order = query.addOrder(...processed)
                 return order
             }

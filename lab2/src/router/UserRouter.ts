@@ -135,14 +135,15 @@ user_router.post("/order", async (
         
         const resp = await user_service.addUserOrder(id,...items);
         console.log("resp",resp);
-        if(Array.isArray(resp)){
-            //I'd rather not have to send a 200 since it technically isn't accepted
+        if(resp instanceof PastOrder){
             res.status(200).send(resp);
-        }else if(resp instanceof PastOrder){
-            res.status(200).send(resp);
-        }else{
+        }else if(resp instanceof ProductError){
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);
+        }else{
+            //I'd rather not have to send a 200 since it technically isn't accepted
+            res.status(200).send(resp.items);
+           
         }
     } catch (e: any) {
         res.status(500).send(e.message);

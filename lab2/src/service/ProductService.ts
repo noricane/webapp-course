@@ -7,7 +7,6 @@ import { User } from '../model/user';
 import { productConstructor } from '../helper/utils';
 import { initShoes } from './dummyproducts';
 import { multiProduct } from '../model/pastorder';
-import { LongWithoutOverridesClass } from 'bson';
 
 export interface IProductService {
     //Returns a list of all listed products
@@ -61,54 +60,59 @@ export class ProductError{
 }
 
 export class ProductService implements IProductService{
-     processOrder(...order:multiProduct[]):multiProduct[]{
-        const result:multiProduct[] = []
-        let processable = true;
-        order.forEach(async e => {
-            /* First check if we can process this order and then process it. If order is invalid 
-            e.g you want to buy 44/44 shoes while someone has just bought one. Return an error instead of buying 43 */
-            const query = await this.getProductColor(e.item.id,normalizeString(e.item.color));
-            /* Check that query is valid */
-            if(query instanceof Product && query.stock.find(elem => elem.size == e.size) != null){
-                const find = query.stock.find(elem => elem.size == e.size)
 
-                if(find == null){return}
-
-                if(find.amount < e.amount){
-                    processable = false;
-                }
-            }
-        })
-
-        if(!processable){            
-            return []
-        }
-        order.forEach(async e => {
-            /* First check if we can process this order and then process it. If order is invalid 
-            e.g you want to buy 44/44 shoes while someone has just bought one. Return an error instead of buying 43 */
-            const query = await this.getProductColor(e.item.id,normalizeString(e.item.color));
-
-            
-            if(query instanceof Product && query.stock.find(elem => elem.size == e.size) != null){
-                const find = query.stock.find(elem => elem.size == e.size)
-
-                if(find == null){return}
-                console.log("not null");
-                
-                if(find.amount >= e.amount){
-                    const index = query.stock.indexOf(find);
-                    const list = query.stock
-                    const stock = {size:e.size,amount:find.amount-e.amount}
-                    console.log("indexof", index);
-                    query.setStock([...list.slice(0,index),stock,...list.slice(index+1,)])
-                    result.push(e)
-                }
-            }
-        })
-        console.log("resraiosdaoisdj",result);
+    async processOrder(...order:multiProduct[]):Promise<multiProduct[]>{
         
-        return result;
-    }
+      
+        return await (async()=>{
+            let processable = true;
+            const result:multiProduct[] = []
+            const pending:multiProduct[] = []
+            for (const e of order) {
+                try {
+                  const query = await this.getProductColor(e.item.id,normalizeString(e.item.color));
+            
+                  if(query instanceof Product && query.stock.find(elem => elem.size == e.size) != null){
+                    const find = query.stock.find(elem => elem.size == e.size)
+            
+                    if(find == null){return []}
+            
+                    if(find.amount >= e.amount){
+                      const index = query.stock.indexOf(find);
+                      const list = query.stock
+                      const stock = {size:e.size,amount:find.amount-e.amount}
+                      console.log("indexof", index);
+                      query.setStock([...list.slice(0,index),stock,...list.slice(index+1,)])
+                      result.push(e)
+                    } else {
+                      processable = false;
+                      pending.push({size:e.size,item:e.item,amount:find.amount});
+
+                    }
+                  } 
+                } catch (error) {
+                  // handle any errors thrown by inner functions
+                }
+              }
+              return [result,pending,processable]
+        })().then((props:any) =>{
+            console.log("HERE");
+            const [r,p,b] = props;
+            console.log(r);
+            console.log(p);
+            
+            if(!b){
+                console.log("Not processable");
+                return p;
+              }
+             console.log("processable");
+             
+              
+              return r;}
+        )
+        
+          
+      }
     
     /* The collection of products is represented as a Map with the id of the product that leads to a map with all the product's color variations */
     //products : Map<string,Map<string,Product>> = new Map();

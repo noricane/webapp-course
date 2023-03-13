@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import ProductPage from "./pages/ProductPage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Success from "./pages/Success";
 
 axios.defaults.withCredentials = true;
 
@@ -60,6 +61,7 @@ function App() {
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/product/:id" element={<ProductPage />} />
+      <Route path="/success:id" element={<Success />} />
       <Route path="/jargon" element={<Jargon />} />
 
       <Route path="*" element={<NotFound />} />
