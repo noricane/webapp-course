@@ -1,7 +1,10 @@
+/* Addresses can be either of type Billing or Delivery */
 export enum addressType {
     BILLING,
     DELIVERY
 }
+
+/* Address class for storing user addresses in. */
 export class address {
     id: number;
     type: addressType;

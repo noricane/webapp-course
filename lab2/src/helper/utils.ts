@@ -4,26 +4,31 @@ import { PastOrder } from '../model/pastorder';
 
 const crypto = require('crypto');
 
+/* Turn a string into the corresponding string that includes alphabet shown below and without spaces */
 export function checkLatinCharacters(str: string):string{
     return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
 }
+/* Turn string into the same string without spaces */
 export function normalizeString(str: string){
     return str.replace(/\s/g, '').toLowerCase();
 }
-
+/* Hash function for hashing strings */
 export function hashize(str:string) {
     return crypto.createHmac('sha256', normalizeString(str)).digest('hex');
 }
+/* Enum for the type of user accounts */
 export enum UserType {
     ADMIN,
     CUSTOMER
 }
+/* Enum for shoe categories */
 export enum CATEGORY {
     LOW,
     MID,
     HIGH,
 }
 
+//Enum for general colors copied from another ecommerce website
 export enum GENERALCOLOR {
     BLACK,
     GRAY,
@@ -59,8 +64,7 @@ export type productConstructor= {
     price_factor:number;
     images: string[];
 }
-/* Check that object is of type productConstructtor couldn't think of better way */
-
+/* Check that arg object is of type productConstructor, couldn't think of better way */
 export function isProduct(arg: any){
     let nameCheck:boolean    = arg?.name != null && typeof(arg.name)== "string"
     let brandCheck:boolean   = arg?.brand != null && typeof(arg.brand)== "string"
@@ -72,9 +76,7 @@ export function isProduct(arg: any){
     let pfactorCheck:boolean = arg?.price_factor != null && typeof(arg.price_factor)== "number"
     let stockCheck:boolean = arg?.stock != null && Array.isArray(arg.stock)
     let urlCheck:boolean = arg?.images != null &&  Array.isArray(arg.images)
-
     let checks = [nameCheck,brandCheck,descCheck,colorCheck,generalColorCheck,categoryCheck,priceCheck,pfactorCheck,stockCheck,urlCheck]
-
 
     if (!nameCheck || !brandCheck || !descCheck || !colorCheck || !generalColorCheck || !categoryCheck || !priceCheck 
         || !pfactorCheck || !stockCheck || !urlCheck||Object.keys(arg).length > checks.length) {            
@@ -87,15 +89,12 @@ export function isProduct(arg: any){
 //Checks that this any object contains the correct data for a user to be instantiated
 export function isUser(arg: any){
     let arr = [arg?.street, arg?.city, arg?.country, arg?.zip,]
-    
-    
     let nameCheck:boolean    = arg?.name != null && typeof(arg.name)== "string"
     let emailCheck:boolean   = arg?.email != null && typeof(arg.email)== "string"
     let passwordCheck:boolean    = arg?.password != null && typeof(arg.password)== "string"
     let phonenumberCheck:boolean   = arg?.phonenumber != null && typeof(arg.phonenumber)== "string"
     let birthdateCheck:boolean   = arg?.birthdate != null && new Date(arg.birthdate) instanceof Date
     let addressCheck:boolean   = arr.length != 0 && Array.isArray(arr) && arrayType(arr,"string")
-
     let checks = [nameCheck,emailCheck,passwordCheck,phonenumberCheck,birthdateCheck,addressCheck]
      
     if (!nameCheck || !emailCheck || !passwordCheck || !phonenumberCheck || !birthdateCheck || !addressCheck /* || !orderCheck  */
@@ -107,8 +106,8 @@ export function isUser(arg: any){
 
 
 /*
- * Turn the map<String, Object> to an Object so it can be converted to JSON
- */
+Turn the map<String, Object> to an Object so it can be converted to JSON 
+*/
 export const toObject = (map:any):any =>
     Array.from( 
         map.entries(), ([ k, v ]) =>
@@ -116,7 +115,10 @@ export const toObject = (map:any):any =>
                 ? { key: k, value: toObject(v) }
                 : { key: k, value: v }
     )
-  
+
+/* 
+Method for checking that an array only contains elements that are type of T
+*/
 const arrayType = (arr:any[],type:string):boolean => {
     let bool = true
     if(arr.length == 0) {
@@ -129,6 +131,9 @@ const arrayType = (arr:any[],type:string):boolean => {
         }})
     return bool
 }
+/* 
+Method for checking that an array only contains elements that are instances of T
+ */
 export const arrayInstance = (arr:any[],type:any):boolean => {
     let bool = true
     if(arr.length == 0) {
@@ -152,15 +157,12 @@ export const isMultiProducts = (list:any[]):boolean => {
     return bool
 }
 
+
+/* Simple equality checker between arrays, copied from stack overflow */
 export function arraysEqual(a:any[], b:any[]) {
     if (a === b) return true;
     if (a == null || b == null) return false;
     if (a.length !== b.length) return false;
-  
-    // If you don't care about the order of the elements inside
-    // the array, you should sort both arrays here.
-    // Please note that calling sort on an array will modify that array.
-    // you might want to clone your array first.
   
     for (var i = 0; i < a.length; ++i) {
       if (a[i] !== b[i]) return false;
