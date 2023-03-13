@@ -13,6 +13,12 @@ export abstract class BaseUser {
     getId():number{
         return this.id
     }
+    getName():string{
+        return this.name
+    }
+    getPassword():string{
+        return this.password
+    }
     abstract getType():string;
     comparePassword(pass:string):boolean{
         return hashize(pass) == this.password
