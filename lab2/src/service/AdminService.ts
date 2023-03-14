@@ -1,6 +1,8 @@
+import { userModel } from './../../db/user.db';
 import { UserService } from './UserService';
 import { Admin } from "../model/admin";
 import { User } from "../model/user";
+import { adminModel } from '../../db/admin.db';
 
 
 export interface IAdminService {
@@ -8,7 +10,7 @@ export interface IAdminService {
 
     getUsers() : Promise<User[]|ProductError>;
 
-    addAdmin(admin:Admin): Promise<Admin|ProductError> //Change name of ProductError type?
+    addAdmin(id:number,name: string,email: string,password:string): Promise<Admin|ProductError> //Change name of ProductError type?
 
     removeAdmin(email:string): Promise<Admin|ProductError> 
 
@@ -28,8 +30,8 @@ export class ProductError{
 export class AdminService implements IAdminService{
     /* Logs in admin if there is an entry in admin map that matches email and password  */
     async logInUser(mail: string, password: string): Promise<Admin | ProductError> {
-        const admin = await this.getAdmin(mail)
-        if (admin instanceof Admin){
+        const admin = await adminModel.findOne({email:mail})
+        if (admin != null){
             if(admin.comparePassword(password)){
                 return admin
             }else{
@@ -47,18 +49,22 @@ export class AdminService implements IAdminService{
 
     constructor(service:UserService){
         this.userService=service;
-        const user = new Admin("Michael Jackson","mj@gmail.com","mj123")
-        this.admins.set(user.email,user)
+
+        (async() => {
+            const admin =  await adminModel.create({id:Date.now(),name:"Michael Jackson",email:"mj@gmail.com",password:"mj123"})
+            console.log("creating user",admin);
+        })()
+
     }
    
     /* Returns list of users from userService */
     async getUsers(): Promise<User[]> {
-        return Array.from(this.userService.users.values())
+        return await userModel.find({})
     }
 
     /* Returns admin if found, this method seems a little weird, TODO */
-    async getAdmin(mail: string): Promise<ProductError | Admin> {
-        const query: Admin | undefined = this.admins.get(mail);
+    async getAdmin(email: string): Promise<ProductError | Admin> {
+        const query = await adminModel.findOne({email:email});
         if(query != undefined){
             return query;
         }else{
@@ -69,9 +75,10 @@ export class AdminService implements IAdminService{
 
     /* Removes admin if found */
     async removeAdmin(email:string): Promise<ProductError | Admin> {
-        const query = this.admins.get(email)
+        const query = await adminModel.findOne({email:email});
+
         if(query != null){
-            this.admins.delete(email)
+            query.deleteOne()
             return query
         }else{
             return new ProductError(404, "Admin not found")
@@ -79,11 +86,11 @@ export class AdminService implements IAdminService{
     }
 
     /* Adds admin if not found */
-    async addAdmin(admin: Admin): Promise<ProductError | Admin> {
-        const query = this.admins.get(admin.email)
+    async addAdmin(id:number,name: string,email: string,password:string): Promise<ProductError | Admin> {
+        const query = await adminModel.findOne({email:email});
         if(query == null){
-            this.admins.set(admin.email,admin)
-            return admin
+            const create = await adminModel.create({id:id,name:name,email:email,password:password});
+            return create
         }else{
             return new ProductError(400, "Admin already exists")
         }

@@ -1,5 +1,5 @@
 import { GENERALCOLOR, CATEGORY } from './../helper/utils';
-import { Product } from "../model/product";
+import { IProduct } from "../model/product";
 import { makeProductService } from "./ProductService";
 
 

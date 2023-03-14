@@ -8,7 +8,8 @@ import { CATEGORY, GENERALCOLOR } from "../src/helper/utils";
 
 export const productMapSchema: Schema = new Schema({
   id: { type: String, required: true },
-  products:{ 
+  /* Holds all color variations that a product has */
+  product:{ 
                 type: Map,
                 of:productSchema
             }
@@ -16,4 +17,4 @@ export const productMapSchema: Schema = new Schema({
 
 });
 
-export const productModel = conn.model<Product>("ProductMap", productMapSchema);
+export const productMapModel = conn.model<Map<string,Product>>("ProductMap", productMapSchema);

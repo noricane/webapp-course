@@ -1,6 +1,6 @@
 import { userModel } from './../../db/user.db';
 import { ProductService } from './ProductService';
-import { arraysEqual, CATEGORY, GENERALCOLOR } from './../helper/utils';
+import { arraysEqual, CATEGORY, GENERALCOLOR, isUser } from './../helper/utils';
 import { addressType } from './../model/adress';
 import { multiProduct } from './../model/pastorder';
 import { stockedSize } from '../model/product';
@@ -13,6 +13,7 @@ import { PastOrder } from '../model/pastorder';
 import { Admin } from '../model/admin';
 import { address } from '../model/adress';
 import { product_service } from '../router/ProductRouter';
+import { newsletterModel } from '../../db/newsletter.db';
 
 export interface IUserService {
     logInUser(mail: string,password:string) : Promise<User|ProductError>;
@@ -24,7 +25,7 @@ export interface IUserService {
     getUserOrders(id:string) : Promise<PastOrder[]|ProductError>;
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
-    addUser(desc:Object): Promise<User|ProductError>
+    addUser(id:number,name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]): Promise<User|ProductError>
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
@@ -49,68 +50,65 @@ export class ProductError{
 }
 
 export class UserService implements IUserService{
+
+
+    
     /* Logs in user if there is an entry in user map that matches email and password  */
     async logInUser(mail: string, password: string): Promise<User | ProductError> {
-        const user = await this.getUser(mail)
-        
-        if (user instanceof User){
+        //const user = await this.getUser(mail)
+        const user = await userModel.findOne({email:mail})
+        if (user == null){
+            return new ProductError(404,"Email or password was not found")
+           
+        }else{
             if(user.comparePassword(password)){
                 return user
             }else{
                 return new ProductError(404,"Email or password was not found")
             }
-        }else{
-            return new ProductError(404,"Email or password was not found")
         }
     }
 
     /* Dependency injection, to process orders and add to user */
     productService:ProductService;
     /* Map of users in the form of <email,User> */
-    users: Map<string,User> = new Map<string,User>()
-    newsletterList: string[] = []
+
+
 
     addNewsLetterMail(email: string): true {
-        this.newsletterList.push(email)
+        newsletterModel.create({email:email})
         return true
     }
     
     constructor(service:ProductService){
         this.productService=service;
-        const user = new User("James Brown","jb@gmail.com","jb123","0731231234",new Date(1978),[new address(addressType.DELIVERY,"Saxophonestreet 45","New York","USA","4423")])
-        this.users.set(user.email,user)
+
+        (async() => {
+            const user =  await userModel.create({id:Date.now(),name:"James Brown",email:"jb@gmail.com",password:"jb123",phonenumber:"0731231234",birthdate:new Date(1978),orders:[],adresses:[{id:Date.now(),addressType:addressType.DELIVERY,street:"Saxophonestreet 45",city:"New York",country:"USA",zip:"4423"}]})
+            console.log("creating user",user);
+        })()
+        
+
     }
     
     /* Retrieves user if it is found */
     async getUser(mail: string): Promise<ProductError | User> {
-        const query: User | undefined = this.users.get(mail);
-        const mongoose = await userModel.findOne({email:mail})
+        const mongoQuery = await userModel.findOne({email:mail})
         
-        if(mongoose != null){
-            const user = new User()
-            console.log(mongoose.email);
-            
-
-            
-
-        }else{
-
-            
-        }
-        
-        if(query != null ){
-            
-            return query;
+        if(mongoQuery != null){
+            return mongoQuery
         }else{
             return new ProductError(404, "No user found with that email")
         }
+       
     }
 
     /* Retrieves all previous orders of a specific user*/
     async getUserOrders(email: string /* mail */): Promise<ProductError | PastOrder[]> {
-        const query: User | undefined = this.users.get(email);
-        if(query != undefined){
-            return query.orders
+        const query = await userModel.findOne({email:email})
+
+        if(query != null){
+            return query.getOrders()
         }else{
             return new ProductError(404, "No user found")
         }
@@ -118,21 +116,22 @@ export class UserService implements IUserService{
     }
 
     /* Adds user if the user email doesn't exist in Map */
-    async addUser(user: User): Promise<ProductError | User> {
-        const query = this.users.get(user.email)
-        if(query == null){
+
+    async addUser(id:number,name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]): Promise<ProductError | User> {
+        
             return userModel.create({
-                id:user.getId(),
-                name:user.getName(),
-                email:user.email,
-                password:user.getPassword(),
-                birthdate:user.birthdate,
-                phonenumber:user.phonenumber,
-                orders:[...user.orders],
-                adresses:[...user.adresses],
-            }).then(e => {
-                return user
-            }).catch(e => {
+                id:id,
+                name:name,
+                email:email,
+                password:password,
+                birthdate:birthdate,
+                phonenumber:phonenumber,
+                orders:[...orders],
+                adresses:[...adresses]
+            }).then((e:any) => {
+                //Success return newly creted object
+                return e
+            }).catch((e:any) => {
                 /* Duplicate key error code is 11000, don't know what other errors may arise */
                 console.log(e);
                 return new ProductError(500, e.code == 11000 ? 'Email already exists' : e.message)
@@ -140,10 +139,8 @@ export class UserService implements IUserService{
 
             
             
-        }else{
-            return new ProductError(400, "User already exists")
-        }
     }
+    
 
     /* Processes order through product_service */
     async processOrder(...order:multiProduct[]):Promise<multiProduct[]>{
@@ -152,7 +149,7 @@ export class UserService implements IUserService{
     
     /* Processes order through product_service and then add's order to user */
     async addUserOrder(id: string, ...order: multiProduct[]): Promise< PastOrder | {error:true, items:multiProduct[]} | ProductError> {
-        const query = this.users.get(id)
+        const query = await userModel.findOne({email:id});
         if(query != null){
             
             const processed =  await this.processOrder(...order);
@@ -165,8 +162,8 @@ export class UserService implements IUserService{
                     return {error:true,items:processed}
                 }
                 
-                const addOrder = query.addOrder(...processed)
-                return addOrder
+                const addOrder =  query.addOrder(processed)
+                return addOrder 
             }
             return {error:true,items:processed}
         }else{
@@ -176,9 +173,9 @@ export class UserService implements IUserService{
 
     // Removes user if id(email) is found
     async removeUser(id: string): Promise<ProductError | User> {
-        const query = this.users.get(id)
+        const query = await userModel.findOne({email:id})
         if(query != null){
-            this.users.delete(id)
+            query.deleteOne()  
             return query
         }else{
             return new ProductError(404, "User not found")

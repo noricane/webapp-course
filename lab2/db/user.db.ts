@@ -1,12 +1,16 @@
+import { multiProduct } from './../src/model/archive/pastorder';
 import { Schema, Model } from "mongoose";
 import { addressType } from "../src/model/adress";
+import { PastOrder } from "../src/model/pastorder";
 import { Product } from "../src/model/product";
-import { User } from "../src/model/user";
+import { User, UserMethods } from "../src/model/user";
 
 import { conn } from "./conn";
 import { productModel, productSchema } from "./product.db";
 
-const userSchema: Schema = new Schema({
+type UserModel = Model<User,{},UserMethods>
+
+const userSchema: Schema = new Schema<User,UserModel,UserMethods>({
   id: { type: Number, required: true },
   name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
@@ -26,8 +30,8 @@ const userSchema: Schema = new Schema({
   adresses: {
     type: [
       {
-        id: Number,
-        type: { type: String, enum: addressType, required: true },
+        id: {type:Number},
+        addressType: { type: String, enum: addressType, required: true },
         street: String,
         city: String,
         country: String,
@@ -39,15 +43,33 @@ const userSchema: Schema = new Schema({
 });
 
 
-userSchema.methods.comparePassword = function(str:string):boolean{
-    return this.password == str
-}
-userSchema.methods.changePassword = function(str:string):void{
+userSchema.method('comparePassword' , function comparePassword(str:string):boolean{
+    return this.password == str;
+})
+userSchema.method('changePassword' , function changePassword(str:string):boolean{
     this.password = str
-}
-userSchema.methods.changeEmail = function(str:string):void{
+    return true
+    
+  })
+userSchema.method('changeEmail' , function comparePassword(str:string):boolean{
     this.eamil = str
-}
+    return true
 
+})
 
-export const userModel = conn.model<User>("User", userSchema);
+userSchema.method('getOrders' , function getOrders():PastOrder[]{
+
+    return this.orders
+
+})
+userSchema.method('addOrder' , function addOrder(list:multiProduct[]):PastOrder{
+    const newOrder  ={id:Date.now(),items:list};
+    this.orders.push(newOrder)
+    return newOrder
+})
+
+userSchema.method('setOrders' , function getOrders(list:PastOrder[]):void{
+    this.orders = list
+})
+
+export const userModel = conn.model<User,UserModel>("User", userSchema);

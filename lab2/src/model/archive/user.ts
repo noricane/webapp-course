@@ -1,7 +1,7 @@
 import { UserType } from "../../helper/utils";
-import { address } from "../adress";
-import { BaseUser } from "../baseuser";
-import { PastOrder, multiProduct } from "../pastorder";
+import { address } from "./adress";
+import { BaseUser } from "./baseuser";
+import { PastOrder, multiProduct } from "./pastorder";
 
 
 /* User Class */
@@ -11,8 +11,8 @@ export class User extends BaseUser{
     orders: PastOrder[]
     adresses: address[];
     
-    constructor(name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]){
-        super(name,email,password)
+    constructor(id:number,name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]){
+        super(id,name,email,password)
         this.phonenumber = phonenumber;
         this.birthdate = birthdate;
         this.adresses = adresses;

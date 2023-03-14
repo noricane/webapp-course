@@ -3,7 +3,7 @@ import { GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { hashize } from "../helper/utils";
 
 /* This will probably not be implemented */
-export type paymentInformation={
+export interface paymentInformation{
     card_holder:string; //Encrypt, How to hide encryption algorithm, .env var?
     card_number:string;//Encrypt
     csv_number:string; //can start with 0? //Encrypt
@@ -12,13 +12,13 @@ export type paymentInformation={
 }
 
 /* Stocked size is the format of saving a size and amount of that size in stock */
-export type stockedSize = {
+export interface stockedSize{
     size:number;
     amount:number;
 }
 
 /* Product class */
-export class Product{
+export interface Product{
     id:string; 
     name:string;
     brand: string;
@@ -30,46 +30,10 @@ export class Product{
     stock:stockedSize[]; //List of sizes in stock 
     price_factor:number; //if factor < 1 then product is on sale
     images: string[];//array of urls.
+}
 
-
-    isInStock(){
-        return !(this.stock.length == 0)
-    }
-    setStock(list:stockedSize[]){
-        this.stock = list
-    }
-
-    populate(name:string, brand:string,description:string, color:string,generalColor:GENERALCOLOR,price:number,category:CATEGORY,stock:stockedSize[],price_factor:number, url:string[]){
-        this.id = hashize(brand.concat(name));//different brands may have the exact same modelname and this will make it easier to bundle products of the same brand and name
-        this.name =name;
-        this.brand =brand;
-        this.description =description;
-        this.color =color;
-        this.generalColor = generalColor
-        this.price = price;
-        this.category =category;
-        this.stock = []
-        stock.forEach(e => this.stock.push(e));
-        this.price_factor = price_factor;
-        this.images = [];
-        url.forEach(e => this.images.push(e))
-    }
-    constructor(){
-        this.id = Date.now().toString();//different brands may have the exact same modelname and this will make it easier to bundle products of the same brand and name
-        this.name ="name";
-        this.brand ="brand";
-        this.description ="description";
-        this.color ="color";
-        this.generalColor = -1
-        this.price = -1;
-        this.category = -1;
-        this.stock = []
-        this.price_factor = 0;
-        this.images = [];
-    }
-
-
-
+export interface ProductMethods{
+    setStock(list:stockedSize[]):void
 }
 
 

@@ -1,10 +1,10 @@
 import { GENERALCOLOR, CATEGORY } from './../../helper/utils';
 import { normalizeString, productConstructor } from '../../helper/utils';
-import {Product} from '../../model/product'
+import {IProduct} from '../../model/product'
 
 /* Hardcoded method for initialization of shoe objects and then adding returning them in the correct Map form*/
-export function initShoes():Map<string,Map<string,Product>>{
-    const map: Map<string,Map<string,Product>> = new Map();
+export function initShoes():Map<string,Map<string,IProduct>>{
+    const map: Map<string,Map<string,IProduct>> = new Map();
     
     
     const p33 = createProduct("Foam Runners","Yeezy","Stone Salt",GENERALCOLOR.BEIGE,3495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front_970x.jpg?v=1670005153","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front-Side_970x.jpg?v=1670404734","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Sole_970x.jpg?v=1670404734");
@@ -45,14 +45,14 @@ export function initShoes():Map<string,Map<string,Product>>{
         if( query != null){
             let elems: string[] = []
             const newColor = normalizeString(e.color);
-            const innerQuery: Product | undefined =  query.get(newColor);
+            const innerQuery: IProduct | undefined =  query.get(newColor);
             if( innerQuery == null){
                 query.set(newColor/**NORMALIZED STRING HERE */,e)
                 return
             }return
 
         }
-        const init: [string, Product] = [normalizeString(e.color),e]
+        const init: [string, IProduct] = [normalizeString(e.color),e]
         map.set(e.id,new Map([init]))
     })
 
@@ -60,12 +60,12 @@ export function initShoes():Map<string,Map<string,Product>>{
 }
 
 
-const createProductCategory = (name:string, brand: string, color: string,generalColor:GENERALCOLOR, category:CATEGORY,price: number,...url:string[]):Product=>{
+const createProductCategory = (name:string, brand: string, color: string,generalColor:GENERALCOLOR, category:CATEGORY,price: number,...url:string[]):IProduct=>{
     const p = createProduct(name,brand,color,generalColor,price,...url)
     p.category = category
     return p
 }
-const createProduct = (name:string, brand: string, color: string,generalColor:GENERALCOLOR, price: number,...url:string[]):Product=>{
+const createProduct = (name:string, brand: string, color: string,generalColor:GENERALCOLOR, price: number,...url:string[]):IProduct=>{
     const sizes =  [[{size: 43,amount: 42},{size: 44,amount: 42},{size: 45,amount: 42}],[{size: 40,amount: 42},{size: 41,amount: 0},{size: 43,amount: 0},{size: 44,amount: 42}],[{size: 35,amount: 42},{size: 36,amount: 42},{size: 37,amount: 42},{size: 38,amount: 42}],[{size: 41,amount: 42},{size: 42,amount: 42},{size: 43,amount: 42}], [ {size: 39,amount: 42},{size: 42,amount: 42},{size: 44,amount: 0},{size: 45,amount: 9} ]]
 
     const size = sizes[Math.floor(Math.random() * sizes.length)];

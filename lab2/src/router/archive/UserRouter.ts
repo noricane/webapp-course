@@ -1,11 +1,11 @@
-import { address, addressType } from './../model/adress';
-import { ProductError } from './../service/UserService';
-import { arrayInstance, isMultiProducts } from './../helper/utils';
-import { PastOrder, multiProduct } from './../model/pastorder';
+import { address, addressType } from './../../model/adress';
+import { ProductError } from './../../service/UserService';
+import { arrayInstance, isMultiProducts } from './../../helper/utils';
+import { PastOrder, multiProduct } from './../../model/pastorder';
 import express, { Request, Response } from "express";
-import { User } from "../model/user";
-import { makeUserService } from '../service/UserService';
-import { isUser } from '../helper/utils';
+import { User } from "../../model/user";
+import { makeUserService } from '../../service/UserService';
+import { isUser } from '../../helper/utils';
 import { product_service } from './ProductRouter';
 
 export const user_router = express.Router();
@@ -91,17 +91,17 @@ user_router.post("/register", async (
             res.status(400).send("Bad GET request, id must be of type string");
             return
         }
-
-        const resp = await user_service.addUser(Date.now(),user.name,user.email,user.password,user.phonenumber,user.birthdate,[{id:Date.now(),addressType:addressType.DELIVERY,street:"Saxophonestreet 45",city:"New York",country:"USA",zip:"4423"}]);
+        const newuser = new User(Date.now(),user.name,user.email,user.password,user.phonenumber,user.birthdate,[new address(addressType.DELIVERY,user.street,user.city,user.country,user.zip)])
+        const resp = await user_service.addUser(newuser);
         console.log("RESPONSEE IS ",resp);
         
-        if(resp instanceof ProductError){
-            //Success, resp is the registered user!            
-            res.status(resp.code).send(resp.message);
-            //Resp is of type ProductError
-        }else{
+        if(resp instanceof User){
             res.cookie('user',JSON.stringify(resp))
+            //Success, resp is the registered user!            
             res.status(200).send(true);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
         }
     } catch (e: any) {
         res.status(500).send(e.message);
@@ -134,11 +134,11 @@ user_router.post("/order", async (
         
         const resp = await user_service.addUserOrder(id,...items);
         console.log("resp",resp);
-        if(resp instanceof ProductError){
+        if(resp instanceof PastOrder){
+            res.status(200).send(resp);
+        }else if(resp instanceof ProductError){
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);
-        }else if(resp.items != null && (resp as PastOrder).id != null){
-            res.status(200).send(resp as PastOrder);
         }else{
             //I'd rather not have to send a 200 since it technically isn't accepted
             res.status(200).send(resp.items);
@@ -165,13 +165,13 @@ user_router.get("/:id", async (
         console.log("email",id);
         console.log("response is",resp);
         
-        if(resp instanceof ProductError){
-            //Resp is of type ProductError
-            res.status(resp.code).send(resp.message);
-        }else{
+        if(resp instanceof User){
             //Success, resp is the requested user!           
             res.cookie('user',JSON.stringify(resp)) 
             res.status(200).send(resp);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
         }
     } catch (e: any) {
         res.status(500).send(e.message);
@@ -192,12 +192,12 @@ user_router.delete("/:id", async (
             return
         }
         const resp = await user_service.removeUser(id);
-        if(resp instanceof ProductError){
-            //Resp is of type ProductError
-            res.status(resp.code).send(resp.message);
-        }else{
+        if(resp instanceof User){
             //Success, resp is the requested user!            
             res.status(200).send(resp);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
         }
     } catch (e: any) {
         res.status(500).send(e.message);

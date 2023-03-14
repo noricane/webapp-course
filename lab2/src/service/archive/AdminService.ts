@@ -1,6 +1,6 @@
 import { UserService } from './UserService';
-import { Admin } from "../../model/admin";
-import { User } from "../../model/user";
+import { Admin } from "../../model/archive/admin";
+import { User } from "../../model/archive/user";
 
 
 export interface IAdminService {
@@ -47,13 +47,14 @@ export class AdminService implements IAdminService{
 
     constructor(service:UserService){
         this.userService=service;
-        const user = new Admin("Michael Jackson","mj@gmail.com","mj123")
+        const user = new Admin(Date.now(),"Michael Jackson","mj@gmail.com","mj123")
         this.admins.set(user.email,user)
     }
    
     /* Returns list of users from userService */
     async getUsers(): Promise<User[]> {
-        return Array.from(this.userService.users.values())
+        //return Array.from(this.userService.users.values())
+        return []
     }
 
     /* Returns admin if found, this method seems a little weird, TODO */

@@ -1,7 +1,7 @@
 import { CATEGORY, checkLatinCharacters, normalizeString } from './../../helper/utils';
 import { GENERALCOLOR } from '../../helper/utils';
 import { stockedSize } from '../../model/product';
-import { Product } from "../../model/product";
+import { IProduct } from "../../model/product";
 
 import { User } from '../../model/user';
 import { productConstructor } from '../../helper/utils';
@@ -10,7 +10,7 @@ import { multiProduct } from '../../model/pastorder';
 
 export interface IProductService {
     //Returns a list of all listed products
-    getProducts() : Promise<Map<string,Map<string,Product>>|ProductError>;
+    getProducts() : Promise<Map<string,Map<string,IProduct>>|ProductError>;
     
     //Returns a list of updated products
     updateClientList(list:multiProduct[]) : Promise<multiProduct[]|ProductError>;
@@ -19,31 +19,31 @@ export interface IProductService {
     getBrands(): Promise<string[]>;
     
     //Return specific product
-    getProduct(id:string) : Promise<Map<string,Product>|ProductError>;
+    getProduct(id:string) : Promise<Map<string,IProduct>|ProductError>;
     //Returns specific product and its color
-    getProductColor(id:string,color:string) : Promise<Product|ProductError>;
+    getProductColor(id:string,color:string) : Promise<IProduct|ProductError>;
 
     //Returns lists of products in category
-    getCategoryProducts(category:CATEGORY): Promise<Product[]|ProductError>//FChange to enum probably
+    getCategoryProducts(category:CATEGORY): Promise<IProduct[]|ProductError>//FChange to enum probably
     //Returns lists of products with color
-    getColorProducts(color:GENERALCOLOR): Promise<Product[]|ProductError>
+    getColorProducts(color:GENERALCOLOR): Promise<IProduct[]|ProductError>
 
 
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
-    addProduct(desc:Object): Promise<Product|ProductError>//Technically equivalent to an addProductColor method
+    addProduct(desc:Object): Promise<IProduct|ProductError>//Technically equivalent to an addProductColor method
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
-    editProduct(desc:Object): Promise<Product|ProductError> 
+    editProduct(desc:Object): Promise<IProduct|ProductError> 
 
     // Removes a product with the given id from stock,
     // and returns the removed Map<string(id),Product> object
-    removeProduct(id:string): Promise<Map<string,Product>|ProductError> 
+    removeProduct(id:string): Promise<Map<string,IProduct>|ProductError> 
 
     // Removes a color within the given product from id from stock,
     // and returns the removed product object
-    removeProductColor(id: string, color:string): Promise<Product|ProductError> 
+    removeProductColor(id: string, color:string): Promise<IProduct|ProductError> 
 
  /*    addUser(): Promise<User|ProductError> //Change name of ProductError type?
     removeUser(id:number): Promise<User|ProductError> 
@@ -119,7 +119,7 @@ export class ProductService implements IProductService{
     
     /* The collection of products is represented as a Map with the id of the product that leads to a map with all the product's color variations */
     //products : Map<string,Map<string,Product>> = new Map();
-    products : Map<string,Map<string,Product>> = initShoes();
+    products : Map<string,Map<string,IProduct>> = initShoes();
     /* List of recorded brands */
     brands: string[] = ["Nike","Louis Vuitton","Adidas","Yeezy", "Maison Margiela","Off-White x Nike"]
     constructor(){
@@ -144,8 +144,8 @@ export class ProductService implements IProductService{
     }
 
     /* Returns list of products within the given category */
-    async getCategoryProducts(category: CATEGORY): Promise<ProductError | Product[]> {
-        const productList:Product[] = []
+    async getCategoryProducts(category: CATEGORY): Promise<ProductError | IProduct[]> {
+        const productList:IProduct[] = []
         Array.from(this.products.values()).forEach(
             innermap=> Array.from(innermap.values()).forEach
             (product => {
@@ -157,8 +157,8 @@ export class ProductService implements IProductService{
     }
 
     /* Returns list of products that are of the color x with type GENERALCOLOR */
-    async getColorProducts(color: number): Promise<ProductError | Product[]> {
-        const productList:Product[] = []
+    async getColorProducts(color: number): Promise<ProductError | IProduct[]> {
+        const productList:IProduct[] = []
         Array.from(this.products.values()).forEach(
             innermap=> Array.from(innermap.values()).forEach
             (product => {               
@@ -175,7 +175,7 @@ export class ProductService implements IProductService{
     }
 
     /* Returns collection of all products */
-    async getProducts(): Promise<Map<string,Map<string,Product>>|ProductError> {
+    async getProducts(): Promise<Map<string,Map<string,IProduct>>|ProductError> {
         if(this.products.size > 0){
             console.log("Sending products",this.products);
             return this.products; //Send an array of Map<string,product> instead?
@@ -186,7 +186,7 @@ export class ProductService implements IProductService{
     }
 
     /* Returns map of specific product which contains all the color variants of that product */
-    async getProduct(id: string): Promise<ProductError | Map<string, Product>> {
+    async getProduct(id: string): Promise<ProductError | Map<string, IProduct>> {
         const query = this.products.get(id);
         if(query!=null){
             return query
@@ -195,7 +195,7 @@ export class ProductService implements IProductService{
     }
 
     /* Returns the specific product with the requested color */
-    async getProductColor(id: string, color: string): Promise<ProductError |  Product> {
+    async getProductColor(id: string, color: string): Promise<ProductError |  IProduct> {
         const query = this.products.get(id);        
         if(query!=null){
             const color_query  = query.get(color)
@@ -211,7 +211,7 @@ export class ProductService implements IProductService{
 
 
     /* Adds product if it doesn't exist */
-    async addProduct(desc: productConstructor): Promise<Product|ProductError> {   
+    async addProduct(desc: productConstructor): Promise<IProduct|ProductError> {   
         const {color} = desc;
         const item = new Product(desc.name, desc.brand, desc.description, desc.color,desc.generalColor, desc.price, desc.category, desc.stock, desc.price_factor, desc.images);
 
@@ -224,7 +224,7 @@ export class ProductService implements IProductService{
                 findEntry.set(color,item)
             }
         }else{//Product doesn't exist
-            this.products.set(item.id,new Map<string,Product>([[color,item]]))
+            this.products.set(item.id,new Map<string,IProduct>([[color,item]]))
         }
         //If brand doesn't exist add it.
         if(this.brands.filter(e => checkLatinCharacters(e) == checkLatinCharacters(desc.brand)).length == 0){
@@ -234,7 +234,7 @@ export class ProductService implements IProductService{
     }
 
     /* Edits product if it exists */
-    async editProduct(desc: productConstructor): Promise<Product|ProductError> {   
+    async editProduct(desc: productConstructor): Promise<IProduct|ProductError> {   
         const {color} = desc;
         const item = new Product(desc.name, desc.brand, desc.description, desc.color,desc.generalColor, desc.price, desc.category, desc.stock, desc.price_factor, desc.images);
         const findEntry = this.products.get(item.id);
@@ -279,7 +279,7 @@ export class ProductService implements IProductService{
     } */
 
     /* Removes product's Map if found */
-    async removeProduct(id: string):  Promise<Map<string,Product>|ProductError>  {
+    async removeProduct(id: string):  Promise<Map<string,IProduct>|ProductError>  {
         const query = this.products.get(id);
         if(query != null){
          this.products.delete(id)
@@ -289,7 +289,7 @@ export class ProductService implements IProductService{
     }
 
     /* Removes a product's specific color variant if it's found */
-    async removeProductColor(id: string, color:string): Promise<Product|ProductError> {
+    async removeProductColor(id: string, color:string): Promise<IProduct|ProductError> {
         const query = this.products.get(id);
         if(query!=null){
             const color_query = query.get(color)

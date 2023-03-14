@@ -1,5 +1,5 @@
 import { address } from './../model/adress';
-import { Product, stockedSize } from "../model/product";
+import { IProduct, stockedSize } from "../model/product";
 import { PastOrder } from '../model/pastorder';
 
 const crypto = require('crypto');
@@ -14,6 +14,7 @@ export function normalizeString(str: string){
 }
 /* Hash function for hashing strings */
 export function hashize(str:string) {
+    if(str == null){return ""}
     return crypto.createHmac('sha256', normalizeString(str)).digest('hex');
 }
 /* Enum for the type of user accounts */

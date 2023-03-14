@@ -1,12 +1,12 @@
-import { stockedSize } from './../model/product';
+import { stockedSize } from './../../model/product';
 
 import express, { Request, Response } from "express";
 
-import { User } from "../model/user";
-import { Admin } from "../model/admin";
+import { User } from "../../model/user";
+import { Admin } from "../../model/admin";
 
-import { makeProductService, ProductError } from '../service/ProductService';
-import { makeAdminService } from '../service/AdminService';
+import { makeProductService, ProductError } from '../../service/ProductService';
+import { makeAdminService } from '../../service/AdminService';
 import { UserRequest, user_service } from './UserRouter';
 
 
@@ -71,14 +71,14 @@ admin_router.post("/", async (
             res.status(400).send("Bad GET request, admin must have correct arguments, must be of type string");
             return
         }
-
-        const resp = await admin_service.addAdmin(Date.now(),admin.name,admin.email,admin.password);
-        if(resp instanceof ProductError){
+        const newAdmin = new Admin(Date.now(),admin.name,admin.email,admin.password)
+        const resp = await admin_service.addAdmin(newAdmin);
+        if(resp instanceof Admin){
+            //Success, resp is the requested user!            
+            res.status(200).send(resp);
+        }else{
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);
-        }else{
-            //Success, resp is the requested user!            
-            res.status(200).send(resp as Admin);
         }
     } catch (e: any) {
         res.status(500).send(e.message);
@@ -95,12 +95,12 @@ admin_router.delete("/:id", async (
             res.status(400).send("Bad GET request, id must be of type number");
         }
         const resp = await admin_service.removeAdmin(id);
-        if(resp instanceof ProductError){
+        if(resp instanceof Admin){
+            //Success, resp is the requested user!            
+            res.status(200).send(resp);
+        }else{
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);
-        }else{
-            //Success, resp is the requested user!            
-            res.status(200).send(resp as Admin);
         }
     } catch (e: any) {
         res.status(500).send(e.message);

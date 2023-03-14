@@ -3,7 +3,7 @@ import { arraysEqual, CATEGORY, GENERALCOLOR } from './../../helper/utils';
 import { addressType } from './../../model/adress';
 import { multiProduct } from './../../model/pastorder';
 import { stockedSize } from '../../model/product';
-import { Product } from "../../model/product";
+import { IProduct } from "../../model/product";
 
 import { User } from '../../model/user';
 import { productConstructor } from '../../helper/utils';

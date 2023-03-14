@@ -1,6 +1,7 @@
 import { GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { normalizeString, productConstructor } from '../helper/utils';
-import {Product} from '../model/product'
+
+import { Product } from '../model/archive/product';
 
 /* Hardcoded method for initialization of shoe objects and then adding returning them in the correct Map form*/
 export function initShoes():Map<string,Map<string,Product>>{

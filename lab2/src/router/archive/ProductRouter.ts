@@ -1,13 +1,13 @@
-import { multiProduct } from './../model/pastorder';
-import { toObject, GENERALCOLOR, CATEGORY } from './../helper/utils';
-import { stockedSize } from './../model/product';
+import { multiProduct } from './../../model/pastorder';
+import { toObject, GENERALCOLOR, CATEGORY } from './../../helper/utils';
+import { stockedSize } from './../../model/product';
 
 import express, { Request, Response } from "express";
 
-import { Product } from "../model/product";
-import { isProduct, productConstructor } from '../helper/utils';
-import { makeProductService, ProductError } from '../service/ProductService';
-import { User } from '../model/user';
+import { IProduct } from "../../model/product";
+import { isProduct, productConstructor } from '../../helper/utils';
+import { makeProductService, ProductError } from '../../service/ProductService';
+import { User } from '../../model/user';
 
 
 export const product_service = makeProductService();
@@ -68,12 +68,12 @@ product_router.post("/updatecart", async (
 
 product_router.get("/", async (
     req: Request<{color:string,category:string}, {}, {}>,
-    res: Response<Product[] | string>,
+    res: Response<IProduct[] | string>,
     next:Function
 ) => {
     try {
-        let categoryList: Product[] | null = null
-        let colorList: Product[] | null = null
+        let categoryList: IProduct[] | null = null
+        let colorList: IProduct[] | null = null
         if(req.query.color == null && req.query.category == null){
             console.log('the response will be sent by the next function ...')
             return next()
@@ -167,13 +167,13 @@ product_router.get("/", async (
 
 product_router.get("/", async (
     req: Request<{}, {}, {}>,
-    res: Response<Map<string, Map<string, Product>> | string>
+    res: Response<Map<string, Map<string, IProduct>> | string>
 ) => {
     try {
 
         const resp = await product_service.getProducts();
 
-        if(resp instanceof Map<string, Map<string, Product>>){
+        if(resp instanceof Map<string, Map<string, IProduct>>){
 
            
             //Success, resp contains products! 
@@ -197,7 +197,7 @@ product_router.get("/", async (
 
 product_router.get("/:id", async (
     req: Request<{color:string,id:string}, {}, {}>,
-    res: Response<Product | string>,
+    res: Response<IProduct | string>,
     next:Function
 ) => {
     try {
@@ -215,12 +215,13 @@ product_router.get("/:id", async (
         const color: string = req.query.color
         const resp = await product_service.getProductColor(id,color);
 
-        if(resp instanceof ProductError){
-            //Resp is of type ProductError
-            res.status(resp.code).send(resp.message);
-        }else{
+        if(resp instanceof Product){
             //Success, resp contains products!
             res.status(200).send(resp);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
+            
         }
     }
     } catch (e: any) {
@@ -231,7 +232,7 @@ product_router.get("/:id", async (
 
 product_router.get("/:id", async (
     req: Request<{id:string}, {}, {}>,
-    res: Response< Map<string, Product> | string>
+    res: Response< Map<string, IProduct> | string>
 ) => {
     try {
         const { id } = req.params
@@ -242,7 +243,7 @@ product_router.get("/:id", async (
         const resp = await product_service.getProduct(id);
         
         
-        if(resp instanceof Map<string, Product>){
+        if(resp instanceof Map<string, IProduct>){
             //Success, resp contains products!
 
 
@@ -266,7 +267,7 @@ product_router.get("/:id", async (
 
 product_router.post("/", async (
     req: Request<{}, {}, { productInformation : productConstructor  }>,
-    res: Response<Product | string>
+    res: Response<IProduct | string>
 ) => {
     try {
 
@@ -278,13 +279,14 @@ product_router.post("/", async (
         const description: productConstructor= req.body.productInformation;
 
         const resp = await product_service.addProduct(description);
-        if(resp instanceof ProductError){
-            //Resp is of type ProductError
-            res.status(resp.code).send(resp.message);
-        }else{
+        if(resp instanceof Product){
             console.log("successfully created");
             //Success, resp contains products!
+            
             res.status(200).send(resp);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
             
         }
     } catch (e: any) {
@@ -309,10 +311,10 @@ product_router.put("/", async (
         const resp = await product_service.editProduct(description);
         console.log("resp",resp);
 
-        if (resp instanceof ProductError){
-            res.status(resp.code).send(resp.message)
-        }else{
+        if (resp instanceof Product){
             res.status(200).send("Successfully restocke")
+        }else{
+            res.status(resp.code).send(resp.message)
         }
 
     }
@@ -326,7 +328,7 @@ product_router.put("/", async (
 //TODO, is this safe to have id in delete url??
 product_router.delete("/:id", async (
     req: Request<{id:string}, {}, {}>,
-    res: Response< Map<string, Product> | string>
+    res: Response< Map<string, IProduct> | string>
 ) => {
     try {
         const {id} = req.params;
@@ -335,7 +337,7 @@ product_router.delete("/:id", async (
             return
         }
         const resp =  await product_service.removeProduct(id)
-        if(resp instanceof Map<string, Product>){
+        if(resp instanceof Map<string, IProduct>){
             //Success, resp contains products!
             res.status(200).send(resp);
         }else{
@@ -351,7 +353,7 @@ product_router.delete("/:id", async (
 //TODO, is this safe to have id in delete url??
 product_router.delete("/:id/:color", async ( 
     req: Request<{id:string, color:string}, {}, {}>,
-    res: Response<Product|string>
+    res: Response<IProduct|string>
 ) => {
     try {
         const {id, color} = req.params;
@@ -360,12 +362,12 @@ product_router.delete("/:id/:color", async (
             return
         }
         const resp =  await product_service.removeProductColor(id,color)
-        if(resp instanceof ProductError){
-            //Resp is of type ProductError
-            res.status(resp.code).send(resp.message);
-        }else{
+        if(resp instanceof Product){
             //Success, resp contains products!
             res.status(200).send(resp);
+        }else{
+            //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
             
         }
 
