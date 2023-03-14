@@ -1,6 +1,7 @@
+import { GENERALCOLOR, CATEGORY, hashize } from "../../helper/utils";
 
-import { GENERALCOLOR, CATEGORY } from './../helper/utils';
-import { hashize } from "../helper/utils";
+
+
 
 /* This will probably not be implemented */
 export type paymentInformation={
@@ -39,7 +40,7 @@ export class Product{
         this.stock = list
     }
 
-    populate(name:string, brand:string,description:string, color:string,generalColor:GENERALCOLOR,price:number,category:CATEGORY,stock:stockedSize[],price_factor:number, url:string[]){
+    constructor(name:string, brand:string,description:string, color:string,generalColor:GENERALCOLOR,price:number,category:CATEGORY,stock:stockedSize[],price_factor:number, url:string[]){
         this.id = hashize(brand.concat(name));//different brands may have the exact same modelname and this will make it easier to bundle products of the same brand and name
         this.name =name;
         this.brand =brand;
@@ -53,19 +54,6 @@ export class Product{
         this.price_factor = price_factor;
         this.images = [];
         url.forEach(e => this.images.push(e))
-    }
-    constructor(){
-        this.id = Date.now().toString();//different brands may have the exact same modelname and this will make it easier to bundle products of the same brand and name
-        this.name ="name";
-        this.brand ="brand";
-        this.description ="description";
-        this.color ="color";
-        this.generalColor = -1
-        this.price = -1;
-        this.category = -1;
-        this.stock = []
-        this.price_factor = 0;
-        this.images = [];
     }
 
 

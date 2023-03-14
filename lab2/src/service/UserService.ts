@@ -52,6 +52,7 @@ export class UserService implements IUserService{
     /* Logs in user if there is an entry in user map that matches email and password  */
     async logInUser(mail: string, password: string): Promise<User | ProductError> {
         const user = await this.getUser(mail)
+        
         if (user instanceof User){
             if(user.comparePassword(password)){
                 return user
@@ -83,8 +84,22 @@ export class UserService implements IUserService{
     /* Retrieves user if it is found */
     async getUser(mail: string): Promise<ProductError | User> {
         const query: User | undefined = this.users.get(mail);
+        const mongoose = await userModel.findOne({email:mail})
+        
+        if(mongoose != null){
+            const user = new User()
+            console.log(mongoose.email);
+            
 
-        if(query != null){
+            
+
+        }else{
+
+            
+        }
+        
+        if(query != null ){
+            
             return query;
         }else{
             return new ProductError(404, "No user found with that email")

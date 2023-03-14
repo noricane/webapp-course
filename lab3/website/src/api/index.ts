@@ -111,8 +111,8 @@ export async function getUserInfo(em:string):Promise<any>{
 Function for logging in user, takes an email and password as input and sends them to backend
 Result is either a string or a User object */
 export async function logInUser(em:string,pw:string):Promise<string | User>{
-
-    const {data} = await axios.post(`${config.URL}/user/login`,{
+    let message:string = ""
+    const resp = await axios.post(`${config.URL}/user/login`,{
         email: em,
         password: pw
       },{
@@ -121,11 +121,18 @@ export async function logInUser(em:string,pw:string):Promise<string | User>{
         },
         withCredentials: true
       }).catch((e:AxiosError) =>{
-        throw new Error (e.response?.data == null ? e.message : e.response.data as string)})
+        console.log(e);
+        
+         message= (e.response?.data == null ? e.message : e.response.data as string)})
       
+      if(message.length > 0){
+        console.log(resp);
+        return message
+      }else{
+        return resp?.data
+      }
       
-      
-      return data
+
 
 }
 
