@@ -168,21 +168,13 @@ export class ProductService implements IProductService{
     async updateClientList(clientList: multiProduct[]): Promise<multiProduct[]> {
         const products = await this.getProducts();
         if(products instanceof ProductError){
-            console.log("ERROR: status",products.code,"message",products.message);
             return []
         }
         const list: multiProduct[]=[];
-        console.log("UPDATING CART");
-        console.log("INCOMING LISTLEN",clientList.length);
-        
         clientList.forEach(e => {
-          
           const query = products.get(e.item.id)?.get(normalizeString(e.item.color))
-          console.log("ELEMENT QUERY",query);
             if(query==null){return}
             const findsize = query.stock.filter(elem => elem.size == e.size )[0]
-            console.log("FINDSIZE",findsize);
-            
             if(findsize == null){return;} //probably because server initializes random sizes every time
             let size = findsize.amount < e.amount? findsize.amount : e.amount 
             list.push({item:query, size:e.size, amount:size})
@@ -199,9 +191,7 @@ export class ProductService implements IProductService{
         const productList:Product[] = []
         products.forEach(
             doc=> Array.from((doc.get('product') as Map<string,Product>).values()).forEach(
-            (product => {
-                console.log("Equal",product.category == category);
-                
+            (product => {                
                 if(product.category == category){ productList.push(product) }}//While no enum this is fine
             )))
         return productList
@@ -289,21 +279,25 @@ export class ProductService implements IProductService{
         
         const id = hashize(normalizeString(desc.brand.concat(desc.name)));
         const query = await productMapModel.findOne({id:id});
-;
-        
-        const newProd = await productModel.create({id:id,name:desc.name, brand:desc.brand, description:desc.description, color:desc.color,generalColor:desc.generalColor, price:desc.price, category:desc.category, stock:desc.stock, price_factor:desc.price_factor, images:desc.images});
+
+        //Allow 
+        let generalColor = gc == -1 ? desc.generalColor : gc
+        if(generalColor < 0){return new ProductError(400,"Bad Request, general color not right type")}
+        const newProd = await productModel.create({id:id,name:desc.name, brand:desc.brand, description:desc.description, color:desc.color,generalColor:generalColor, price:desc.price, category:desc.category, stock:desc.stock, price_factor:desc.price_factor, images:desc.images});
         if(query != null){
             const getproduct = query.get('product');
             if(getproduct.get(color)!=null){
                 //color exists
+                newProd.deleteOne()
                 return new ProductError(409,"Product already exists, did you mean to restock?");
             }else{              
                 getproduct.set(normalizeString(color),newProd);
                 newProd.deleteOne()
                 query.save();
-            }
-        }else{//Product doesn't exist            
-            productMapModel.create({id:id,product:new Map<string,Product>([[normalizeString(color),newProd]])});
+              }
+            }else{//Product doesn't exist            
+              productMapModel.create({id:id,product:new Map<string,Product>([[normalizeString(color),newProd]])});
+              newProd.deleteOne()
         }
         //If brand doesn't exist add it.
         if(this.brands.filter(e => checkLatinCharacters(e) == checkLatinCharacters(desc.brand)).length == 0){

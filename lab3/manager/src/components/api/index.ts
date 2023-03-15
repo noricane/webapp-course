@@ -76,6 +76,8 @@ export async function addProduct(
   images: string[]
 ): Promise<true | string> {
   try {
+    console.log(generalColor);
+    
     let msg = true;
     const resp = await axios.post(`${config.URL}/product/`, {
       productInformation: {
@@ -91,6 +93,7 @@ export async function addProduct(
         images: images,
       },
     });
+    console.log("resp",resp);
 
     return msg;
   } catch (error) {

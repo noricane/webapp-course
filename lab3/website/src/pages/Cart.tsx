@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { processOrder } from '../api'
 import CartItem from '../components/Misc/CartItem'
+import ErrorSpan from '../components/Misc/ErrorSpan'
 import { cartAtom, orderAtom, sessionAtom } from '../model/jotai.config'
 import { PastOrder, User } from '../model/types'
 
@@ -82,6 +83,7 @@ const Cart = () => {
         <div className='h-[32rem] flex px-4 flex-col gap-4 rounded-3xl overflow-scroll'>
             {cart.map(e => <CartItem  mp={e}/>)}
         </div>
+            {error && <ErrorSpan message={error}/>}
         <div className='flex justify-center items-center mt-5 gap-8'>
         <button onClick={purchaseHandler} className='button bg-stone-800 h-12 w-48 button transition-all rounded-sm  p-2 px-4 font-bold text-stone-100 hover:bg-stone-700  active:bg-stone-50 active:text-stone-800'>Confirm Choices</button>
         <button onClick={e => nav('/')} className=" h-12 button transition-all rounded-sm bg-stone-100 p-2 px-4 font-bold text-stone-800 hover:bg-stone-200 active:bg-stone-800 active:text-stone-100">Cancel</button></div>  

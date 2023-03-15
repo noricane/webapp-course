@@ -12,6 +12,7 @@ import { MenuButton } from '../components/Misc/Dropdown';
 import { CategoryToArray, checkString, GeneralColorToArray } from '../helper/utils';
 import { GENERALCOLOR } from '../model/misc';
 import { addProduct } from '../components/api';
+import Input from '../components/HTML/Input';
 
 const AddProduct = () => {
   
@@ -64,20 +65,21 @@ const AddProduct = () => {
         {/* Product Brand and Name */}
         <article className='p-8 grid grid-cols-2 gap-2' id='info'>
             <label htmlFor="brand" className='justify-end flex p-1 h-10 items-center font-bold col-span-1 '>Brand: &nbsp;</label>
-            <input name={'brand'} className='text-2xl text-stone-700 h-10 rounded-sm col-span-1 font-oswald' value={brand} onChange={e=>setBrand(e.target.value)}/>
+            <Input name='brand' value={brand} onChange={setBrand} />
+
 
             <label htmlFor="name" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Name: &nbsp;</label>
-            <input name="name" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={name} onChange={e=>setName(e.target.value)}/>
+            <Input name='name' value={name} onChange={setName} />
 
 
             {/* Color and general color */}
             <label htmlFor="color" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Color: &nbsp;</label>
-            <input name="color" className=' col-span-1 text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={color} onChange={e=>setColor(e.target.value)}/>
+            <Input name='color' value={color} onChange={setColor} />
 
             <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>General Color: &nbsp;</label>
             <ColorDropdown color={generalColor} setColor={setGeneralColor}  colors={colors} />
 
-            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Category: &nbsp;</label>
+            <label  className='justify-end flex p-1 h-10 items-center font-bold '>Category: &nbsp;</label>
             <div>
                 <button onClick={()=>{setCategoryOpen(prev => !prev)}} className='w-full h-10 bg-white  relative z-10 rounded-sm '>{category == null ? 'Categories':category}</button>
                 <ul className={`${!categoryOpen && 'hidden' } w-48 h-12 z-[15] bg-stone-50 rounded-sm border-2 flex justify-around items-center absolute`}>
@@ -86,10 +88,11 @@ const AddProduct = () => {
             </div>
 
             {/* Descritpion and Price */}
-            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Description: &nbsp;</label>
-            <input className='text-2xl text-stone-700 h-10  rounded-sm font-oswald' value={desc} onChange={e=>setDesc(e.target.value)}/>
+            <label htmlFor="desc" className='justify-end flex p-1 h-10 items-center font-bold '>Description: &nbsp;</label>
+            <Input name='desc' value={desc} onChange={setDesc} />
+
             
-            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Price: &nbsp;</label>
+            <label className='justify-end flex p-1 h-10 items-center font-bold '>Price: &nbsp;</label>
             <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={price} onChange={e=>setPrice(prev => {
                     if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
                         return prev
@@ -98,7 +101,7 @@ const AddProduct = () => {
                 })}/>
 
 
-            <label htmlFor="" className='justify-end flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
+            <label className='justify-end flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
             <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={priceFactor} onChange={e=>setPriceFactor(prev => {
                     if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
                         return prev
@@ -107,9 +110,10 @@ const AddProduct = () => {
                 })}/>
 
             {/* Add Product Images */}
-            <label htmlFor="" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
+            <label htmlFor="link" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
             <span className='flex w-full'>
-              <input className='text-2xl text-stone-700 h-10 w-full font-oswald rounded-l-sm' value={link} onChange={e=>setLink(e.target.value)}/>
+              <Input name='link' value={link} onChange={setLink} />
+
               <button onClick={()=>{ link!= null && setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
             </span>
             {/* Add Stocked Size Images */}
