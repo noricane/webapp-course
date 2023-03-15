@@ -5,6 +5,7 @@ import { Product } from "../model/product";
 import { isProduct, productConstructor } from '../helper/utils';
 import { makeProductService, ProductError } from '../service/ProductService';
 import { User } from '../model/user';
+import { initShoes } from '../service/dummyproducts';
 
 
 export const product_service = makeProductService();
@@ -45,8 +46,12 @@ product_router.post("/updatecart", async (
             res.status(400).send("Bad GET request, cart is not formatted in a correct way");
             return
         }
-
+        console.log("list",req.body.clientlist);
+        
         const resp = await product_service.updateClientList(req.body.clientlist)
+        console.log("resp",resp);
+        console.log("resp end");
+        
         resp.forEach(e=> console.log(e.item.stock));
         
         

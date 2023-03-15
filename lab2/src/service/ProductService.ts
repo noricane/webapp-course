@@ -172,10 +172,17 @@ export class ProductService implements IProductService{
             return []
         }
         const list: multiProduct[]=[];
+        console.log("UPDATING CART");
+        console.log("INCOMING LISTLEN",clientList.length);
+        
         clientList.forEach(e => {
-            const query = products.get(e.item.id)?.get(normalizeString(e.item.color))
+          
+          const query = products.get(e.item.id)?.get(normalizeString(e.item.color))
+          console.log("ELEMENT QUERY",query);
             if(query==null){return}
             const findsize = query.stock.filter(elem => elem.size == e.size )[0]
+            console.log("FINDSIZE",findsize);
+            
             if(findsize == null){return;} //probably because server initializes random sizes every time
             let size = findsize.amount < e.amount? findsize.amount : e.amount 
             list.push({item:query, size:e.size, amount:size})
@@ -282,7 +289,8 @@ export class ProductService implements IProductService{
         
         const id = hashize(normalizeString(desc.brand.concat(desc.name)));
         const query = await productMapModel.findOne({id:id});
-
+;
+        
         const newProd = await productModel.create({id:id,name:desc.name, brand:desc.brand, description:desc.description, color:desc.color,generalColor:desc.generalColor, price:desc.price, category:desc.category, stock:desc.stock, price_factor:desc.price_factor, images:desc.images});
         if(query != null){
             const getproduct = query.get('product');
@@ -291,6 +299,7 @@ export class ProductService implements IProductService{
                 return new ProductError(409,"Product already exists, did you mean to restock?");
             }else{              
                 getproduct.set(normalizeString(color),newProd);
+                newProd.deleteOne()
                 query.save();
             }
         }else{//Product doesn't exist            
@@ -309,7 +318,7 @@ export class ProductService implements IProductService{
         const color  = normalizeString(desc.color);
         //Id of a product is this.
         const id = hashize(normalizeString(desc.brand.concat(desc.name)));
-        
+
         const newProd = await productModel.create({ id: id, name: desc.name, brand: desc.brand, description: desc.description, color: desc.color, generalColor: desc.generalColor, price: desc.price, category: desc.category, stock: desc.stock, price_factor: desc.price_factor, images: desc.images });
         const findEntry = await productMapModel.findOneAndUpdate({ id: id }, { $set: { [`product.${color}`]: newProd } }, { new: true });
         if (findEntry != null) {

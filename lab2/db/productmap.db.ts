@@ -4,7 +4,7 @@ import { conn } from "./conn";
 import { Product } from "../src/model/product";
 
 export const productMapSchema: Schema = new Schema({
-  id: { type: String, required: true },
+  id: { type: String, required: true, unique:true },
   /* Holds all color variations that a product has */
   product:{ 
                 type: Map,

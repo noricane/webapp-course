@@ -11,7 +11,7 @@ import { multiProduct, stockedSize } from '../model/types';
 import { cartAtom } from '../model/jotai.config';
 import { useAtom } from 'jotai';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+
 
 const ProductPage = () => {
   const addToCart = () => {
@@ -21,29 +21,31 @@ const ProductPage = () => {
       return
     }
     if(cart != null && cart.filter(e => e.item.id == Product.id && e.item.color == Product.color  &&  e.size == size.size).length != 0){
-      console.log("here");
+
       
       const cartItem:multiProduct = cart.filter(e => e.item.id == Product.id && e.item.color == Product.color && e.size == size.size)[0]
       const rest:multiProduct[] = cart.filter(e => e.item.color != Product.color || e.item.id != Product.id || e.size != size.size)
       cartItem.amount++
+      console.log("first");
 
       const cartObj = [cartItem,...rest]
+      localStorage.setItem('cart',JSON.stringify(cartObj))
       setCart(cartObj)
-      Cookies.set('cart',JSON.stringify(cartObj))
       console.log(cart);
       
       
     }else if(cart.length == 0 && Product != null){
+      console.log("secibd");
+      
       const cartObj = [{item:Product,size:size.size,amount:1}]
+      localStorage.setItem('cart',JSON.stringify(cartObj))
       setCart(cartObj)
-      Cookies.set('cart',JSON.stringify(cartObj))
     }else{
       console.log("last");
       
       setCart(prev => {
         const cartObj = [...prev,{item:Product,size:size.size,amount:1}]
-        Cookies.set('cart',JSON.stringify(cartObj))
-
+        localStorage.setItem('cart',JSON.stringify(cartObj))
         return cartObj
       })
 

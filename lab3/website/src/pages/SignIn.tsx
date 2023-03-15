@@ -30,9 +30,10 @@ const  SignIn = () => {
         (async()=>{
           const resp = await logInUser(em,pw)
           console.log("in signin",resp);
-          
-          if(Cookies.get('user') || typeof resp != "string" && resp?.id != null){
-            setUser(JSON.parse(decodeURIComponent(Cookies.get('user') as string)))
+          const userStore = localStorage.getItem('user')
+          if( userStore != null || typeof resp != "string" && resp?.id != null){
+
+            setUser(JSON.parse(userStore as string))
             nav('/')
             return
           }

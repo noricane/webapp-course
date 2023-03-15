@@ -17,7 +17,7 @@ const ProfileSettings = ({user}:{user:User}) => {
   const [,setSession] = useAtom(sessionAtom)
   const logOutHandler = () => {
     setSession(undefined)
-    Cookies.remove('user')
+    localStorage.removeItem('user')
     nav('/')
   }
   const deleteHandler = () => {

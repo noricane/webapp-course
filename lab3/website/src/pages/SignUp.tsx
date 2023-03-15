@@ -52,13 +52,11 @@ const SignUp = () => {
         )
         console.log("resp",resp);
         
-        if (resp === true){
-          const cookie = Cookies.get('user')
-          console.log("cookie",cookie);
-          
-          if (cookie == null){return}
-          const object = JSON.parse(decodeURIComponent(cookie)) 
-          setUser(object)
+        if ((resp as User).id != null){
+          const userstore = localStorage.getItem('user')          
+          if (userstore == null){return}
+
+          setUser(JSON.parse(userstore))
           nav('/')
           return
         }

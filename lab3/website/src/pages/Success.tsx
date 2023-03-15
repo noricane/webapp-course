@@ -28,11 +28,11 @@ const Success = () => {
   }
 
   return (
-    <article className='h-[70vh] p-4 '>
+    <article className='min-h-[70vh] p-4 '>
       <h1 className='text-center my-3 text-3xl font-bold font-oswald'>Order was sucessful:</h1>
-      <section className='w-full max-h-[30rem] overflow-scroll mx-auto mt-4 gap-4 bg-stone-300 p-4 rounded-lg sm:px-8 flex flex-col items-center '>
+      <section className='w-full  mx-auto mt-4 gap-4 bg-stone-300 p-4 rounded-lg sm:px-8 flex flex-col items-center '>
         <h2 className='font-oswald text-2xl'>Order number: {order.id}</h2>
-        <ul className='flex flex-col w-full gap-8 h-full overflow-scroll'>
+        <ul className='flex flex-col w-full gap-8 h-full '>
         {order?.items.map(e=>
           <CartItem mp={e} />)}
         </ul>

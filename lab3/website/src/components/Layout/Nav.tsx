@@ -10,7 +10,7 @@ import LoggedInMenu from "../Misc/LoggedInMenu";
 const Nav = () => {
 
   /* States to  */
-  const [userCookie,] = useAtom(sessionAtom)
+  const [session,] = useAtom(sessionAtom)
   const [isOpen, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const Nav = () => {
           </ul>
         </div>
         {/* Only Display these links(buttons) if user is not logged in */
-        userCookie == null && !loading &&
+        session == null && !loading &&
           <div className="absolute utsm:hidden [&>*]:hover:cursor-pointer right-0 mx-4 flex gap-2">
             <Link to="/signup" className="hover:bg-black hover:text-stone-200  bg-stone-200 p-1 border-black border-4" >
               Sign Up
@@ -67,13 +67,13 @@ const Nav = () => {
           </div>
         }
         {/* Only Display these links(buttons) if user is logged in */
-          userCookie != null &&
+          session != null &&
           <div className="utsm:hidden flex justify-center items-center"><LoggedInMenu mobile={false} firstColor={["bg-stone-200","text-stone-200","#E7E5E4"]} secondColor={["bg-stone-900","text-stone-900","#1C1917"]} /></div>
         }
       </div>
       
       {/* Mobile view menu component. We technically don't have to pass loading here since the menu is always closed on refresh but I'm aiming for correctness */}
-      <ResponsiveMenu loading={loading} loggedIn={userCookie} openState={isOpen} />
+      <ResponsiveMenu loading={loading} loggedIn={session} openState={isOpen} />
     </nav>
   );
 };

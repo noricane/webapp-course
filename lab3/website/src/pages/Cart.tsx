@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import Cookies from 'js-cookie'
+
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { processOrder } from '../api'
@@ -45,10 +45,10 @@ const Cart = () => {
                     const orders = Array.isArray(prev.orders) ? [...prev.orders] : [];
                     orders.push(newOrder)
                     console.log("list",orders);
-                    Cookies.set('user',JSON.stringify({...prev,orders:orders}))
+                    localStorage.setItem('user',JSON.stringify({...prev,orders:orders}))
                     return {...prev,orders:orders}
                 })
-                Cookies.set('cart',JSON.stringify([]))
+                localStorage.setItem('cart',JSON.stringify([]))
                 setCart([])
                 
                 nav(`/success`)

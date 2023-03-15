@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useAtom } from "jotai";
-import Cookies from "js-cookie";
+
 import { useEffect } from "react";
 import { Route, Routes } from "react-router";
 import { getUserInfo } from "./api";
@@ -43,31 +43,42 @@ function App() {
     } */
     (async () => {
       try{
-        const cartcookie = JSON.parse(decodeURIComponent(Cookies.get('cart') as string))
-        const usercookie = JSON.parse(decodeURIComponent(Cookies.get('user') as string))
-        if(usercookie != null){
-          setUser(usercookie)}
-        if(cartcookie != null){
-          const updatedCart = await updateCart(cartcookie)
+        const userstore = localStorage.getItem('user')       
+        const cartstore = localStorage.getItem('cart')
+        //console.log("Cartstore",cartstore);
+        
+
+
+        
+        if(cartstore != null){
+          console.log("Before update", cartstore.length);
+          
+          const updatedCart = await updateCart(JSON.parse(cartstore))
+          console.log("after update", updateCart.length);
           if(Array.isArray(updatedCart) ){
+            console.log("updatecart here");
             setCart(updatedCart)
+
+
           }else{
             console.log("no resp");
             
             setCart([])
           }
         }
-        if(usercookie != null){
-          setUser(usercookie)
-          const resp = await getUserInfo(usercookie?.email)
-          if(resp.id == usercookie.id){
+        if(userstore != null){
+          const parsed = JSON.parse(userstore)
+          setUser(JSON.parse(userstore))
+          const resp = await getUserInfo(parsed.email)
+          if(resp.id == parsed.id){
             console.log("before problem");
             
-            Cookies.set('user',JSON.stringify(resp))
+            //Cookies.set('user',JSON.stringify(resp))
+            localStorage.setItem('user',JSON.stringify(resp))
             setUser(resp)
 
           }
-          console.log("resp is ",resp);
+          //console.log("resp is ",resp);
 
           
         }
@@ -76,11 +87,16 @@ function App() {
   },[])
 
   useEffect(()=>{
-    console.log("in app");
+    console.log("in app useeffect");
+    if(cart.length == 0) {
+      localStorage.setItem('cart',JSON.stringify([]))
+      return
+    }
+
+    localStorage.setItem('cart',JSON.stringify(cart))
+
+    //console.log("store",localStorage.getItem('cart'));
     
-    if(cart.length == 0) {Cookies.set('cart',JSON.stringify([]))}
-    Cookies.set('cart',JSON.stringify(cart))
-    console.log(JSON.parse(decodeURIComponent(Cookies.get('cart') as string)));
 
   },[cart])
   

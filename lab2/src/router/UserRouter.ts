@@ -71,8 +71,8 @@ user_router.post("/login", async (
             res.status(resp.code).send(resp.message);
         }else{
             //Success, resp is the requested user!            
-            res.cookie('user',JSON.stringify(resp))
-            res.status(200).send("Successfully logged in");
+
+            res.status(200).send(resp);
         }
     } catch (e: any) {
         res.status(500).send(e.message);
@@ -87,7 +87,7 @@ user_router.post("/login", async (
     */
 user_router.post("/register", async (
     req: Request<{}, {}, {user:any}>,
-    res: Response< true | string>
+    res: Response< User | string>
 ) => {
     try {
         const { user } = req.body
@@ -98,12 +98,11 @@ user_router.post("/register", async (
         const resp = await user_service.addUser(Date.now(),user.name,user.email,hashize(user.password),user.phonenumber,user.birthdate,[{id:Date.now(),addressType:addressType.DELIVERY,street:user.street,city:user.city,country:user.country,zip:user.zip}]);
         
         if(resp instanceof ProductError){
-            //Success, resp is the registered user!            
-            res.status(resp.code).send(resp.message);
             //Resp is of type ProductError
+            res.status(resp.code).send(resp.message);
         }else{
-            res.cookie('user',JSON.stringify(resp))
-            res.status(200).send(true);
+            //Success, resp is the registered user!            
+            res.status(200).send(JSON.stringify(resp));
         }
     } catch (e: any) {
         res.status(500).send(e.message);

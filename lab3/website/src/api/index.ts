@@ -64,7 +64,7 @@ export async function getProduct(id:string,color:string):Promise<Product | undef
 }
 
 /* Register user and return true if successful else return  response string */
-export async function  registerUser(name:string,email:string,phonenumber:string,birthdate:Date,street:string,city:string,country:string,zip:string,password:string):Promise<true | string>{
+export async function  registerUser(name:string,email:string,phonenumber:string,birthdate:Date,street:string,city:string,country:string,zip:string,password:string):Promise<User | string>{
     try {
         let message = ""
         console.log("In register");
@@ -75,8 +75,9 @@ export async function  registerUser(name:string,email:string,phonenumber:string,
         });       
         console.log("data after get",data);
         
-        if (data === true) {
-          return true
+        if (data.message == null && data.id != null) {
+          localStorage.setItem('user',JSON.stringify(data))
+          return data
             
         }else{
           const {message } = data
@@ -95,14 +96,15 @@ export async function getUserInfo(em:string):Promise<any>{
     withCredentials: true
   }).catch((e:AxiosError) =>{
     throw new Error (e.response?.data == null ? e.message : e.response.data as string)})
-  console.log("email",em);
-  
-  console.log("getuserinfo resp",resp);
+  if(resp.status == 200){
+    //console.log(resp.data);
+    
+  }
   
   const cookie = Cookies.get('user') as string;
   if(cookie == null){return false}
   const object = JSON.parse(decodeURIComponent(cookie)) 
-  console.log("object",object);
+  //console.log("object",object);
   
   return object
 }
@@ -121,14 +123,17 @@ export async function logInUser(em:string,pw:string):Promise<string | User>{
         },
         withCredentials: true
       }).catch((e:AxiosError) =>{
-        console.log(e);
+        //console.log(e);
         
          message= (e.response?.data == null ? e.message : e.response.data as string)})
       
       if(message.length > 0){
-        console.log(resp);
+        //console.log(resp);
         return message
       }else{
+        //console.log("status",resp?.status);
+        //console.log("data here ,",resp?.data);
+        localStorage.setItem('user',JSON.stringify(resp?.data))
         return resp?.data
       }
       
@@ -173,11 +178,11 @@ export async function newsletterRequest(email:string):Promise<boolean> {
     console.log("eamils is",email);
     
     const resp = await axios.post(`${config.URL}/user/newsletter`,{email:email})
-    console.log("resp",resp);    
+    //console.log("resp",resp);    
     return true
     
   } catch (e:any) {  
-    console.log(e.data);
+    //console.log(e.data);
     return false
     
   }

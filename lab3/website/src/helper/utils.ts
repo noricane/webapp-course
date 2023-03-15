@@ -25,7 +25,10 @@ export async function updateCart(list:multiProduct[]):Promise<string | multiProd
         if(list.length == 0){
             return []
         }
+        console.log("list here", list);
         const res = await getProductCollection(list)
+        console.log("response here", res);
+
         return Array.isArray(res) ? res : 'undefined'
     }catch(e){
         return e as string
