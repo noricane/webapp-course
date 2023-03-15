@@ -39,4 +39,3 @@ app.use(express.json());
 app.use("/product", product_router);
 app.use("/user", user_router);
 app.use("/7b2e9f54cdff413fcde01f330af6896c3cd7e6cd", admin_router);
-//app.use("/product", user_router);
