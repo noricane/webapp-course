@@ -11,6 +11,7 @@ import EditProduct from './pages/EditProduct';
 
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
+import SignUp from './pages/SignUp';
 
 axios.defaults.withCredentials = true;
 
@@ -39,6 +40,7 @@ function App() {
       <Route path="/edit/:id" element={<EditProduct />} />
       <Route path="/addvariant/:id" element={<AddVariant />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/signup" element={<SignUp />} />
       <Route path="*" element={<NotFound />} />
 
 

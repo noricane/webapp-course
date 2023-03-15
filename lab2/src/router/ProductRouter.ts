@@ -96,8 +96,9 @@ product_router.get("/", async (
         const query = req.query.color
         if(typeof(query) != "string"){return}
         const parsedquery:number = parseInt(query)
-        let color: GENERALCOLOR = Object.values(GENERALCOLOR).indexOf(parsedquery)
-
+        let color = parsedquery
+        console.log("color",color);
+        
         
         if (parseInt(query) == -1){ //Weird stuff, it claims no overlap between color and -1 but this is factually incorrect. Cast for now.
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- color query must be correct type and correct value ${typeof(req.query.color)}`);
@@ -149,11 +150,13 @@ product_router.get("/", async (
 
 
     if(categoryList !=null && colorList !=null){
+        console.log("colorlist",colorList.length);
+
         /* @ts-ignore  for some reason TS still thinks categoryList might be null*/
-        console.log("SE#NDING",colorList.filter(e => categoryList.includes(e)));
-        
-        /* @ts-ignore  for some reason TS still thinks categoryList might be null*/
-        res.status(200).send( colorList.filter(e => categoryList.includes(e)))
+        console.log("SE#NDING",categoryList.filter(col => colorList.find(cat => cat.color == col.color) != null))
+
+        /* @ts-ignore  for some reason TS still thinks colorList might be null*/
+        res.status(200).send( categoryList.filter(col => colorList.find(cat => cat.color == col.color) != null));
     }else if (colorList != null){
         res.status(200).send( colorList)
     }else if( categoryList != null){

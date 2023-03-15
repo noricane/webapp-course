@@ -25,6 +25,7 @@ const ProductPage = () => {
     if(Product == null) return
     (async()=>{
       const resp = await removeVariant(Product.id,Product.color)
+      
     })()
   }
   const removeProductHandler = () => {

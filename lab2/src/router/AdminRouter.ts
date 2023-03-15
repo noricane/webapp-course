@@ -74,8 +74,10 @@ admin_router.post("/", async (
             res.status(400).send("Bad GET request, admin must have correct arguments, must be of type string");
             return
         }
-
+        console.log("here");
+        
         const resp = await admin_service.addAdmin(Date.now(),admin.name,admin.email,admin.password);
+        console.log("resp",resp);
         if(resp instanceof ProductError){
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);

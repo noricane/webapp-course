@@ -11,6 +11,7 @@ const Layout = ({ children }: any) => {
   
   return (
     <div className="bg-stone-50 min-h-screen">
+      <div className="h-auto  w-full">
       <Link to='onclick overrides this' onClick={(e)=>{
         e.preventDefault();
         if(session == null){
@@ -26,7 +27,7 @@ const Layout = ({ children }: any) => {
           playsInline
           draggable="false"
           autoPlay
-          className="hover:cursor-pointer h-28 mx-auto md:left-0 video mix-blend-darken"
+          className="hover:cursor-pointer max-h-48 mx-auto md:left-0 video mix-blend-darken"
         >
           <source src={ window.location.protocol + "//" + window.location.host + "/media/logohb.mp4" } type="video/mp4" />
           <p>Aesthetic video loop of logo</p>
@@ -34,16 +35,26 @@ const Layout = ({ children }: any) => {
         <div className="text-center  text-2xl font-oswald font-bold ">
           ADMIN
         </div>
-        {session && <button className="h-12 w-36 absolute z-10 top-12 mr-12 bg-stone-800 text-stone-50 active:bg-stone-200 active:text-stone-800 font-oswald text-xl rounded-sm right-0" onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+        
+        {/* relative mt-[-1rem] */}
+      </Link>
+        {session && <>
+          <button className="h-12 w-36 absolute z-10 top-12 mr-12 bg-stone-800 text-stone-50 active:bg-stone-200 active:text-stone-800 font-oswald text-xl rounded-sm right-0" onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
           e.preventDefault();
           Cookies.remove('user');
           setSession(undefined);
           nav('/')
           nav(0)
 
-        }}>Log Out</button>}
-        {/* relative mt-[-1rem] */}
-      </Link>
+        }}>Log Out</button>
+          <button className="h-12 w-36 mt-14 absolute z-10 top-12 mr-12 bg-stone-800 text-stone-50 active:bg-stone-200 active:text-stone-800 font-oswald text-xl rounded-sm right-0" onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+          e.preventDefault();
+          nav('/signup')
+
+
+        }}>Add Admin</button>
+        </>}
+      </div>
       {children}
     </div>
   );

@@ -60,7 +60,7 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
   return (
      
      
-     <li key={key} className={`bg-white ${variantStyles}  rounded-sm shadow-xl`}>
+     <li key={key} className={`bg-white ${variantStyles}  h-auto rounded-sm shadow-xl`}>
         <div className="h-96  ">
         {product == null ? 'ERROR' :<ProductLink to='edit' color={product.color} id={product.id}> <img className='h-full w-full object-contain'  src={currentImage} alt="" />  </ProductLink>}
         <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>

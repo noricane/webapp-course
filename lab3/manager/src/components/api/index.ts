@@ -5,6 +5,36 @@ import { config } from "../../model/config";
 import Cookies from "js-cookie";
 import { Product } from "../../model/product";
 
+export async function registerUser(name:string,em: string, pw: string,): Promise<any> {
+  const resp = await axios
+  .post(`${config.URL}/7b2e9f54cdff413fcde01f330af6896c3cd7e6cd/`, {
+    admin:{
+      name:name,
+    email: em,
+    password: pw,
+    }
+  })
+  .then((e) => {
+    console.log("response", e);
+    return e;
+  })
+  .catch((e: AxiosError) => {
+    return(
+      e.response?.data == null ? e.message : (e.response.data as string)
+    );
+  });
+  if (typeof(resp) != "string" && typeof resp.data == "string" && resp.status != 200) {
+    console.log("returning not string data");
+    
+    return (resp.data);
+  } if(typeof(resp) != "string" && resp.status == 200){
+    return true;
+    
+  }
+  
+
+  return resp;
+}
 export async function logInUser(em: string, pw: string): Promise<any> {
   const resp = await axios
     .post(`${config.URL}/7b2e9f54cdff413fcde01f330af6896c3cd7e6cd/login`, {
