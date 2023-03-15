@@ -2,15 +2,17 @@ import { multiProduct } from './../src/model/archive/pastorder';
 import { Schema, Model } from "mongoose";
 import { addressType } from "../src/model/adress";
 import { PastOrder } from "../src/model/pastorder";
-import { Product } from "../src/model/product";
 import { User, UserMethods } from "../src/model/user";
-
 import { conn } from "./conn";
-import { productModel, productSchema } from "./product.db";
+import { productSchema } from "./product.db";
 import { hashize } from '../src/helper/utils';
 
+
+/* Defined to enable method usage */
 type UserModel = Model<User,{},UserMethods>
 
+/* Defined type <User,UserModel,UserMethods> to enable method usage*/
+/* Roughly translated user interface to schema */
 const userSchema: Schema = new Schema<User,UserModel,UserMethods>({
   id: { type: Number, required: true },
   name: { type: String, required: true },
@@ -43,25 +45,21 @@ const userSchema: Schema = new Schema<User,UserModel,UserMethods>({
   },
 });
 
-
+/* Relevant methods */
 userSchema.method('comparePassword' , function comparePassword(str:string):boolean{
     return this.password == hashize(str);
 })
 userSchema.method('changePassword' , function changePassword(str:string):boolean{
     this.password = str
     return true
-    
-  })
+})
 userSchema.method('changeEmail' , function comparePassword(str:string):boolean{
     this.eamil = str
     return true
-
 })
 
 userSchema.method('getOrders' , function getOrders():PastOrder[]{
-
     return this.orders
-
 })
 userSchema.method('addOrder' , function addOrder(list:multiProduct[]):PastOrder{
     const newOrder  ={id:Date.now(),items:list};

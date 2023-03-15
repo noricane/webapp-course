@@ -1,13 +1,15 @@
 import { ProductMethods, stockedSize } from "./../src/model/product";
-import { Admin } from "./../src/model/admin";
 import { Schema, Model } from "mongoose";
 import { conn } from "./conn";
 import { Product } from "../src/model/product";
 import { CATEGORY, GENERALCOLOR } from "../src/helper/utils";
 
+/* Defined to enable method usage */
 type ProductModel = Model<Product,{},ProductMethods>
 
 
+/* Defined type <Product,ProductModel,ProductMethods> to enable method usage*/
+/* Roughly Translated product interface to schema here  */
 export const productSchema: Schema = new Schema<Product,ProductModel,ProductMethods>({
   id: { type: String, required: true },
   name: { type: String, required: true },
@@ -27,6 +29,7 @@ export const productSchema: Schema = new Schema<Product,ProductModel,ProductMeth
   images: { type: [String], required: true },
 });
 
+/* Relevant method */
 productSchema.method('setStock' , function setStock(stock:stockedSize[]):void{
   this.stock = stock;
 })

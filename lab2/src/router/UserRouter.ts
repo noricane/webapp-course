@@ -1,6 +1,6 @@
-import { address, addressType } from './../model/adress';
+import { addressType } from './../model/adress';
 import { ProductError } from './../service/UserService';
-import { arrayInstance, hashize, isMultiProducts } from './../helper/utils';
+import { hashize, isMultiProducts } from './../helper/utils';
 import { PastOrder, multiProduct } from './../model/pastorder';
 import express, { Request, Response } from "express";
 import { User } from "../model/user";
@@ -23,6 +23,7 @@ export type UserRequest = Request & {
     }
 }
 
+/* Adds new mail to newsletter if request is valid */
 user_router.post("/newsletter", async (
     req: UserRequest&{body:{email:string}},
     res: Response< string>
@@ -44,6 +45,12 @@ user_router.post("/newsletter", async (
         res.status(500).send(e.message);
     }
 });
+
+
+/* Log in route, 
+    if request isn't successful (and no error being thrown) it returns ProductError code and status , 
+    else sets client side cookie and sends success response,
+    if any error is thrown the catch will send it's own response */
 user_router.post("/login", async (
     req: UserRequest,
     res: Response< User | string>
@@ -61,14 +68,9 @@ user_router.post("/login", async (
         const resp = await user_service.logInUser(email,password);
         if(resp instanceof ProductError){
             //Error
-            console.log("error met");
             res.status(resp.code).send(resp.message);
-            //Success, resp is the requested user!            
         }else{
-            console.log("sending resp");
-            
-            console.log("response",JSON.stringify(resp));
-            
+            //Success, resp is the requested user!            
             res.cookie('user',JSON.stringify(resp))
             res.status(200).send("Successfully logged in");
         }
@@ -77,23 +79,23 @@ user_router.post("/login", async (
     }
 });
 
-
+/* Registers user
+    if query is invalid a response is sent with code 400 and message
+    else service is called to add user and responds with a producterror if user(email) exists
+    otherwise it responds with user object.
+    if any error is thrown the catch will send it's own response
+    */
 user_router.post("/register", async (
-    req: Request<{}, {}, {user:any}> & {session:{user?:User}},
+    req: Request<{}, {}, {user:any}>,
     res: Response< true | string>
 ) => {
     try {
         const { user } = req.body
-        console.log((user));
-        console.log(isUser(user));
-        if(user == null /*||  !isUser(user) */){
-            
-            res.status(400).send("Bad GET request, id must be of type string");
+        if(user == null ||  !isUser(user)){
+            res.status(400).send("Bad GET request, user properties must adhere to specification");
             return
         }
-
         const resp = await user_service.addUser(Date.now(),user.name,user.email,hashize(user.password),user.phonenumber,user.birthdate,[{id:Date.now(),addressType:addressType.DELIVERY,street:user.street,city:user.city,country:user.country,zip:user.zip}]);
-        console.log("RESPONSEE IS ",resp);
         
         if(resp instanceof ProductError){
             //Success, resp is the registered user!            
@@ -112,28 +114,25 @@ user_router.post("/register", async (
 
 
 
-
+/* Adds user order
+    if query is invalid a response is sent with code 400 and message
+    else service is called to add a user's order and responds with a producterror if user(email) doesn't exist
+    otherwise it responds with a processed list of multiProducts if order was unsuccessful and a PastOrder if successful.
+    if any error is thrown the catch will send it's own response
+    */
 user_router.post("/order", async (
     req: Request & {body:{items:multiProduct[]}, session: {user?: User}},
     res: Response< PastOrder | multiProduct[] | string>
 ) => {
     try {
-
         const { items,id } = req.body
-        console.log(req.body);
-        console.log("user",req.session.user);
-        
-        console.log(Array.isArray(items));
-        console.log(isMultiProducts(items));
-        
+  
         if(items == null || !Array.isArray(items) || !isMultiProducts(items)){
             res.status(400).send("Bad GET request, orders must adhere to specification");
             return
         }
-        console.log("finna add order");
         
         const resp = await user_service.addUserOrder(id,...items);
-        console.log("resp",resp);
         if(resp instanceof ProductError){
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);
@@ -141,16 +140,18 @@ user_router.post("/order", async (
             res.status(200).send(resp as PastOrder);
         }else{
             //I'd rather not have to send a 200 since it technically isn't accepted
-            res.status(200).send(resp.items);
-           
+            res.status(200).send(resp.items);  
         }
     } catch (e: any) {
         res.status(500).send(e.message);
     }
 });
 
-
-
+/* 
+    Get user, if request is bad, response 400 with message
+    if user doesn't exist, response is a ProductError
+    else, set cookie to user and respond with user object
+*/
 user_router.get("/:id", async (
     req: Request<{id:string}, {}, {}>,
     res: Response< User | string>
@@ -162,8 +163,6 @@ user_router.get("/:id", async (
             return
         }
         const resp = await user_service.getUser(id);
-        console.log("email",id);
-        console.log("response is",resp);
         
         if(resp instanceof ProductError){
             //Resp is of type ProductError
@@ -179,7 +178,11 @@ user_router.get("/:id", async (
 });
 
 
-
+/* 
+     Delete user, if request is bad, response 400 with message
+    if user doesn't exist, response is a ProductError
+    else, respond with user object
+ */
 user_router.delete("/:id", async (
     req: Request & {params:{id:string},session: {user?: User}},
     res: Response< User | string>

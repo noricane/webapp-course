@@ -68,11 +68,8 @@ export class ProductError{
 export class ProductService implements IProductService{
 
     async processOrder(...order:multiProduct[]):Promise<multiProduct[]>{
-        
-      
         return await (async()=>{
-          console.log("lets start");
-          
+            //Assume order is processable and prove otherwise if not.
             let processable = true;
             const pending:multiProduct[] = []
             for (const e of order) {
@@ -327,12 +324,7 @@ export class ProductService implements IProductService{
     /* Adds product if it doesn't exist */
     async addProduct(desc: productConstructor): Promise<Product|ProductError> {   
         const {color} = desc;
-        console.log("generalcolor",desc.generalColor);
         let gc = GeneralColorToArray().indexOf(desc.generalColor);
-
-        
-        console.log(desc.category);
-        console.log();
         
         const id = hashize(normalizeString(desc.brand.concat(desc.name)))
         const query = await productMapModel.findOne({id:id})
@@ -340,27 +332,18 @@ export class ProductService implements IProductService{
         const newProd = await productModel.create({id:id,name:desc.name, brand:desc.brand, description:desc.description, color:desc.color,generalColor:desc.generalColor, price:desc.price, category:desc.category, stock:desc.stock, price_factor:desc.price_factor, images:desc.images})
         console.log("newprod is",newProd);
         
-       // const findEntry = this.products.get(item.id);
+
         if(query != null){
             const getproduct = query.get('product')
             if(getproduct.get(color)!=null){
                 //color exists
                 return new ProductError(409,"Product already exists, did you mean to restock?")
-            }else{
-              console.log("should be here");
-              console.log(desc);
-              
+            }else{              
                 getproduct.set(normalizeString(color),newProd)
-                query.save()
-
-                
+                query.save()                
             }
-        }else{//Product doesn't exist
-            console.log("here");
-            
+        }else{//Product doesn't exist            
             productMapModel.create({id:id,product:new Map<string,Product>([[normalizeString(color),newProd]])})
-
-
         }
         //If brand doesn't exist add it.
         if(this.brands.filter(e => checkLatinCharacters(e) == checkLatinCharacters(desc.brand)).length == 0){

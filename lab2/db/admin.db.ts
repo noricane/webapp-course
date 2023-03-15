@@ -1,12 +1,14 @@
 import { Admin, AdminMethods } from "./../src/model/admin";
 import { Schema, Model } from "mongoose";
-
 import { conn } from "./conn";
 import { hashize } from "../src/helper/utils";
 
+
+/* Defined to enable method usage */
 type AdminModel = Model<Admin,{},AdminMethods>
 
-
+/* Defined type <Admin,AdminModel,AdminMethods> to enable method usage*/
+/* Roughly translated admin interface to schema */
 const adminSchema: Schema = new Schema<Admin,AdminModel,AdminMethods>({
   id: { type: Number, unique: true, required: true },
   name: { type: String, required: true },

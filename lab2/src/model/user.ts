@@ -4,9 +4,9 @@ import { address, addressType } from "./adress";
 import { BaseUser } from "./baseuser";
 
 
-/* User Class */
+
+//Rough translation of User class
 export interface User extends BaseUser{
-    
     phonenumber: string;
     birthdate: Date;
     orders: PastOrder[]
@@ -18,15 +18,13 @@ export interface User extends BaseUser{
         country: string; 
         zip: string;
     }[];
-   
-    
 }
+//User schema method interface
 export interface UserMethods{
     comparePassword(str:string):boolean
     changePassword(str:string):boolean
     changeEmail(str:string):boolean
     getOrders():PastOrder[]
     addOrder(list:multiProduct[]):PastOrder
-    setOrders(list:PastOrder[]):void
-    
+    setOrders(list:PastOrder[]):void  
 }

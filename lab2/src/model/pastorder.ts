@@ -1,9 +1,9 @@
-import { IProduct } from "./product";
+import { Product } from "./product";
 
 
 /* Multiproduct specifies product, shoe size and amount of shoes with the first two properties */
 export interface multiProduct{
-    item: IProduct; 
+    item: Product; 
     size:number;
     amount: number;
 }

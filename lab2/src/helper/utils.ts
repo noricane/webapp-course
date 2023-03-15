@@ -1,7 +1,4 @@
-import { address } from './../model/adress';
-import { Product, stockedSize } from "../model/product";
-import { PastOrder } from '../model/pastorder';
-
+import { stockedSize } from "../model/product";
 const crypto = require('crypto');
 
 /* Turn a string into the corresponding string that includes alphabet shown below and without spaces */
@@ -113,9 +110,10 @@ export function isUser(arg: any){
     let birthdateCheck:boolean   = arg?.birthdate != null && new Date(arg.birthdate) instanceof Date
     let addressCheck:boolean   = arr.length != 0 && Array.isArray(arr) && arrayType(arr,"string")
     let checks = [nameCheck,emailCheck,passwordCheck,phonenumberCheck,birthdateCheck,addressCheck]
-     
+
+    
     if (!nameCheck || !emailCheck || !passwordCheck || !phonenumberCheck || !birthdateCheck || !addressCheck /* || !orderCheck  */
-        || Object.keys(arg).length > checks.length) {
+        || Object.keys(arg).length > checks.length+3) {//adress check is checking 4 properties
         return false
     }
     return true
