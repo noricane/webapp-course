@@ -3,6 +3,7 @@ import { UserService } from './UserService';
 import { Admin } from "../model/admin";
 import { User } from "../model/user";
 import { adminModel } from '../../db/admin.db';
+import { hashize } from '../helper/utils';
 
 
 export interface IAdminService {
@@ -31,6 +32,8 @@ export class AdminService implements IAdminService{
     /* Logs in admin if there is an entry in admin map that matches email and password  */
     async logInUser(mail: string, password: string): Promise<Admin | ProductError> {
         const admin = await adminModel.findOne({email:mail})
+        console.log("found",admin);
+        
         if (admin != null){
             if(admin.comparePassword(password)){
                 return admin
@@ -50,10 +53,7 @@ export class AdminService implements IAdminService{
     constructor(service:UserService){
         this.userService=service;
 
-        (async() => {
-            const admin =  await adminModel.create({id:Date.now(),name:"Michael Jackson",email:"mj@gmail.com",password:"mj123"})
-            console.log("creating user",admin);
-        })()
+        
 
     }
    
@@ -89,7 +89,7 @@ export class AdminService implements IAdminService{
     async addAdmin(id:number,name: string,email: string,password:string): Promise<ProductError | Admin> {
         const query = await adminModel.findOne({email:email});
         if(query == null){
-            const create = await adminModel.create({id:id,name:name,email:email,password:password});
+            const create = await adminModel.create({id:id,name:name,email:email,password:hashize(password)});
             return create
         }else{
             return new ProductError(400, "Admin already exists")

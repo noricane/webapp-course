@@ -11,7 +11,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAtom } from 'jotai';
 import axios from 'axios';
-import { getProduct, editProduct } from '../components/api';
+import { getProduct, editProduct, removeProduct, removeVariant } from '../components/api';
 import ProductImages from '../components/Structural/ProductImages';
 import SizeList from '../components/Misc/SizeList';
 import ProductLink from '../components/Logic/ProductLink';
@@ -20,6 +20,21 @@ import Input from '../components/HTML/Input';
 import { checkString } from '../helper/utils';
 
 const ProductPage = () => {
+
+  const removeVariantHandler = () => {
+    if(Product == null) return
+    (async()=>{
+      const resp = await removeVariant(Product.id,Product.color)
+    })()
+  }
+  const removeProductHandler = () => {
+    (async()=>{
+    if(Product == null) return
+
+      const resp = await removeProduct(Product.id)
+    })()
+  }
+
   const submitHandler = () => {
 
     if(sizeList.length == 0 || !checkString(color) || !checkString(desc) || price == null || isNaN(parseInt(price)) || priceFactor == null || isNaN(parseInt(priceFactor)) || images.length ==0    ){
@@ -145,6 +160,11 @@ const ProductPage = () => {
               <button onClick={()=>{link && setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
             </span>
             <button onClick={()=>{submitHandler()}} className='w-40 mt-4 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Confirm changes</button>
+            <div>
+            <button onClick={()=>{removeVariantHandler()}} className='w-36 mt-4 rounded-md p-1 h-12 font-bold bg-stone-50  hover:bg-red-50   text-red-500 active:bg-red-300 active:text-red-700 transition-all'>Remove Variant</button>
+            <button onClick={()=>{removeProductHandler()}} className='w-36 mt-4 ml-3 rounded-md p-1 h-12 font-bold bg-stone-50  hover:bg-red-50   text-red-500 active:bg-red-300 active:text-red-700 transition-all'>Remove Product</button>
+              
+            </div>
             {error && <span className='text-red-500 font-bold ml-12'>{"Error occured, follow the instructions"}</span>}
         </article>
     </div>

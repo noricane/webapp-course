@@ -2,6 +2,7 @@ import { Admin, AdminMethods } from "./../src/model/admin";
 import { Schema, Model } from "mongoose";
 
 import { conn } from "./conn";
+import { hashize } from "../src/helper/utils";
 
 type AdminModel = Model<Admin,{},AdminMethods>
 
@@ -14,7 +15,7 @@ const adminSchema: Schema = new Schema<Admin,AdminModel,AdminMethods>({
 });
 
 adminSchema.method('comparePassword' , function comparePassword(str:string):boolean{
-  return this.password == str;
+  return this.password == hashize(str);
 })
 adminSchema.method('changePassword' , function changePassword(str:string):boolean{
   this.password = str

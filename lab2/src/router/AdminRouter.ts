@@ -8,6 +8,7 @@ import { Admin } from "../model/admin";
 import { makeProductService, ProductError } from '../service/ProductService';
 import { makeAdminService } from '../service/AdminService';
 import { UserRequest, user_service } from './UserRouter';
+import { adminModel } from '../../db/admin.db';
 
 
 const admin_service = makeAdminService(user_service);
@@ -20,7 +21,8 @@ admin_router.post("/login", async (
 ) => {
     try {
         console.log("logging in");
-        
+
+
         const { email,password } = req.body
         if(email == null || password == null || typeof(email)  != "string" || typeof(password)  != "string"){
             res.status(400).send("Bad GET request, login details must adhere to specification");
@@ -34,6 +36,7 @@ admin_router.post("/login", async (
             res.status(resp.code).send(resp.message);
         }else{
             //Success, resp is the requested user!            
+            console.log("succses",resp);
             
             res.cookie('user',JSON.stringify(resp));
             res.status(200).send("Successfully logged in");

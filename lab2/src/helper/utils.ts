@@ -1,5 +1,5 @@
 import { address } from './../model/adress';
-import { IProduct, stockedSize } from "../model/product";
+import { Product, stockedSize } from "../model/product";
 import { PastOrder } from '../model/pastorder';
 
 const crypto = require('crypto');
@@ -52,13 +52,29 @@ export enum GENERALCOLOR {
 
 }
 
+
+//Check if value of string is number
+const StringIsNumber = (value:string) => isNaN(Number(value)) === false;
+
+//Turn Enum to array to be able to search
+export function GeneralColorToArray() {
+    return Object.keys(GENERALCOLOR)
+        .filter(StringIsNumber)
+        .map((key:any) => GENERALCOLOR[key]); //??any
+}
+//Turn Enum to array to be able to search
+export function CategoryToArray() {
+    return Object.keys(CATEGORY)
+        .filter(StringIsNumber)
+        .map((key:any) => CATEGORY[key]); //??any
+}
 /*ANY CHANGES IN CONSTRUCTOR MUST REFLECT IN FUNCTION BELOW "isProduct" */
 export type productConstructor= {
     name:string;
     brand: string;
     description:string;
     color:string;
-    generalColor:GENERALCOLOR;
+    generalColor:string;
     price:number;
     category:CATEGORY;
     stock:stockedSize[];

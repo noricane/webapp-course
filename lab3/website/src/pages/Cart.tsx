@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 import Cookies from 'js-cookie'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { processOrder } from '../api'
 import CartItem from '../components/Misc/CartItem'
@@ -11,9 +11,11 @@ const Cart = () => {
     const nav = useNavigate()
     const [cart,setCart] = useAtom(cartAtom)
     const [error, setError] = useState<string>()
+    const [loading, setLoading] = useState<boolean>(true)
     const [session, setSession] = useAtom(sessionAtom)
-    const [, setOrder] = useAtom(orderAtom)
+    const [order, setOrder] = useAtom(orderAtom)
     const purchaseHandler = () => {
+        
         (async()=>{
             if(session == null){return}
             const resp = await processOrder(session.email,cart)
@@ -57,7 +59,16 @@ const Cart = () => {
             
         })()
     }
+    /* Super hacky solution, but I don't have time to fix minor unintended behavior */
+    useEffect(()=>{
+        setTimeout(()=>setLoading(false),300)
+    },[])
 
+    if(loading){
+        return <div className='min-h-[70vh] p-8 bg-stone-300 m-12 rounded-xl flex flex-col justify-center items-center font-oswald text-3xl'>
+            LOADING...
+        </div>
+    }
     if(cart.length == 0){
         return <div className='min-h-[70vh] p-8 bg-stone-300 m-12 rounded-xl flex flex-col justify-center items-center font-oswald text-3xl'>
             Cart is empty

@@ -27,8 +27,8 @@ export const productSchema: Schema = new Schema<Product,ProductModel,ProductMeth
   images: { type: [String], required: true },
 });
 
-productSchema.method('setStock' , function setStock(stock:stockedSize[]):boolean{
-  return this.stock == stock;
+productSchema.method('setStock' , function setStock(stock:stockedSize[]):void{
+  this.stock = stock;
 })
 
 export const productModel = conn.model<Product, ProductModel>("Product", productSchema);

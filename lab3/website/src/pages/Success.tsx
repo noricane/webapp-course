@@ -30,7 +30,7 @@ const Success = () => {
   return (
     <article className='h-[70vh] p-4 '>
       <h1 className='text-center my-3 text-3xl font-bold font-oswald'>Order was sucessful:</h1>
-      <section className='w-full max-h-[30rem] overflow-scroll mx-auto mt-4 gap-4 bg-blue-200 p-4 sm:px-8 flex flex-col items-center '>
+      <section className='w-full max-h-[30rem] overflow-scroll mx-auto mt-4 gap-4 bg-stone-300 p-4 rounded-lg sm:px-8 flex flex-col items-center '>
         <h2 className='font-oswald text-2xl'>Order number: {order.id}</h2>
         <ul className='flex flex-col w-full gap-8 h-full overflow-scroll'>
         {order?.items.map(e=>
@@ -57,7 +57,7 @@ const CartItem = ({mp}:{mp:multiProduct}) => {
           <span className='font-oswald  text-stone-700'>{item.brand}</span>
           <span>{item.name}</span>
           <span>{item.color}</span>
-          {size}
+          <span className='my-1'>Size: {size}</span>
           </div>
           <Price price={item.price} gap={true} pricefactor={item.price_factor}  />
         </div>

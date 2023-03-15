@@ -36,7 +36,7 @@ export enum addressType {
 }
 interface address {
     id: number;
-    type: addressType;
+    addressType: addressType;
     street: string;
     city: string;
     country: string; 

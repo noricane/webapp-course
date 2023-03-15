@@ -81,6 +81,8 @@ export async function editProduct(
 ): Promise<true | string> {
   try {
     let msg = true;
+    console.log(generalColor);
+    
     const resp = await axios.put(`${config.URL}/product/`, {
       productInformation: {
         name: name,
@@ -108,6 +110,40 @@ export async function getProduct(id:string,color:string):Promise<Product | undef
     let arr:Product[]= []
     const {data}:{data:Product} =  await axios.get(`${config.URL}/product/${id}?color=${color}`);
 
+    
+    if (data != null) {
+      return data
+  }
+    return undefined
+  } catch (error) {
+    
+  }
+}
+
+
+
+export async function removeProduct(id:string):Promise<any>{/* for now any */
+  
+ try {
+    let arr:Product[]= []
+    const {data}:{data:Product} =  await axios.delete(`${config.URL}/product/${id}`);
+
+    
+    if (data != null) {
+      return data
+  }
+    return undefined
+  } catch (error) {
+    
+  }
+}
+export async function removeVariant(id:string,color:string):Promise<any>{/* for now any */
+ try {
+    let arr:Product[]= []
+    const {data}:{data:Product} =  await axios.delete(`${config.URL}/product/${id}/${color}`);
+    
+    console.log("Here is data ",data);
+  
     
     if (data != null) {
       return data

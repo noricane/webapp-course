@@ -83,6 +83,7 @@ const Dashboard = () => {
     
     setFiltered([...arr])
     setItems([...arr])
+    setLoading(false)
     } catch (error) {
     }
   }
@@ -110,6 +111,7 @@ const Dashboard = () => {
   const [state, dispatch] = useReducer(reducer ,initialState);
   const [prevState,setPrevState] = useState<FilterState>({brand:null,category:null,color:null})
 
+  const [loading, setLoading] = useState<boolean>(true)
   const [brands, setBrands] = useState<string[]>([])
   const categories:CATEGORY[] =[CATEGORY.LOW,CATEGORY.MID,CATEGORY.HIGH]
   const colors :string[] = GeneralColorToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
@@ -140,7 +142,7 @@ const Dashboard = () => {
 
   const Button = ({desc,onClick}:{desc:string,onClick?:Function}) => {
     return (
-      <button onClick={()=>{onClick != null && onClick()}}  className='bg-stone-800 text-stone-50 h-12 w-36 hover:bg-stone-900 rounded-sm active:bg-stone-50 active:text-stone-800 transition-all'>{desc}</button>
+      <button onClick={()=>{onClick != null && onClick()}}  className='utsm:row-start-2 bg-stone-800 text-stone-50 h-12 w-36 hover:bg-stone-900 rounded-sm active:bg-stone-50 active:text-stone-800 transition-all'>{desc}</button>
 
     )
   }
@@ -149,9 +151,9 @@ const Dashboard = () => {
   
   return (
     <div className='bg-stone-200 m-4 rounded-md min-h-screen p-4'>
-        <div className='text-center flex items-center justify-center gap-3'>
+        <div className='text-center flex utlg:grid grid-rows-2 items-center justify-center gap-3'>
           <Link to={'/addproduct'}> <Button desc='Add Product +' /></Link>
-          <Button desc='Edit Batch' />
+
 
           <label htmlFor="brand">Brand:</label>
           <GeneralDropdown onClick={dispatch} action={"set_brand"} state={state.brand} items={brands}>{state.brand == null ?`Brand ➤` : state.brand}</GeneralDropdown>
@@ -172,7 +174,7 @@ const Dashboard = () => {
 
 
         </div>
-        <Grid items={filtered}/>
+        <Grid loading={loading} items={filtered}/>
     </div>
   )
 }

@@ -32,7 +32,7 @@ saveUninitialized : true //Decides wherther a blank session is saved or if it wa
 }));
 app.use(cors({
 origin: true, //Allows requests from any origin, not good for production
-methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD','DELETE'],
 credentials : true //Specifies if express should include session id in every response, if this is true then origin property must be specified. 
 }));
 app.use(express.json());

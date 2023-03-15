@@ -51,7 +51,7 @@ export class ProductError{
 
 export class UserService implements IUserService{
 
-
+    
     
     /* Logs in user if there is an entry in user map that matches email and password  */
     async logInUser(mail: string, password: string): Promise<User | ProductError> {
@@ -82,11 +82,14 @@ export class UserService implements IUserService{
     
     constructor(service:ProductService){
         this.productService=service;
+        
+         console.log("Removing all");
+       (async()=>{
+        const resp = await userModel.deleteMany({});
+      console.log("resp1",resp);
 
-        (async() => {
-            const user =  await userModel.create({id:Date.now(),name:"James Brown",email:"jb@gmail.com",password:"jb123",phonenumber:"0731231234",birthdate:new Date(1978),orders:[],adresses:[{id:Date.now(),addressType:addressType.DELIVERY,street:"Saxophonestreet 45",city:"New York",country:"USA",zip:"4423"}]})
-            console.log("creating user",user);
-        })()
+      
+      })()
         
 
     }
@@ -153,8 +156,9 @@ export class UserService implements IUserService{
         if(query != null){
             
             const processed =  await this.processOrder(...order);
-            console.log(order);
-            console.log("lenproc",processed);
+            console.log("lenorder",order.length);
+            console.log("lenproc",processed.length);
+            console.log("equal",arraysEqual(processed,order));
             
             if(processed.length == order.length){
                 let unchanged = arraysEqual(order,processed);

@@ -10,7 +10,10 @@ const PersonalInfo = ({user}:{user:User}) => {
   /* Populate address arrays with relevant html on component first render */
   useEffect(()=>{
     user.adresses.map(e =>{ 
-      if(e.type == addressType['DELIVERY'] ){
+      console.log(e);
+
+      
+      if(e.addressType == addressType['DELIVERY'] ){
         setDeliveryAddresses(prev => [...prev,(
           <ul className='text-stone-600 font-normal'>
             <li>{e.street}</li>

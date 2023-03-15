@@ -7,6 +7,7 @@ import { User, UserMethods } from "../src/model/user";
 
 import { conn } from "./conn";
 import { productModel, productSchema } from "./product.db";
+import { hashize } from '../src/helper/utils';
 
 type UserModel = Model<User,{},UserMethods>
 
@@ -44,7 +45,7 @@ const userSchema: Schema = new Schema<User,UserModel,UserMethods>({
 
 
 userSchema.method('comparePassword' , function comparePassword(str:string):boolean{
-    return this.password == str;
+    return this.password == hashize(str);
 })
 userSchema.method('changePassword' , function changePassword(str:string):boolean{
     this.password = str

@@ -1,6 +1,6 @@
 import { address, addressType } from './../model/adress';
 import { ProductError } from './../service/UserService';
-import { arrayInstance, isMultiProducts } from './../helper/utils';
+import { arrayInstance, hashize, isMultiProducts } from './../helper/utils';
 import { PastOrder, multiProduct } from './../model/pastorder';
 import express, { Request, Response } from "express";
 import { User } from "../model/user";
@@ -92,7 +92,7 @@ user_router.post("/register", async (
             return
         }
 
-        const resp = await user_service.addUser(Date.now(),user.name,user.email,user.password,user.phonenumber,user.birthdate,[{id:Date.now(),addressType:addressType.DELIVERY,street:"Saxophonestreet 45",city:"New York",country:"USA",zip:"4423"}]);
+        const resp = await user_service.addUser(Date.now(),user.name,user.email,hashize(user.password),user.phonenumber,user.birthdate,[{id:Date.now(),addressType:addressType.DELIVERY,street:user.street,city:user.city,country:user.country,zip:user.zip}]);
         console.log("RESPONSEE IS ",resp);
         
         if(resp instanceof ProductError){

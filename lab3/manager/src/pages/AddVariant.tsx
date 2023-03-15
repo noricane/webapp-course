@@ -134,7 +134,7 @@ const AddProduct = () => {
     (async () => {
       let pf = 1- parseInt(priceFactor)/100 > 0 &&1- parseInt(priceFactor)/100 <= 1 ? 1- parseInt(priceFactor)/100 : 1 
       /* @ts-ignore - Typescript doesn't realize that we've checked name etc in the checkString function. */
-      const resp = await addProduct(Product.name,Product.brand,desc,color,generalColor,category,parseInt(price),pf,sizeList,images)
+      const resp = await addProduct(Product.name,Product.brand,desc,color,generalColor?.toUpperCase(),category?.toUpperCase(),parseInt(price),pf,sizeList,images)
       console.log("Respoinse",resp);
       
     })()

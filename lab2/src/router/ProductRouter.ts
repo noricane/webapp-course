@@ -8,10 +8,12 @@ import { Product } from "../model/product";
 import { isProduct, productConstructor } from '../helper/utils';
 import { makeProductService, ProductError } from '../service/ProductService';
 import { User } from '../model/user';
+import { initShoes } from '../service/dummyproducts';
+
 
 
 export const product_service = makeProductService();
-
+//initShoes(product_service);
 export const product_router = express.Router();
 
 product_router.get("/brands", async (
@@ -177,8 +179,11 @@ product_router.get("/", async (
 
            
             //Success, resp contains products! 
+            console.log("HELLO");
+            
             const res_obj = toObject(resp)
-            console.log("res_obj", res_obj);
+            console.log("HELLO");
+            
             
             res.status(200).send(res_obj);
             
@@ -276,9 +281,15 @@ product_router.post("/", async (
             return;
         }
         const description: productConstructor= req.body.productInformation;
+        console.log("Hello");
 
+        
         const resp = await product_service.addProduct(description);
+        console.log("Hello2");
+        
         if(resp instanceof ProductError){
+
+
             //Resp is of type ProductError
             res.status(resp.code).send(resp.message);
         }else{
@@ -348,7 +359,7 @@ product_router.delete("/:id", async (
         res.status(500).send(e.message);
     }
 })
-//TODO, is this safe to have id in delete url??
+
 product_router.delete("/:id/:color", async ( 
     req: Request<{id:string, color:string}, {}, {}>,
     res: Response<Product|string>
@@ -359,6 +370,8 @@ product_router.delete("/:id/:color", async (
             res.status(400).send(`Bad DELETE call to ${req.originalUrl} --- fields do not adhere to restock api specification`);
             return
         }
+        console.log("Id n color",id,color);
+        
         const resp =  await product_service.removeProductColor(id,color)
         if(resp instanceof ProductError){
             //Resp is of type ProductError
