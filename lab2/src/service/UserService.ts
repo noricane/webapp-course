@@ -82,7 +82,7 @@ export class UserService implements IUserService{
     
     constructor(service:ProductService){
         this.productService=service;
-        
+       /*  
          console.log("Removing all");
        (async()=>{
         const resp = await userModel.deleteMany({});
@@ -90,7 +90,7 @@ export class UserService implements IUserService{
 
       
       })()
-        
+          */
 
     }
     
@@ -167,6 +167,7 @@ export class UserService implements IUserService{
                 }
                 
                 const addOrder =  query.addOrder(processed)
+                query.save()
                 return addOrder 
             }
             return {error:true,items:processed}

@@ -52,6 +52,8 @@ function App() {
           if(Array.isArray(updatedCart) ){
             setCart(updatedCart)
           }else{
+            console.log("no resp");
+            
             setCart([])
           }
         }
