@@ -48,11 +48,6 @@ export interface IProductService {
     // and returns the removed product object
     removeProductColor(id: string, color:string): Promise<Product|ProductError> 
 
- /*    addUser(): Promise<User|ProductError> //Change name of ProductError type?
-    removeUser(id:number): Promise<User|ProductError> 
-
-    addAdmin(): Promise<User|ProductError> //Change name of ProductError type?
-    removeAdmin(id:number): Promise<User|ProductError>  */
 }
 
 export class ProductError{
@@ -67,33 +62,35 @@ export class ProductError{
 
 export class ProductService implements IProductService{
 
+    /* Processes order, meaning that it checks that the incoming object is within the bounds of the servers capacity 
+    (client might have different information about product stock than what actually exists on the server due to concurrency of customers or if admin updates this information) 
+    If the check doesn't pass a new multiProduct array is sent with items adhering to backend values 
+      (e.g A shoe variant has 10 copies left but client has the information that the shoe has 14 copies, 
+      if the client tries to purchase 14 shoes the order will not result in a success but an updated list containing 10 copies of that shoe instead).
+
+    If the query is processable the backend will update it's values and return essentially the same list back.
+    */
     async processOrder(...order:multiProduct[]):Promise<multiProduct[]>{
         return await (async()=>{
             //Assume order is processable and prove otherwise if not.
             let processable = true;
             const pending:multiProduct[] = []
+            /* For loop checks that the order query is processable */
             for (const e of order) {
                 try {
+                //TODO query for all products and search instead, will be a lot faster...
                   const query = await this.getProductColor(e.item.id,normalizeString(e.item.color));
-                  console.log("query L:82",query);
                   
                   if(!(query instanceof ProductError) && query.stock.find(elem => elem.size == e.size) != null){
                     const find = query.stock.find(elem => elem.size == e.size)
-            
                     if(find == null){return []}
 
                     const mapquery = await productMapModel.findOne({id:query.id})
                     if(mapquery == null){return []}
-                    console.log("aquery get",query);
-                    
-                    console.log("query get",mapquery);
-                    const queryDb = mapquery.get('product').get(normalizeString(query.color))
-                    if(!(find.amount >= e.amount)){
-                      console.log("not processable assjakdaksdhasdkjhaskdjh l110");
-                      
+              
+                    if(find.amount < e.amount){
                       processable = false;
                       pending.push({size:e.size,item:query ,amount:find.amount});
-                      
                     } 
                   } 
                 } catch (error) {
@@ -104,72 +101,56 @@ export class ProductService implements IProductService{
         })().then(async (props:any) =>{
             const [o,p,b]:[multiProduct[],multiProduct[],boolean] = props;
             if(!b){
-              console.log("before",p);
                 o.forEach((element:multiProduct) => {
                   if(!p.find(e => e.item.id == element.item.id && e.size == element.size)){
                     p.push(element)
                   }
                 });
-                console.log("Not processable");
-                console.log("after",p);
-                
                 return p;
             }
+            /* Now the query is processable, the rest of the code will process the query. */
             const result:multiProduct[] = []
             for (const e of o) {
               try {
+                //TODO query for all products and search instead, will be a lot faster...
                 const query = await this.getProductColor(e.item.id,normalizeString(e.item.color));
-                console.log("query L:82",query);
-                
+                /* Check that query is valid */
                 if(!(query instanceof ProductError) && query.stock.find(elem => elem.size == e.size) != null){
                   const find = query.stock.find(elem => elem.size == e.size)
-          
                   if(find == null){return []}
 
                   const mapquery = await productMapModel.findOne({id:query.id})
                   if(mapquery == null){return []}
-                  console.log("aquery get",query);
                   
-                  console.log("query get",mapquery);
                   const queryDb = mapquery.get('product').get(normalizeString(query.color))
+                  /* Check that the amount stored on the server is greater or equal to what has been passed */
                   if(find.amount >= e.amount){
-                    console.log("here");
-                      
                     const index = query.stock.indexOf(find);
                     const list = query.stock
                     const stock = {size:e.size,amount:find.amount-e.amount}
-                    console.log("indexof", index);
-                    console.log("newlist",[...list.slice(0,index),stock,...list.slice(index+1,)]);
-                    
                     queryDb.setStock([...list.slice(0,index),stock,...list.slice(index+1,)])
                     mapquery.set(normalizeString(query.color),queryDb)
                     mapquery.save()
-                    console.log("new obj",);
                     result.push(e)
-                    
                   } 
                 } 
+
               } catch (error) {
                 // handle any errors thrown by inner functions
               }
             }
-
-             
-              
-              return result;}
-        )
+            return result;
+        })
         
           
       }
     
-    /* The collection of products is represented as a Map with the id of the product that leads to a map with all the product's color variations */
-    //products : Map<string,Map<string,Product>> = new Map();
-    //products : Map<string,Map<string,Product>> = initShoes();
-    /* List of recorded brands */
+
+    /* List of recorded brands, TODO mongodb */
     brands: string[] = ["Nike","Louis Vuitton","Adidas","Yeezy", "Maison Margiela","Off-White x Nike"]
     
     constructor(){
-      console.log("creating");
+      //console.log("creating");
       /* console.log("Removing all");
        (async()=>{
         const resp = await productModel.deleteMany({});
@@ -182,12 +163,12 @@ export class ProductService implements IProductService{
       
         //console.log("Initialized shoe collection",this.products);
     }
+
+    /* receives a list of multiproducts and updates it if it doesn't adhere to what the backend has in stock */
     async updateClientList(clientList: multiProduct[]): Promise<multiProduct[]> {
-        console.log("hello");
         const products = await this.getProducts();
         if(products instanceof ProductError){
             console.log("ERROR: status",products.code,"message",products.message);
-
             return []
         }
         const list: multiProduct[]=[];
@@ -206,7 +187,7 @@ export class ProductService implements IProductService{
     }
 
     /* Returns list of products within the given category */
-    async getCategoryProducts(category: CATEGORY): Promise<ProductError | Product[]> {
+    async getCategoryProducts(category: CATEGORY): Promise<Product[]> {
         const products = await productMapModel.find({}) 
         const productList:Product[] = []
         products.forEach(
@@ -220,7 +201,7 @@ export class ProductService implements IProductService{
     }
 
     /* Returns list of products that are of the color x with type GENERALCOLOR */
-    async getColorProducts(color: number): Promise<ProductError | Product[]> {
+    async getColorProducts(color: number): Promise<Product[]> {
         const products = await productMapModel.find({})
         const productList:Product[] = []
         products.forEach(
@@ -238,10 +219,9 @@ export class ProductService implements IProductService{
         return this.brands
     }
 
-    /* Returns collection of all products */
+    /* Returns collection of all products and a ProductError if none were found*/
     async getProducts(): Promise<Map<string, Map<string, Product>> | ProductError> {
         const productDoc = await productMapModel.find({});
-
         /*Productdoc is a list of these innermaps  
           innermap {
           _id: new ObjectId("6410fe9843a6cafc65d2b078"),
@@ -251,30 +231,17 @@ export class ProductService implements IProductService{
           }, */
         if (productDoc != null) {
           const productsMap = new Map<string, Map<string, Product>>();
-          for (const [id, innerMap] of Object.entries(productDoc)) {
-            const id =innerMap.get('id')
+          for (const [, innerMap] of Object.entries(productDoc)) {
+            /* Get the product map that contains different color variants */
             const productVars =  innerMap.get('product')
             productVars.forEach((element:any) => {
-              console.log("hello element",element);
               const query = productsMap.get(element.id)
               if(query != null){
                 query.set(normalizeString(element.color),element)
               }else{
                 productsMap.set(element.id,new Map<string,Product>([[normalizeString(element.color),element]]))
               }
-              
-            });
-            const q =productsMap.get(id)
-            console.log("id",id,"product",productVars,"bigmap",productsMap,"qmap",q);
-            if(q != null) {
-              //console.log("color",product.c);
-              
-              //q.set(product.color,product)
-            }else{
-
-             // productsMap.set(product.id,product);
-            }
-            
+            });            
           }
           return productsMap;
         } else {
@@ -282,38 +249,25 @@ export class ProductService implements IProductService{
         }
       }
 
-    /* Returns map of specific product which contains all the color variants of that product */
+    /* Returns map of specific product which contains all the color variants of that product. 
+       Returns a ProductError if the product wasn't found */
     async getProduct(id: string): Promise<ProductError | Map<string, Product>> {
-      console.log("getProduct line 208, prod service");
       const query = await productMapModel.findOne({id:id})
-      
       if(query!=null){
-
         return query.get('product');           
       }
       return new ProductError(404,"Product not found")
     }
     
-    /* Returns the specific product with the requested color */
+    /* Returns the specific product with the requested color, returns ProductError if either query fails */
     async getProductColor(id: string, color: string): Promise<ProductError |  Product> {
-      console.log("getProductcolor line 220, prod service");
         const query = await productMapModel.findOne({id:id})
         if(query!=null){
-
-
-
-          
             const color_query = query.get('product').get(normalizeString(color))
-            
             if(color_query!=null){
-              console.log("not lol");
-              
                 color_query
                 return color_query;
             }else{
-                console.log("lol");
-
-              
                 return new ProductError(404,"Product was found but color was not found, consider adding color to this product first")
             }
         }
@@ -321,81 +275,77 @@ export class ProductService implements IProductService{
     }
 
 
-    /* Adds product if it doesn't exist */
+    /* Adds product if it doesn't exist and returns it, returns ProductError otherwise. */
     async addProduct(desc: productConstructor): Promise<Product|ProductError> {   
         const {color} = desc;
         let gc = GeneralColorToArray().indexOf(desc.generalColor);
         
-        const id = hashize(normalizeString(desc.brand.concat(desc.name)))
-        const query = await productMapModel.findOne({id:id})
+        const id = hashize(normalizeString(desc.brand.concat(desc.name)));
+        const query = await productMapModel.findOne({id:id});
 
-        const newProd = await productModel.create({id:id,name:desc.name, brand:desc.brand, description:desc.description, color:desc.color,generalColor:desc.generalColor, price:desc.price, category:desc.category, stock:desc.stock, price_factor:desc.price_factor, images:desc.images})
-        console.log("newprod is",newProd);
-        
-
+        const newProd = await productModel.create({id:id,name:desc.name, brand:desc.brand, description:desc.description, color:desc.color,generalColor:desc.generalColor, price:desc.price, category:desc.category, stock:desc.stock, price_factor:desc.price_factor, images:desc.images});
         if(query != null){
-            const getproduct = query.get('product')
+            const getproduct = query.get('product');
             if(getproduct.get(color)!=null){
                 //color exists
-                return new ProductError(409,"Product already exists, did you mean to restock?")
+                return new ProductError(409,"Product already exists, did you mean to restock?");
             }else{              
-                getproduct.set(normalizeString(color),newProd)
-                query.save()                
+                getproduct.set(normalizeString(color),newProd);
+                query.save();
             }
         }else{//Product doesn't exist            
-            productMapModel.create({id:id,product:new Map<string,Product>([[normalizeString(color),newProd]])})
+            productMapModel.create({id:id,product:new Map<string,Product>([[normalizeString(color),newProd]])});
         }
         //If brand doesn't exist add it.
         if(this.brands.filter(e => checkLatinCharacters(e) == checkLatinCharacters(desc.brand)).length == 0){
-            this.brands.push(desc.brand)
+            this.brands.push(desc.brand);
         }
         return newProd;
     }
 
-    /* Edits product if it exists */
+    /* Edits product if it exists and returns ProductError if the product or color isn't found*/
     async editProduct(desc: productConstructor): Promise<Product | ProductError> {
-        const color  = normalizeString(desc.color)
-        const id = hashize(normalizeString(desc.brand.concat(desc.name)))
-        const newProd = await productModel.create({ id: id, name: desc.name, brand: desc.brand, description: desc.description, color: desc.color, generalColor: desc.generalColor, price: desc.price, category: desc.category, stock: desc.stock, price_factor: desc.price_factor, images: desc.images })
-        const findEntry = await productMapModel.findOneAndUpdate({ id: id }, { $set: { [`product.${color}`]: newProd } }, { new: true })
-      
+        //Format color correctly such that spaces and capitalization are eliminated.
+        const color  = normalizeString(desc.color);
+        //Id of a product is this.
+        const id = hashize(normalizeString(desc.brand.concat(desc.name)));
+        
+        const newProd = await productModel.create({ id: id, name: desc.name, brand: desc.brand, description: desc.description, color: desc.color, generalColor: desc.generalColor, price: desc.price, category: desc.category, stock: desc.stock, price_factor: desc.price_factor, images: desc.images });
+        const findEntry = await productMapModel.findOneAndUpdate({ id: id }, { $set: { [`product.${color}`]: newProd } }, { new: true });
         if (findEntry != null) {
-          const updatedProd = findEntry.get(`product.${color}`) as Product
+          const updatedProd = findEntry.get(`product.${color}`) as Product;
       
           if (updatedProd != null) {
-            return updatedProd
+            return updatedProd;
           } else {
-            return new ProductError(409, "Product colorway not found, did you mean to add?")
+            return new ProductError(409, "Product colorway not found, did you mean to add?");
           }
         } else {
           // Product doesn't exist
-          return new ProductError(409, "Product not found, did you mean to add?")
+          return new ProductError(409, "Product not found, did you mean to add?");
         }
       }
 
 
 
-    /* Removes product's Map if found */
+    /* Removes product's Map if found and returns it, returns ProductError if Product wasn't found*/
     async removeProduct(id: string):  Promise<Map<string,Product>|ProductError>  {
-        const query = await productMapModel.findOne({id:id})
-
-
+        const query = await productMapModel.findOne({id:id});
         if(query != null){
             const productData = query.get('product');
             await query.deleteOne();
             return productData;
         }
-        return new ProductError(404,"Product was not found")
+        return new ProductError(404,"Product was not found");
     }
 
-    /* Removes a product's specific color variant if it's found */
+    /* Removes a product's specific color variant if it's found, returns ProductError if product or color wasn't found */
     async removeProductColor(id: string, c: string): Promise<Product | ProductError> {
         const query = await productMapModel.findOne({ id: id })
         const color = normalizeString(c)
         if (query != null) {
           const productData = query.get('product')
           const color_query = productData.get(color)
-      
           if (color_query != null) {
             productData.delete(color)
             await query.save() // save the updated document
@@ -404,7 +354,6 @@ export class ProductService implements IProductService{
             return new ProductError(404, "Product was found but color was not found, consider adding color to this product first")
           }
         }
-      
         return new ProductError(404, "Product was not found")
       }
       

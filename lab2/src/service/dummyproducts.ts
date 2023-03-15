@@ -1,17 +1,11 @@
-
-import { GENERALCOLOR, CATEGORY, hashize } from './../helper/utils';
-import { normalizeString, productConstructor } from '../helper/utils';
-
+import { GENERALCOLOR, CATEGORY } from './../helper/utils';
+import { productConstructor } from '../helper/utils';
 import { Product } from '../model/product';
-import { userModel } from '../../db/user.db';
 import { ProductError, ProductService } from './ProductService';
-import { product_service } from '../router/ProductRouter';
+
 
 /* Hardcoded method for initialization of shoe objects and then adding returning them in the correct Map form*/
 export function initShoes(service:ProductService){
-
-    
-    
              const p33 = createProduct(service,"Foam Runners","Yeezy","Stone Salt",GENERALCOLOR.BEIGE,3495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front_970x.jpg?v=1670005153","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front-Side_970x.jpg?v=1670404734","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Sole_970x.jpg?v=1670404734");
              const p34 = createProduct(service,"Foam Runners","Yeezy","MXT Moon Grey",GENERALCOLOR.GRAY,3495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-MXT-Moon-Grey-Crepslocker-2048x2048-1_f47252b8-46a2-4987-a9f6-4428f8c197ca_970x.jpg?v=1648475497","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-MXT-Moon-Grey-Crepslocker-2048x2048-2_1aea5deb-560b-4388-a7f5-0eac2aa597b5_970x.jpg?v=1648475497",);
              const p11 = createProduct(service,"Air Jordan 1 Low","Nike","True Blue",GENERALCOLOR.BLUE,1249,"https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Top_970x.jpg?v=1676626230","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Front-Side_970x.jpg?v=1674236361","https://cdn.shopify.com/s/files/1/1626/5391/products/Air-Jordan-1-Low-True-Blue-_GS_-Crepslocker-Back_970x.jpg?v=1676626230");

@@ -52,14 +52,11 @@ export class ProductError{
 export class UserService implements IUserService{
 
     
-    
-    /* Logs in user if there is an entry in user map that matches email and password  */
+    /* Checks if user exists and compares password returning a ProductError if any of these checks fail */
     async logInUser(mail: string, password: string): Promise<User | ProductError> {
-        //const user = await this.getUser(mail)
         const user = await userModel.findOne({email:mail})
         if (user == null){
             return new ProductError(404,"Email or password was not found")
-           
         }else{
             if(user.comparePassword(password)){
                 return user
@@ -71,10 +68,10 @@ export class UserService implements IUserService{
 
     /* Dependency injection, to process orders and add to user */
     productService:ProductService;
-    /* Map of users in the form of <email,User> */
 
 
 
+    /* Add email to newsletter document  */
     addNewsLetterMail(email: string): true {
         newsletterModel.create({email:email})
         return true
@@ -94,7 +91,7 @@ export class UserService implements IUserService{
 
     }
     
-    /* Retrieves user if it is found */
+    /* Retrieves user if it is found. Returns ProductError if user isn't found. */
     async getUser(mail: string): Promise<ProductError | User> {
         const mongoQuery = await userModel.findOne({email:mail})
         
@@ -106,7 +103,7 @@ export class UserService implements IUserService{
        
     }
 
-    /* Retrieves all previous orders of a specific user*/
+    /* Retrieves all previous orders of a specific user and returns ProductError if user not found.*/
     async getUserOrders(email: string /* mail */): Promise<ProductError | PastOrder[]> {
         const query = await userModel.findOne({email:email})
 
@@ -118,10 +115,8 @@ export class UserService implements IUserService{
 
     }
 
-    /* Adds user if the user email doesn't exist in Map */
-
+    /* Adds user if the user email doesn't exist in Map and returns it, returns a ProductError if user exists*/
     async addUser(id:number,name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]): Promise<ProductError | User> {
-        
             return userModel.create({
                 id:id,
                 name:name,
@@ -139,9 +134,6 @@ export class UserService implements IUserService{
                 console.log(e);
                 return new ProductError(500, e.code == 11000 ? 'Email already exists' : e.message)
             })
-
-            
-            
     }
     
 
@@ -150,22 +142,23 @@ export class UserService implements IUserService{
         return await this.productService.processOrder(...order)
     }
     
-    /* Processes order through product_service and then add's order to user */
+    /* Processes order through product_service, if the call was successful an object of type PastOrder is returned, 
+       otherwise a {error:true, items:multiProduct[]} is returned to be handled,
+       returns a ProductError if user wasn't  found*/
     async addUserOrder(id: string, ...order: multiProduct[]): Promise< PastOrder | {error:true, items:multiProduct[]} | ProductError> {
         const query = await userModel.findOne({email:id});
         if(query != null){
-            
             const processed =  await this.processOrder(...order);
-            console.log("lenorder",order.length);
-            console.log("lenproc",processed.length);
-            console.log("equal",arraysEqual(processed,order));
-            
+           
+            //If length is unchanged the order might've been processed
             if(processed.length == order.length){
+                //If the arrays are equal the order has been successfully processed
                 let unchanged = arraysEqual(order,processed);
+                //Unsucessfully processed
                 if(!unchanged){
                     return {error:true,items:processed}
                 }
-                
+                //Sccessfully processed
                 const addOrder =  query.addOrder(processed)
                 query.save()
                 return addOrder 
@@ -176,7 +169,7 @@ export class UserService implements IUserService{
         }
     }
 
-    // Removes user if id(email) is found
+    // Removes user if id(email) is found, returns a ProductError if user isn't found.
     async removeUser(id: string): Promise<ProductError | User> {
         const query = await userModel.findOne({email:id})
         if(query != null){

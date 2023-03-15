@@ -29,7 +29,7 @@ export class ProductError{
 }
 
 export class AdminService implements IAdminService{
-    /* Logs in admin if there is an entry in admin map that matches email and password  */
+    /* Checks if admin exists and compares password returning a product error if any of these checks fail */
     async logInUser(mail: string, password: string): Promise<Admin | ProductError> {
         const admin = await adminModel.findOne({email:mail})
         console.log("found",admin);
@@ -52,9 +52,6 @@ export class AdminService implements IAdminService{
 
     constructor(service:UserService){
         this.userService=service;
-
-        
-
     }
    
     /* Returns list of users from userService */
@@ -62,7 +59,7 @@ export class AdminService implements IAdminService{
         return await userModel.find({})
     }
 
-    /* Returns admin if found, this method seems a little weird, TODO */
+    /* Returns admin if found, and product error otherwise */
     async getAdmin(email: string): Promise<ProductError | Admin> {
         const query = await adminModel.findOne({email:email});
         if(query != undefined){
@@ -73,7 +70,7 @@ export class AdminService implements IAdminService{
     }
    
 
-    /* Removes admin if found */
+    /* Removes admin if found and returns Admin, returns ProductError otherwise*/
     async removeAdmin(email:string): Promise<ProductError | Admin> {
         const query = await adminModel.findOne({email:email});
 
@@ -85,7 +82,7 @@ export class AdminService implements IAdminService{
         }
     }
 
-    /* Adds admin if not found */
+    /* Adds admin and returns it if not found, otherwise returns a ProductError */
     async addAdmin(id:number,name: string,email: string,password:string): Promise<ProductError | Admin> {
         const query = await adminModel.findOne({email:email});
         if(query == null){
