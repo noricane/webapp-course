@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getProducts, newsletterRequest } from "../api";
 import HomeHeader from "../components/Misc/HomeHeader";
 import Carousel from "../components/structural/Carousel";
-import { Product } from "../model/product";
+import { Product } from "../model/types";
 
 
 const Home = () => {

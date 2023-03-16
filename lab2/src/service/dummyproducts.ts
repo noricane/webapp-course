@@ -1,7 +1,8 @@
 import { GENERALCOLOR, CATEGORY } from './../helper/utils';
 import { productConstructor } from '../helper/utils';
 import { Product } from '../model/product';
-import { ProductError, ProductService } from './ProductService';
+import { ProductService } from './ProductService';
+import { ProductError } from "../model/ProductError";
 
 
 /* Hardcoded method for initialization of shoe objects and then adding returning them in the correct Map form*/

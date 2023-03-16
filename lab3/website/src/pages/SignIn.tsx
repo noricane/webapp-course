@@ -1,7 +1,4 @@
 import React, { useRef, useState } from "react";
-import axios, { AxiosError } from "axios";
-import Cookies  from 'js-cookie';
-import { config } from "../model/config";
 import { sessionAtom } from "../model/jotai.config";
 import { useAtom } from "jotai";
 import ErrorSpan from "../components/Misc/ErrorSpan";
@@ -13,45 +10,41 @@ import { logInUser } from "../api";
 const  SignIn = () => {
   const [,setUser] = useAtom(sessionAtom)    
   const nav =useNavigate();
-    const email = useRef<HTMLInputElement>(null)
-    const password = useRef<HTMLInputElement>(null)
-    const [error, setError] = useState<string>()
-
-    const submitHandler = async (e:React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (email.current?.value == null || password.current?.value == null){
-        setError("Email and Password must be non empty")
-        return
-      }
-      setError(undefined)
-      try{
-        const em:string = email.current.value;
-        const pw: string = password.current.value;
-        (async()=>{
-          const resp = await logInUser(em,pw)
-          console.log("in signin",resp);
-          const userStore = localStorage.getItem('user')
-          if( userStore != null || typeof resp != "string" && resp?.id != null){
-
-            setUser(JSON.parse(userStore as string))
-            nav('/')
-            return
-          }
-          setUser(undefined)
-          setError(resp as string)
-        })()
-        
-
-               
-        
-      }catch(err:any){
-        console.log(err);
-        
-      }
+  const email = useRef<HTMLInputElement>(null)
+  const password = useRef<HTMLInputElement>(null)
+  const [error, setError] = useState<string>()
+  const submitHandler = async (e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (email.current?.value == null || password.current?.value == null){
+      setError("Email and Password must be non empty")
+      return
+    }
+    setError(undefined)
+    try{
+      const em:string = email.current.value;
+      const pw: string = password.current.value;
+      (async()=>{
+        const resp = await logInUser(em,pw)
+        console.log("in signin",resp);
+        const userStore = localStorage.getItem('user')
+        if( userStore != null || typeof resp != "string" && resp?.id != null){
+          setUser(JSON.parse(userStore as string))
+          nav('/')
+          return
+        }
+        setUser(undefined)
+        setError(resp as string)
+      })()
       
-
+             
+      
+    }catch(err:any){
+      console.log(err);
       
     }
+    
+    
+  }
     
     
     return (

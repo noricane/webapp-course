@@ -3,7 +3,7 @@
 These are the variants shown on a product's page */
 
 import { useNavigate } from 'react-router-dom'
-import { Product } from '../../model/product'
+import { Product } from '../../model/types'
 const ProductPageVariants = ({items}:{items:Product[]|undefined}) => {
     //Hook for navigating without links
     const navigate = useNavigate()

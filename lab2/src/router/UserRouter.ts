@@ -1,5 +1,5 @@
 import { addressType } from './../model/adress';
-import { ProductError } from './../service/UserService';
+
 import { hashize, isMultiProducts } from './../helper/utils';
 import { PastOrder, multiProduct } from './../model/pastorder';
 import express, { Request, Response } from "express";
@@ -7,6 +7,7 @@ import { User } from "../model/user";
 import { makeUserService } from '../service/UserService';
 import { isUser } from '../helper/utils';
 import { product_service } from './ProductRouter';
+import { ProductError } from '../model/ProductError';
 
 export const user_router = express.Router();
 
@@ -95,7 +96,7 @@ user_router.post("/register", async (
             res.status(400).send("Bad GET request, user properties must adhere to specification");
             return
         }
-        const resp = await user_service.addUser(Date.now(),user.name,user.email,hashize(user.password),user.phonenumber,user.birthdate,[{id:Date.now(),addressType:addressType.DELIVERY,street:user.street,city:user.city,country:user.country,zip:user.zip}]);
+        const resp = await user_service.addUser(user.name,user.email,hashize(user.password),user.phonenumber,user.birthdate,[{id:Date.now(),addressType:addressType.DELIVERY,street:user.street,city:user.city,country:user.country,zip:user.zip}]);
         
         if(resp instanceof ProductError){
             //Resp is of type ProductError
@@ -120,7 +121,11 @@ user_router.post("/register", async (
     if any error is thrown the catch will send it's own response
     */
 user_router.post("/order", async (
-    req: Request & {body:{items:multiProduct[]}, session: {user?: User}},
+    req: Request & {body:
+        {
+            items:multiProduct[]
+            id:string;
+        }, session: {user?: User}},
     res: Response< PastOrder | multiProduct[] | string>
 ) => {
     try {
@@ -161,6 +166,7 @@ user_router.get("/:id", async (
             res.status(400).send("Bad GET request, id must be of type string");
             return
         }
+        
         const resp = await user_service.getUser(id);
         
         if(resp instanceof ProductError){
@@ -188,8 +194,8 @@ user_router.delete("/:id", async (
 ) => {
     try {
         const { id } = req.params
-        const { user } = req.body
-        if(id == null || typeof(id) != "string" || user == null){
+        //const { user } = req.body
+        if(id == null || typeof(id) != "string" /* || user == null || user.id != id */){
             res.status(400).send("Bad GET request, id must be of type string and user must be logged in");
             return
         }

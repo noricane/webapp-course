@@ -4,7 +4,7 @@
 Not to be confused with productpagevariant which are the variants that are shown while on a specific product's page 
 These are shown when hovering over ProductCards while browsing*/
 
-import { Product } from '../../model/product'
+import { Product } from '../../model/types'
 import ProductLink from '../Logic/ProductLink';
 interface Props {
     map: Map<string,Product>|undefined;

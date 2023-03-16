@@ -14,6 +14,7 @@ import { Admin } from '../model/admin';
 import { address } from '../model/adress';
 import { product_service } from '../router/ProductRouter';
 import { newsletterModel } from '../../db/newsletter.db';
+import { ProductError } from '../model/ProductError';
 
 export interface IUserService {
     logInUser(mail: string,password:string) : Promise<User|ProductError>;
@@ -25,7 +26,7 @@ export interface IUserService {
     getUserOrders(id:string) : Promise<PastOrder[]|ProductError>;
     // Adds a product with the given description to the stores listings
     // and returns the created Product object
-    addUser(id:number,name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]): Promise<User|ProductError>
+    addUser(name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]): Promise<User|ProductError>
 
     // Restocks existing product with the given amount,
     // and returns true if restock was successful
@@ -39,15 +40,7 @@ export interface IUserService {
 
 }
 
-export class ProductError{
-    code:number;
-    message:string;
 
-    constructor(code:number, message:string){
-        this.code = code;
-        this.message = message;
-    }
-}
 
 export class UserService implements IUserService{
 
@@ -79,16 +72,12 @@ export class UserService implements IUserService{
     
     constructor(service:ProductService){
         this.productService=service;
-       /*  
-         console.log("Removing all");
-       (async()=>{
+        
+        /* console.log("Removing all");
+        (async()=>{
         const resp = await userModel.deleteMany({});
-      console.log("resp1",resp);
-
-      
-      })()
-          */
-
+        console.log("resp1",resp);      
+        })() */
     }
     
     /* Retrieves user if it is found. Returns ProductError if user isn't found. */
@@ -116,9 +105,9 @@ export class UserService implements IUserService{
     }
 
     /* Adds user if the user email doesn't exist in Map and returns it, returns a ProductError if user exists*/
-    async addUser(id:number,name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]): Promise<ProductError | User> {
+    async addUser(name: string,email: string,password:string,phonenumber: string,birthdate: Date,adresses: address[], ...orders:PastOrder[]): Promise<ProductError | User> {
             return userModel.create({
-                id:id,
+                id:Date.now(),
                 name:name,
                 email:email,
                 password:password,
@@ -132,7 +121,7 @@ export class UserService implements IUserService{
             }).catch((e:any) => {
                 /* Duplicate key error code is 11000, don't know what other errors may arise */
                 console.log(e);
-                return new ProductError(500, e.code == 11000 ? 'Email already exists' : e.message)
+                return new ProductError(400, e.code == 11000 ? 'Email already exists' : e.message)
             })
     }
     
@@ -165,7 +154,7 @@ export class UserService implements IUserService{
             }
             return {error:true,items:processed}
         }else{
-            return new ProductError(400, "User doesn't exist")
+            return new ProductError(404, "User doesn't exist")
         }
     }
 

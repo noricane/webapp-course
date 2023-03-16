@@ -1,7 +1,7 @@
 import { multiProduct } from '../model/types';
 
 import { EnumType } from "typescript";
-import { GENERALCOLOR } from "../model/product";
+import { GENERALCOLOR } from "../model/types";
 import { getProductCollection } from '../api';
 
 //Check if value of string is number

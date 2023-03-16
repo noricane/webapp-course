@@ -6,7 +6,8 @@ import express, { Request, Response } from "express";
 
 import { Product } from "../../model/product";
 import { isProduct, productConstructor } from '../../helper/utils';
-import { makeProductService, ProductError } from '../../service/ProductService';
+import { makeProductService } from '../../service/ProductService';
+import { ProductError } from "../../model/ProductError";
 import { User } from '../../model/user';
 
 

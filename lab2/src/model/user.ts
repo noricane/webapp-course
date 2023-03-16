@@ -12,7 +12,7 @@ export interface User extends BaseUser{
     orders: PastOrder[]
     adresses: {
         id: number;
-        type: addressType;
+        addressType: addressType;
         street: string;
         city: string;
         country: string; 

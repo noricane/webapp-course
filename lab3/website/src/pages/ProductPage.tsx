@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { getProduct } from '../api';
+import { getProduct, getProductVariants } from '../api';
 import ProductPageVariants from '../components/Misc/ProductPageVariants';
 import Carousel from '../components/structural/Carousel';
 import ProductImages from '../components/structural/ProductImages';
 import SizeList from '../components/structural/SizeList';
 import { config } from '../model/config';
-import { Product } from '../model/product';
+import { Product } from '../model/types';
 import { useLocation } from "react-router-dom";
 import { multiProduct, stockedSize } from '../model/types';
 import { cartAtom } from '../model/jotai.config';
@@ -15,51 +15,42 @@ import axios from 'axios';
 
 const ProductPage = () => {
   const addToCart = () => {
-    console.log("adding");
-    
+    /* Check that query is valid */
     if(size == null || Product == null){      
       return
     }
+    /* Chcek the case where the intended item already is in cart */
     if(cart != null && cart.filter(e => e.item.id == Product.id && e.item.color == Product.color  &&  e.size == size.size).length != 0){
-
-      
       const cartItem:multiProduct = cart.filter(e => e.item.id == Product.id && e.item.color == Product.color && e.size == size.size)[0]
       const rest:multiProduct[] = cart.filter(e => e.item.color != Product.color || e.item.id != Product.id || e.size != size.size)
       cartItem.amount++
-      console.log("first");
-
       const cartObj = [cartItem,...rest]
       localStorage.setItem('cart',JSON.stringify(cartObj))
       setCart(cartObj)
-      console.log(cart);
-      
-      
+
+      /* Check the case where the cart is empty*/
     }else if(cart.length == 0 && Product != null){
-      console.log("secibd");
-      
       const cartObj = [{item:Product,size:size.size,amount:1}]
       localStorage.setItem('cart',JSON.stringify(cartObj))
       setCart(cartObj)
+
+      /* Else cart isn't empty and our item doesn't exist*/
     }else{
-      console.log("last");
-      
       setCart(prev => {
         const cartObj = [...prev,{item:Product,size:size.size,amount:1}]
         localStorage.setItem('cart',JSON.stringify(cartObj))
         return cartObj
       })
-
     }
-
   }
   
-  
+  /* Group of variables used to parse our link and get the product id and color */
   const location = useLocation()
   const {pathname,search} = location
   const id = pathname.split('/')[pathname.split('/').length-1]
   const color = search.split('=')[search.split('=').length-1]
   
-  
+  /* State management */
   const [size, setSize] = useState<{size:number,amount:number}>() 
   const [Product, setProduct] = useState<Product>() 
   const [variants, setVariants] = useState<Product[]>() 
@@ -77,27 +68,26 @@ const ProductPage = () => {
         setProduct(p)
       })()
     },[])
-
+    /* Use effect that fetches a product and it's variants */
    useEffect(()=>{
     if(Product == null){return}
       (async ()=>{
-        const {data}:{data:{key:string,value:Product}[]|string} = await axios.get(`${config.URL}/product/${Product.id}`)
-        if(typeof(data) == "string"){return}
+        /* Get variant data and set it */
+        const data = await getProductVariants(Product.id);
+        if(data == undefined){return;}
         const list:Product[] = []
         console.log(data)
         data.forEach(e => e.value.color != Product.color && list.push(e.value))
-
-        setVariants([Product,...list])
-
-  
+        setVariants([Product,...list]) 
       })()
       
     },[Product])
+
     if(Product == null){
         return (<div className='utsm:min-h-screen h-[50rem] flex justify-center items-center font-oswald text-5xl'>Loading...</div>)
     }
     if(error){
-        return (<div className='utsm:min-h-screen h-[50rem] flex justify-center items-center font-oswald text-5xl'>Erro message</div>)
+        return (<div className='utsm:min-h-screen h-[50rem] flex justify-center items-center font-oswald text-5xl'>Error message</div>)
     }
 
   return (
@@ -112,8 +102,7 @@ const ProductPage = () => {
             <h1 className='text-4xl font-oswald font-bold'>{Product.name}</h1>
             <h3 className='text-xl text-stone-500 font-oswald'>"{Product.color}"</h3>
             <span className='text-xl font-semibold mb-3'>{Product.price*Product.price_factor} {config.CURRENCY}</span>
-
-
+                {/*  */}
                 <ProductPageVariants items={variants} />
 
 

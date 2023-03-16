@@ -142,7 +142,7 @@ export async function getProduct(id:string,color:string):Promise<Product | undef
   try {
     let arr:Product[]= []
     const {data}:{data:Product} =  await axios.get(`${config.URL}/product/${id}?color=${color}`);
-
+ 
     
     if (data != null) {
       return data

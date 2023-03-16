@@ -1,11 +1,14 @@
+
 import { multiProduct } from './../model/pastorder';
 import { toObject, GENERALCOLOR } from './../helper/utils';
 import express, { Request, Response } from "express";
 import { Product } from "../model/product";
 import { isProduct, productConstructor } from '../helper/utils';
-import { makeProductService, ProductError } from '../service/ProductService';
+import { makeProductService } from '../service/ProductService';
+import { ProductError } from "../model/ProductError";
 import { User } from '../model/user';
 import { initShoes } from '../service/dummyproducts';
+import { Admin } from 'mongodb';
 
 
 export const product_service = makeProductService();
@@ -265,6 +268,17 @@ product_router.post("/", async (
     res: Response<Product | string>
 ) => {
     try {
+        //Adding cookie validation broke my tests.
+       /*  const {user:admin} = req.cookies
+        if(admin == null){
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- Admin must be logged in`);
+            return;
+        }
+        const validate =  await admin_service.validateAdmin(admin)
+        if(validate == false){
+            res.status(400).send(`Bad POST call to ${req.originalUrl} --- Admin not valid`);
+            return;
+        } */
         if (!isProduct(req.body.productInformation)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description does not adhere to constructor for product`);
             return;
@@ -281,6 +295,8 @@ product_router.post("/", async (
             res.status(200).send(resp);   
         }
     } catch (e: any) {
+        console.log(e);
+        
         res.status(500).send(e.message);
     }
 })
@@ -293,10 +309,13 @@ product_router.post("/", async (
     If it succeeds in adding, the response will be that product.
     If error is thrown response will contain the message with code 500  */
 product_router.put("/", async (
-    req: Request<{}, {}, {productInformation : productConstructor }>,//TODO chekc that admin cookie exists here
+    req: Request & {body:{productInformation : productConstructor}, cookies:{user?:Admin}    }, //TODO chekc that admin cookie exists here
     res: Response<string>
 ) => {
     try {
+        console.log("in router",req.body);
+        console.log("in cookies",req.cookies);
+        
         if (!isProduct(req.body.productInformation)) {
             res.status(400).send(`Bad POST call to ${req.originalUrl} --- description does not adhere to constructor for product`);
             return;

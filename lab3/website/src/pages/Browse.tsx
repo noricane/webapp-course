@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getFilteredProducts, getProducts } from '../api'
 import { ColorDropdown, GeneralDropdown } from '../components/Misc/Dropdown'
 
 import Grid from '../components/structural/Grid'
@@ -8,20 +9,22 @@ import Grid from '../components/structural/Grid'
 import { checkLatinCharacters, ToArray } from '../helper/utils'
 import { config } from '../model/config'
 
-import { CATEGORY, GENERALCOLOR, Product } from '../model/product'
+import { CATEGORY, GENERALCOLOR, Product } from '../model/types'
 
-
+/* Object that represents filtering functionality. */
 export type FilterState = {
   brand:    string       | null,
   category: CATEGORY     | null,
   color:    GENERALCOLOR | null,
 }
 
+/* Object that represents reducer call. */
 type FilterAction = {
   type: 'set_brand' | 'set_category' | 'set_color',
   payload: FilterState
 }
 
+/* Reducer to handle filtering. Modifies all three possible filter properties of FilterState object. */
 function reducer(state:FilterState, 
                   action:{type:FilterAction["type"],payload:string}):FilterState  {
   switch (action.type) {
@@ -53,36 +56,24 @@ function reducer(state:FilterState,
 const Browse = () => {
   async function getTasksPayload({category,color,brand}:{category:CATEGORY | null, color:GENERALCOLOR | null, brand:string | null}){
     try {
-
-    const {data}:{data:Product[]} =  await axios.get(`${config.URL}/product?${category != null ? `category=${category}&` : ''}${color != null ? `color=${color}`: ''}`);
-    console.log("DATA IS ",data);
-    
-
-    setItems(data)
-    
-    if (brand != null) {
-      setFiltered(data == null ? undefined :  data.filter((e:Product) => checkLatinCharacters(e.brand) == checkLatinCharacters(brand)))
-    } else{
-      setFiltered(data)
+      const data:Product[] = await getFilteredProducts(category,color)
+      console.log("data is",data);
       
-    }
-  
+      setItems(data)      
+      if (brand != null) {
+        setFiltered(data == null ? undefined :  data.filter((e:Product) => checkLatinCharacters(e.brand) == checkLatinCharacters(brand)))
+      } else{
+        setFiltered(data)
+      }
     } catch (error) {
+      console.log(error);
     }
   }
-  async function getProducts(){
+  async function fetchProducts(){
     try {
-    let arr:Product[]= []
-    const {data}:{data:Map<string,Map<string,Product>>} =  await axios.get(`${config.URL}/product`);
-    Array.from(data.values()).forEach((e:any) => {
-      e.value.forEach((element:any) => {
-        arr.push(element.value)
-      })        
-    })
-
-    
-    setFiltered(arr)
-    setItems(arr)
+      const arr:Product[] = await getProducts()
+      setFiltered(arr)
+      setItems(arr)
     } catch (error) {
     }
   }
@@ -96,7 +87,7 @@ const Browse = () => {
 }
   useEffect(()=>{
     
-    getProducts();   
+    fetchProducts();   
     getBrands();   
   },[])
   

@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react'
-import { GENERALCOLOR } from '../../model/product';
+import { GENERALCOLOR } from '../../model/types';
 import useComponentVisible from '../hooks/useComponentVisible';
 
 

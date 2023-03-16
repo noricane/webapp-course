@@ -1,6 +1,8 @@
 import React from "react";
 import Article from "../components/Misc/Article";
 
+
+/* Static news page */
 const News = () => {
     const lorem:string = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque iste
     est voluptatibus quod nobis officia ratione molestiae tempora numquam

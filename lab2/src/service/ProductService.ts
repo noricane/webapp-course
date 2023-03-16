@@ -9,6 +9,7 @@ import { productConstructor } from '../helper/utils';
 import { initShoes } from './dummyproducts';
 import { multiProduct } from '../model/pastorder';
 import { productModel } from '../../db/product.db';
+import { ProductError } from '../model/ProductError';
 
 
 export interface IProductService {
@@ -48,16 +49,6 @@ export interface IProductService {
     // and returns the removed product object
     removeProductColor(id: string, color:string): Promise<Product|ProductError> 
 
-}
-
-export class ProductError{
-    code:number;
-    message:string;
-
-    constructor(code:number, message:string){
-        this.code = code;
-        this.message = message;
-    }
 }
 
 export class ProductService implements IProductService{

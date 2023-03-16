@@ -5,7 +5,8 @@ import express, { Request, Response } from "express";
 import { User } from "../../model/user";
 import { Admin } from "../../model/admin";
 
-import { makeProductService, ProductError } from '../../service/ProductService';
+import { makeProductService } from '../../service/ProductService';
+import { ProductError } from "../../model/ProductError";
 import { makeAdminService } from '../../service/AdminService';
 import { UserRequest, user_service } from './UserRouter';
 

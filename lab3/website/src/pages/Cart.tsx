@@ -23,37 +23,32 @@ const Cart = () => {
             console.log(resp);
             
             if(typeof resp == "string"){
+                /* Type not matching cart type */
                 setError(resp)
-            }else if(Array.isArray(resp) || resp.id && resp.items.length==0){
+            }else if(Array.isArray(resp) || resp.id == null){
+                /* Not PastOrder maning that no order has been processed since the cart didn't match what was on the server, we've received an updated cart instead */
                 console.log(resp);
                 console.log("setting");
                 setError("One or more items just became unavailable, please try again")
                 setCart(prev => Array.isArray(resp) ? resp : prev)
             
             }else if(resp.id && resp.items.length>0 && session != null){
-                let newOrder:PastOrder = {id:resp.id,items:resp.items}
-                setOrder(prev => {
-                    console.log("in here");
-                    
-
-                    console.log(newOrder);
-                    
-                    return newOrder
-                })
-
+                /* PastOrder, meaning that the order was successfully processed and added. */
+                const newOrder:PastOrder = {id:resp.id,items:resp.items}
+                /* Order Atom to save order when moving to success page */
+                setOrder(newOrder)
                 setSession(prev =>  {
+                    /* Update local user order list until it's been updated */
                     if(prev == null){return}
                     const orders = Array.isArray(prev.orders) ? [...prev.orders] : [];
                     orders.push(newOrder)
-                    console.log("list",orders);
                     localStorage.setItem('user',JSON.stringify({...prev,orders:orders}))
                     return {...prev,orders:orders}
                 })
+                /* Empty the cart */
                 localStorage.setItem('cart',JSON.stringify([]))
                 setCart([])
-                
                 nav(`/success`)
-                console.log("success!!!");
                 
             }
 

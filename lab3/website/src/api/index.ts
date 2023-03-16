@@ -1,9 +1,10 @@
-import { multiProduct } from '../model/types';
+import { CATEGORY, GENERALCOLOR, multiProduct } from '../model/types';
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { config } from "../model/config";
-import { Product } from "../model/product";
+import { Product } from "../model/types";
 import { ProductError, User } from "../model/types";
+import { color } from 'framer-motion';
 
 /* 
 Get all products from backend*/
@@ -21,6 +22,21 @@ export async function getProducts():Promise<Product[]>{
 
       //Return array of all products if no error was met
       return arr
+    } catch (error) {
+      console.log(error);
+      return []
+    }
+}
+
+/*
+Get a filtered list of products from backend*/
+export async function getFilteredProducts(category:CATEGORY | null, color:GENERALCOLOR | null):Promise<Product[]>{
+    try {
+
+      const {data} =  await axios.get(`${config.URL}/product?${category != null ? `category=${category}&` : ''}${color != null ? `color=${color}`: ''}`);      
+
+      //Return array of all products if no error was met
+      return data
     } catch (error) {
       console.log(error);
       return []
@@ -46,6 +62,22 @@ export async function getProductCollection(list:multiProduct[]):Promise<multiPro
     }
 }
 
+/* 
+Return a specific product and it's variants if it is found */
+export async function getProductVariants(id:string):Promise<{key:string,value:Product}[] | undefined>{
+    try {
+
+      const {data}:{data:{key:string,value:Product}[]|string} = await axios.get(`${config.URL}/product/${id}`)
+
+      
+      if (typeof data != "string") {
+        return data
+    }
+      return undefined
+    } catch (error) {
+      
+    }
+}
 /* 
 Return a specific product if it is found */
 export async function getProduct(id:string,color:string):Promise<Product | undefined>{

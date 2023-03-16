@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Badge from '../Misc/Badge'
 import Price from '../Misc/Price'
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import { Product } from '../../model/product';
+import { Product } from '../../model/types';
 import axios from 'axios';
 import { config } from '../../model/config';
 import ProductVariants from '../Misc/ProductVariants';
@@ -15,13 +15,17 @@ interface Props{
     item:(MapAndColor|Product);
     key:string,
 }
+
+
+/* Component for displaying and linking to products and their various variations when browsing a grid or a carousel */
 const ProductCard = ({item,key}:Props //in some places we already have acces to the map. In some places we don't, if only product is passed, fetch data here.
 ) => {
+    /* State management */
     const [currentImage, setCurrentImage] = useState<string>()
     const [product, setProduct] = useState<Product>()
     const [map, setMap] = useState<Map<string,Product>>()
+    /* Get product's variants */
     const getProducts = async (item:Product) => {
-
         const {data}:{data:any[]} = await axios.get(`${config.URL}/product/${item.id}`)
         const toMap = new Map<string,Product>()
         data.forEach(e => toMap.set(e.key,e.value))
@@ -29,7 +33,7 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
             setMap(toMap)
         }
     }
-    
+    /* Check if items is map or product. Unnecessary to make a http request if we have the map */
   useEffect(() => {
     if (item instanceof MapAndColor) {
         const product = item.map.get(item.color);
@@ -42,18 +46,17 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
         getProducts(item)
     }    
   }, []);
+  /* Default message */
   if(product == null ){return <div>Loading..</div>}
-
     const variantStyles = "[&>*>#variants]:hover:opacity-100 [&>*>#variants]:hover:bottom-[4rem] [&>*>#variants]:hover:h-[4rem]"
     const price = 2000
     const pricefactor = 0.8
-  return (
-     
-     
+  
+    return (
      <li key={key} className={`bg-white ${variantStyles}  rounded-sm shadow-xl`}>
         <div className="h-96  ">
-        {product == null ? 'ERROR' :<ProductLink color={product.color} id={product.id}> <img className='h-full w-full object-contain'  src={currentImage} alt="" />  </ProductLink>}
-        <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>
+            {product == null ? 'ERROR' :<ProductLink color={product.color} id={product.id}> <img className='h-full w-full object-contain'  src={currentImage} alt="" />  </ProductLink>}
+            <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>
         </div>
         <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
             <div className='font-bold text-lg mb-2  whitespace-nowrap max-h-4 text-ellipsis'>{product.brand} </div>
@@ -68,7 +71,7 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
                 </div>
             </div>
         </div>
-        </li>
+    </li>
 
      
   )

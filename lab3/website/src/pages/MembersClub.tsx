@@ -3,6 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { sessionAtom } from "../model/jotai.config";
 
+
+/* Feel free to ignore barely any TS (static site) */
 const MembersClub = () => {
     const [user,] = useAtom(sessionAtom)
 

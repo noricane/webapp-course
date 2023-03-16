@@ -8,12 +8,17 @@ import ErrorSpan from '../components/Misc/ErrorSpan'
 import { sessionAtom } from '../model/jotai.config'
 import { User } from '../model/types'
 
+/* Simple two panel selector account page */
 const Account = ({PropPage=PersonalInfo}:{PropPage?:({user}:{user:User}) => JSX.Element}) => {
+  /* view panel component  */
   const [CURRENT,SETCURRENT] = useState<JSX.Element>()
-  const [user,] = useAtom(sessionAtom)
+  const [user,] = useAtom(sessionAtom) 
   const location = useLocation();
 
   console.log(user);
+  /* 
+  Check if component data has been passed through a link and set component to it.
+  Otherwise check if component has been passed as prop and set current to it. */
   useEffect(()=>{
     const COMPONENT = location.state?.ProfileSettings
     if(COMPONENT != null && typeof(COMPONENT) == "function"){
@@ -33,7 +38,7 @@ const Account = ({PropPage=PersonalInfo}:{PropPage?:({user}:{user:User}) => JSX.
     
   }
   return (
-    <div className='min-h-[60vh] grid grid-cols-7'>
+    <div className='min-h-[60vh] grid grid-cols-7 utsm:flex utsm:flex-col'>
       <section className='col-span-2 utsm:col-span-3 shadow-lg z-[1]  [&>button]:text-start flex font-oswald gap-4 text-lg flex-col p-4 items-start border-stone-300 border-r-[1px]'>
         <h2 className=' mb-4 font-oswald text-2xl'>My Account</h2>
         <button onClick={()=>SETCURRENT(<PersonalInfo user={user}/>)}>Personal Information</button>

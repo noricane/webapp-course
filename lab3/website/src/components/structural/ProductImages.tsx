@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+
+/* Component for displaying one large image and a tile of additional images to select in the ProductPage */
 const ProductImages = ({images}:{images:string[]}) => {
     const [selected, setSelected] = useState<string>()
     useEffect(()=>{
@@ -10,12 +12,10 @@ const ProductImages = ({images}:{images:string[]}) => {
         return <div>No images found</div>
     }
     
-
-
   return (
     <>
-        <div className=' shadow-lg bg-white flex items-center justify-center'>
-            <img src={selected} className=" sm:h-[50vw] rounded-t-xl" alt="" />
+        <div className=' shadow-lg bg-white flex items-center rounded-t-xl justify-center'>
+            <img src={selected} className=" sm:h-[50vw]" alt="" />
         </div>
         <div className='h-[1px] bg-stone-300'></div>
         <div className='flex shadow-lg   md:h-[10vw] h-24 overflow-scroll bg-stone-300 rounded-b-xl'>

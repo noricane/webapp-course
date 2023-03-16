@@ -5,6 +5,7 @@ import { product_router } from './router/ProductRouter';
 /**
 * Required External Modules
 */
+const cookieParser = require("cookie-parser");
 require('dotenv').config()
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
@@ -35,6 +36,7 @@ origin: true, //Allows requests from any origin, not good for production
 methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD','DELETE'],
 credentials : true //Specifies if express should include session id in every response, if this is true then origin property must be specified. 
 }));
+app.use(cookieParser());
 app.use(express.json());
 app.use("/product", product_router);
 app.use("/user", user_router);

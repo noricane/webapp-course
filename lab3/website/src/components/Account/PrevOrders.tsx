@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { multiProduct, User } from '../../model/types'
 
-/* Previous orders section of the Account page */
+/* Previous orders section of the Account page - mobile optimized of course*/
 const PrevOrders = ({user}:{user:User}) => {
   const [orders, setOrders] = useState<{id:number,items:multiProduct[]}[]>([])
 
@@ -38,7 +38,7 @@ const Order = ({id,items}:{id:number,items:multiProduct[]}) => {
  
 
   return (
-    <section className='w-96 rounded-sm grid grid-cols-10  bg-white border-2 border-stone-400  h-auto'>
+    <section className='w-96 utsm:w-[100%] rounded-sm grid grid-cols-10  bg-white border-2 border-stone-400  h-auto'>
           <div className='w-full col-span-10  flex justify-between p-2 px-4'>
             <span className='font-oswald   text-stone-700'>{id}</span>   
             <button onClick={()=>setOpen(prev => !prev)} className='border-2 border-stone-300 py-1 px-2 rounded-sm w-24 hover:bg-stone-300 active:bg-stone-400'>{open ? 'Close' : 'Open'}</button>
@@ -50,7 +50,7 @@ const Order = ({id,items}:{id:number,items:multiProduct[]}) => {
 
               
               return<div className='flex col-span-full px-2 justify-between items-center w-full'>
-              <img className='  object-contain utsm:h-36 h-36 place-self-center bg-white  ' src={element.item.images[0]} alt="" />
+              <img className='  object-contain utsm:h-30 h-36 place-self-center bg-white  ' src={element.item.images[0]} alt="" />
                <div>
                 <h1 className='justify-self-end font-oswald'>{element.item.brand}</h1>
                 <h2 className='justify-self-end text-stone-600'>{element.item.color}</h2>

@@ -113,7 +113,7 @@ export function isUser(arg: any){
 
     
     if (!nameCheck || !emailCheck || !passwordCheck || !phonenumberCheck || !birthdateCheck || !addressCheck /* || !orderCheck  */
-        || Object.keys(arg).length > checks.length+3) {//adress check is checking 4 properties
+        || Object.keys(arg).length > checks.length+arr.length) {//adress check is checking 4 properties
         return false
     }
     return true

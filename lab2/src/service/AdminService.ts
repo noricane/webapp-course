@@ -4,10 +4,13 @@ import { Admin } from "../model/admin";
 import { User } from "../model/user";
 import { adminModel } from '../../db/admin.db';
 import { hashize } from '../helper/utils';
+import { ProductError } from '../model/ProductError';
 
 
 export interface IAdminService {
     logInUser(mail: string,password:string) : Promise<Admin|ProductError>;
+
+    validateAdmin(admin:Admin):Promise<boolean>
 
     getUsers() : Promise<User[]|ProductError>;
 
@@ -16,16 +19,6 @@ export interface IAdminService {
     removeAdmin(email:string): Promise<Admin|ProductError> 
 
     getAdmin(email:string) : Promise<Admin|ProductError>;
-}
-
-export class ProductError{
-    code:number;
-    message:string;
-
-    constructor(code:number, message:string){
-        this.code = code;
-        this.message = message;
-    }
 }
 
 export class AdminService implements IAdminService{
@@ -52,6 +45,20 @@ export class AdminService implements IAdminService{
 
     constructor(service:UserService){
         this.userService=service;
+
+      /* console.log("Removing all");
+       (async()=>{
+        const resp = await adminModel.deleteMany({});
+      console.log("resp",resp);
+      })() */
+    }
+    async validateAdmin(admin: Admin): Promise<boolean> {
+        const query = await adminModel.findOne({email:admin.email})
+        if(query == null){
+            return false
+        }
+
+        return query?.password == admin.password
     }
    
     /* Returns list of users from userService */
