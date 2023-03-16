@@ -133,12 +133,28 @@ export async function getUserInfo(em:string):Promise<any>{
     
   }
   
-  const cookie = Cookies.get('user') as string;
+  const cookie = localStorage.getItem('user') as string;
   if(cookie == null){return false}
-  const object = JSON.parse(decodeURIComponent(cookie)) 
+  const object = JSON.parse(cookie)
   //console.log("object",object);
   
   return object
+}
+export async function deleteUser(em:string):Promise<string | User>{
+  const resp = await axios.delete(`${config.URL}/user/${em}`,{
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    withCredentials: true
+  }).catch((e:AxiosError) =>{
+    throw new Error (e.response?.data == null ? e.message : e.response.data as string)})
+
+    //console.log(resp.data);
+    return resp.data
+  
+  
+  
+
 }
 
 /* 

@@ -194,6 +194,7 @@ user_router.delete("/:id", async (
 ) => {
     try {
         const { id } = req.params
+        //Should check that user is logged in of course, right now this doesn't work
         //const { user } = req.body
         if(id == null || typeof(id) != "string" /* || user == null || user.id != id */){
             res.status(400).send("Bad GET request, id must be of type string and user must be logged in");

@@ -3,14 +3,18 @@ import { useAtom } from 'jotai'
 import Cookies from 'js-cookie'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { deleteUser } from '../../api'
 import { sessionAtom } from '../../model/jotai.config'
 import { User } from '../../model/types'
 import Input from '../HTML/Input'
+import ErrorSpan from '../Misc/ErrorSpan'
+
 
 /* Settings section of the Account page, 
 page for allowing email and password changes */
 const ProfileSettings = ({user}:{user:User}) => {
   const nav = useNavigate()
+  const [message, setMessage] = useState<string>()
   const [email, setEmail] = useState<string>()
   const [password1, setPassword1] = useState<string>()
   const [password2, setPassword2] = useState<string>()
@@ -21,8 +25,10 @@ const ProfileSettings = ({user}:{user:User}) => {
     nav('/')
   }
   const deleteHandler = () => {
-    
-    setTimeout(()=>nav('/'),1000)
+    deleteUser(user.email)
+    localStorage.removeItem('user')
+    setMessage("Deleting...")
+    setTimeout(()=>{nav('/');nav(0)},1000)
   }
 
   return (
@@ -42,7 +48,8 @@ const ProfileSettings = ({user}:{user:User}) => {
 
       </span>
       <button onClick={()=>logOutHandler()} className='justify-self-end w-24 h-12 bg-stone-800 text-red-500 font-bold'>Log out</button>
-      <button onClick={()=>deleteHandler()} className='justify-self-start w-24 h-12 bg-stone-800 text-red-500 font-bold'>Delete Account</button>
+      <button onClick={()=>deleteHandler()} className='justify-self-start w-36 h-12 bg-stone-800 text-red-500 font-bold'>Delete Account</button>
+      <div className='col-span-full text-center'>{message && <ErrorSpan message={message}/>}</div>
     </div>
     </div>
   )

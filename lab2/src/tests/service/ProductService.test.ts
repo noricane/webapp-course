@@ -114,7 +114,9 @@ expect(!(add_res instanceof ProductError)).toBeTruthy()
 if(!(add_res instanceof ProductError)){
   const multiProduct: multiProduct[]= [{item:add_res,size:7,amount: 8,}]
   const process_res = await test_env.processOrder(...multiProduct)
+  
   expect(arraysEqual(process_res,multiProduct)).toBeTruthy()
+
   const remove_res = await test_env.removeProduct(add_res.id)
   expect(!(remove_res instanceof ProductError)).toBeTruthy()
 }

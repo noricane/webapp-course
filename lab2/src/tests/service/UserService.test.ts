@@ -73,7 +73,7 @@ test('Adds user to test_env and logs newly added user, then removes the user', a
 });
 
 
-test('Adds user to test_env and logs newly added user, then removes the user', async () => {
+test('Adds user to test_env and logs newly added user, gets the users orders and then removes the user', async () => {
     const fakeProduct:Product = {
         id: "fakeid",
         name: "testuserservice",
