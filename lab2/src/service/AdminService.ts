@@ -46,14 +46,14 @@ export class AdminService implements IAdminService{
     constructor(service:UserService){
         this.userService=service;
 
-      /* console.log("Removing all");
+     /*  console.log("Removing all");
        (async()=>{
         const resp = await adminModel.deleteMany({});
       console.log("resp",resp);
 
-      setTimeout(()=> adminModel.create({id:Date.now(),name:"Admin1",email:"admin1",password:"admin1"}),1000)
-
-      })() */
+      setTimeout(()=> this.addAdmin(Date.now(),"Admin1","admin1","admin1"),1000)
+      
+    })() */
     }
     async validateAdmin(admin: Admin): Promise<boolean> {
         const query = await adminModel.findOne({email:admin.email})

@@ -1,3 +1,11 @@
+/* COPYPASTED FROM WEBSITE CLIENT FEEL FREE TO IGNORE */
+
+
+
+
+
+
+
 import React, { useEffect } from 'react'
 import { Product } from '../../model/product'
 import ProductLink from '../Logic/ProductLink';

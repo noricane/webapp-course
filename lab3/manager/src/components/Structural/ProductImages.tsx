@@ -1,3 +1,7 @@
+/* Almost identical to website client, feel free to ignore */
+
+
+
 import React, { useEffect, useState } from 'react'
 import { TiDeleteOutline } from "react-icons/ti";
 

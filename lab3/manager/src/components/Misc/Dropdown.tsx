@@ -1,3 +1,8 @@
+/* COPYPASTED FROM WEBSITE CLIENT FEEL FREE TO IGNORE */
+
+
+
+
 import React, { ReactNode, useState } from 'react'
 import { GENERALCOLOR } from '../../model/misc';
 import { FilterState } from '../../pages/Dashboard';

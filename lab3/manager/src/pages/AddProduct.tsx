@@ -15,10 +15,7 @@ import { addProduct } from '../components/api';
 import Input from '../components/HTML/Input';
 
 const AddProduct = () => {
-  
-     
-  
-
+  /* State management */
   const [sizeList, setSizeList] = useState<{size:number,amount:number}[]>([]) 
   const [sizeOpen, setSizeOpen] = useState<boolean>(false) 
   const [name, setName] = useState<string>() 
@@ -36,20 +33,29 @@ const AddProduct = () => {
   const [session, ] = useAtom(sessionAtom)
   const colors :string[] = GeneralColorToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   const categories :string[] = CategoryToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
-
+  const nav = useNavigate()
  
     
   const submitHandler = () => {
-
+    /* Checl that input is valid */
     if(sizeList.length == 0 || !checkString(name) || !checkString(brand) || !checkString(color) || colors.filter(e => e.toLowerCase()==generalColor?.toLowerCase()).length == 0 ||category == null || categories[parseInt(category as string)]==null || !checkString(desc) || price == null || isNaN(parseInt(price)) || priceFactor == null || isNaN(parseInt(priceFactor)) || images.length ==0    ){
       setError("Input nonvalid")
       return
     }
+    /* Send request */
     (async () => {
       let pf = 1- parseInt(priceFactor)/100 > 0 &&1- parseInt(priceFactor)/100 <= 1 ? 1- parseInt(priceFactor)/100 : 1 
       /* @ts-ignore - Typescript doesn't realize that we've checked name etc in the checkString function. */
       const resp = await addProduct(name,brand,desc,color,(generalColor+"").toUpperCase(),(category+"").toUpperCase(),parseInt(price),pf,sizeList,images)
-      console.log("Respoinse",resp);
+      console.log("log",resp);
+      
+      if(resp == true){
+        setError("Successfully added product")
+        setTimeout(()=>nav('/'),2000)
+        return
+      }
+      setError("Something went wrong, please try again");
+      setTimeout(()=>setError(undefined),2000)
       
     })()
   }
@@ -156,9 +162,9 @@ const AddProduct = () => {
           
 
 
+              {error && <div className='absolute text-stone-600 text-2xl bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
             <button onClick={()=>{submitHandler()}} className='col-span-2 mt-4 justify-self-center w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add Product +</button>
 
-              {error && <div className='absolute text-red-400 bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
         </article>
     </div>
    

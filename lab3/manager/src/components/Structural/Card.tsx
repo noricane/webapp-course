@@ -1,3 +1,8 @@
+/* COPYPASTED FROM WEBSITE CLIENT FEEL FREE TO IGNORE */
+
+
+
+
 import React from 'react'
 
 const Card = (props:any) => {

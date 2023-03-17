@@ -1,3 +1,5 @@
+/* Almost identical to website client, feel free to ignore */
+
 import React, { useEffect, useState } from 'react'
 import Badge from '../Misc/Badge'
 import Price from '../Misc/Price'

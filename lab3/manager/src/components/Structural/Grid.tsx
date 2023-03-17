@@ -1,3 +1,8 @@
+/* COPYPASTED FROM WEBSITE CLIENT FEEL FREE TO IGNORE */
+
+
+
+
 import { useEffect } from 'react'
 import { Product } from '../../model/product'
 import ProductCard from './ProductCard'

@@ -1,3 +1,8 @@
+/* COPYPASTED FROM WEBSITE CLIENT FEEL FREE TO IGNORE */
+
+
+
+
 
 /* Not to be confused with product variants which are the items that are shown when hovering over a product while browsing
 These are the variants shown on a product's page */

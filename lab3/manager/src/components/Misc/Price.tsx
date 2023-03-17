@@ -1,4 +1,10 @@
 import React from 'react'
+/* COPYPASTED FROM WEBSITE CLIENT FEEL FREE TO IGNORE */
+
+
+
+
+
 import { config } from '../../model/config'
 import Badge from './Badge'
 

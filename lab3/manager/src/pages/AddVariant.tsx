@@ -96,7 +96,7 @@ const AddProduct = () => {
     (async ()=>{
       const p = await getProduct(idParam,colorParam)
       if(p == undefined){
-        setError("true")
+        setError("Something went wrong")
         return
       }
       setProduct(p)
@@ -135,7 +135,11 @@ const AddProduct = () => {
       let pf = 1- parseInt(priceFactor)/100 > 0 &&1- parseInt(priceFactor)/100 <= 1 ? 1- parseInt(priceFactor)/100 : 1 
       /* @ts-ignore - Typescript doesn't realize that we've checked name etc in the checkString function. */
       const resp = await addProduct(Product.name,Product.brand,desc,color,generalColor?.toUpperCase(),category?.toUpperCase(),parseInt(price),pf,sizeList,images)
-      console.log("Respoinse",resp);
+      if(resp == true){
+        setError("Successfully added product")
+        setTimeout(()=>nav('/'),2500)
+      }
+      setError("something went wrong")
       
     })()
   }
@@ -212,7 +216,7 @@ const AddProduct = () => {
 
             <button onClick={()=>{submitHandler()}} className='col-span-2 mt-4 justify-self-center w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add Product +</button>
 
-              {error && <div className='absolute text-red-400 bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
+              {error && <div className='absolute text-stone-800 bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
         </article>
     </div>
    
