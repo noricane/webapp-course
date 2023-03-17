@@ -62,12 +62,12 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
   return (
      
      
-     <li key={key} className={`bg-white ${variantStyles}  h-96 rounded-sm shadow-xl`}>
+     <li key={key} className={`bg-white ${variantStyles}  h-[36rem] rounded-sm shadow-xl`}>
         <div className="h-96  ">
         {product == null ? 'ERROR' :<ProductLink to='edit' color={product.color} id={product.id}> <img className='h-full w-full object-contain'  src={currentImage} alt="" />  </ProductLink>}
         <ProductVariants parentImage={product.images[0]} setCurrent={setCurrentImage} color={item.color} map={map}/>
         </div>
-        <div className='  px-3 py-2  bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
+        <div className='  px-3 py-2  h-48 bg-stone-50 border-t-2 border-stone-200 overflow-hidden whitespace-nowrap text-ellipsis'>
             <span className='font-bold text-xl  whitespace-nowrap max-h-4 text-ellipsis'>{product.brand} {product.name}  </span>
             <br /><span className='text-stone-600 text-lg font-semibold'>{product.color}</span>
             <div className='flex items-center justify-between my-2'>

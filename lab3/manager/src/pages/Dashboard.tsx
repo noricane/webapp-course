@@ -150,7 +150,7 @@ const Dashboard = () => {
   
   
   return (
-    <div className='bg-stone-200 m-4 rounded-md min-h-screen p-4'>
+    <div className='bg-stone-200 m-4 rounded-md min-h-screen h-auto p-4'>
         <div className='text-center flex utlg:grid grid-rows-2 items-center justify-center gap-3'>
           <Link to={'/addproduct'}> <Button desc='Add Product +' /></Link>
 
