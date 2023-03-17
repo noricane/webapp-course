@@ -18,6 +18,7 @@ import ProductLink from '../components/Logic/ProductLink';
 import TextArea from '../components/HTML/TextArea';
 import Input from '../components/HTML/Input';
 import { checkString } from '../helper/utils';
+import ProductPageVariants from '../components/Misc/ProductPageVariants';
 
 const ProductPage = () => {
 
@@ -25,28 +26,44 @@ const ProductPage = () => {
     if(Product == null) return
     (async()=>{
       const resp = await removeVariant(Product.id,Product.color)
+      if(resp != null){
+        setMessage("successfully removed product")
+        setTimeout(()=>nav('/'),500)
+        return
+      }
+      setMessage("Something went wrong")
+
       
     })()
   }
   const removeProductHandler = () => {
     (async()=>{
     if(Product == null) return
-
       const resp = await removeProduct(Product.id)
+      if(resp != null){
+        setMessage("successfully removed product")
+        setTimeout(()=>nav('/'),500)
+        return
+      }
+      setMessage("Something went wrong")
     })()
   }
 
   const submitHandler = () => {
 
     if(sizeList.length == 0 || !checkString(color) || !checkString(desc) || price == null || isNaN(parseInt(price)) || priceFactor == null || isNaN(parseInt(priceFactor)) || images.length ==0    ){
-      setError("Input nonvalid")
+      setMessage("Input nonvalid")
       return
     }
     (async () => {
       let pf = 1- parseInt(priceFactor)/100 > 0 &&1- parseInt(priceFactor)/100 <= 1 ? 1- parseInt(priceFactor)/100 : 1 
       /* @ts-ignore - Typescript doesn't realize that we've checked name etc in the checkString function. */
       const resp = await editProduct(Product.name,Product.brand,desc,Product.color,Product.generalColor+"",Product.category+"",parseInt(price),pf,sizeList,images)
-      console.log("Respoinse",resp);
+      if(resp == true){
+        setMessage("Successfully edited product")
+        setTimeout(()=>setMessage(undefined),2000)
+
+      }
       
     })()
   }
@@ -60,7 +77,7 @@ const ProductPage = () => {
   const [sizeList, setSizeList] = useState<{size:number,amount:number}[]>([]) 
   const [Product, setProduct] = useState<Product>() 
   const [variants, setVariants] = useState<Product[]>([]) 
-  const [error, setError] = useState<string>() 
+  const [message, setMessage] = useState<string>() 
   const [price, setPrice] = useState<string>() 
   const [priceFactor, setPriceFactor] = useState<string>('0') 
   const [initial, setInitial] = useState<boolean>(true) 
@@ -74,7 +91,7 @@ const ProductPage = () => {
       (async ()=>{
         const p = await getProduct(id,color)
         if(p == undefined){
-          setError("Error Fetching product")
+          setMessage("Error Fetching product")
           return
         }
         setProduct(p)
@@ -116,14 +133,14 @@ const ProductPage = () => {
             <h2 className='text-2xl text-stone-700  font-oswald'>{Product.brand}</h2>
             <h1 className='text-4xl font-oswald font-bold'>{Product.name}</h1>
           
-            <ul className='flex gap-2'>
-        {variants.map(e => <Link to='disabled' onClick={(evt)=>{
+            {/* <ul className='flex w-auto gap-2 overflow-scroll'>
+        {variants.map(e => <button className='w-24' onClick={(evt)=>{
           evt.preventDefault();
           nav(`/edit/${e.id}?color=${e.color.replace(/\s/g, '').toLowerCase()}`)
           nav(0)
-          }} ><img className='w-24 h-24 object-cover' src={e.images[0]}></img></Link>)}
-        </ul>
-            
+          }} ><img className='w-24 h-24 object-cover' src={e.images[0]}></img></button>)}
+        </ul> */}
+            <ProductPageVariants items={variants} />
             <label htmlFor="price" className=' flex p-1 h-10 text-sm items-center font-bold '>Price:</label>
             <Input name="price" value={price} onChange={(e:string)=>{
               setPrice(prev => {
@@ -153,7 +170,7 @@ const ProductPage = () => {
             <TextArea name='desc' value={desc} onChange={setDesc} />
             
             <label htmlFor="" className=' flex p-1 h-10 items-center font-bold '>Stock: &nbsp;</label>
-            <SizeList useError={[error,setError]}  useSize={[sizeList,setSizeList]} />
+            <SizeList useError={[message,setMessage]}  useSize={[sizeList,setSizeList]} />
 
             <label htmlFor="" className=' flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
             <span className='flex w-full'>
@@ -166,7 +183,7 @@ const ProductPage = () => {
             <button onClick={()=>{removeProductHandler()}} className='w-36 mt-4 ml-3 rounded-md p-1 h-12 font-bold bg-stone-50  hover:bg-red-50   text-red-500 active:bg-red-300 active:text-red-700 transition-all'>Remove Product</button>
               
             </div>
-            {error && <span className='text-red-500 font-bold ml-12'>{"Error occured, follow the instructions"}</span>}
+            {message && <span className='text-stone-500  font-bold ml-12'>{message}</span>}
         </article>
     </div>
    

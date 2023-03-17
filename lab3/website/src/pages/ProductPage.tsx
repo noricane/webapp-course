@@ -94,6 +94,7 @@ const ProductPage = () => {
     <>
     <div className='min-h-[50rem] p-8 grid grid-cols-2 relative -z-[0] utsm:flex utsm:flex-col'>
         <div id='images'>
+            {/* Display product's images */}
             <ProductImages images={Product.images}/>
         </div>
 
@@ -102,7 +103,7 @@ const ProductPage = () => {
             <h1 className='text-4xl font-oswald font-bold'>{Product.name}</h1>
             <h3 className='text-xl text-stone-500 font-oswald'>"{Product.color}"</h3>
             <span className='text-xl font-semibold mb-3'>{Product.price*Product.price_factor} {config.CURRENCY}</span>
-                {/*  */}
+                {/* Display clickable images for product's variants */}
                 <ProductPageVariants items={variants} />
 
 

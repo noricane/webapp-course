@@ -24,7 +24,7 @@ const LoggedInMenu = ({open,firstColor,secondColor, mobile}:{open?:boolean,first
             <IoBagOutline className={`utsm:absolute ${open == null || open == true ? 'opacity-100' : 'opacity-0'}  duration-300 transition-all`} size={24} />
             {cart.length >0 && <div className={`rounded-full utsm:-ml-12 utsm:mt-12 utsm:border-2 border-stone-200 bg-stone-900 text-stone-100 flex justify-center items-center sm:absolute ${cart.length < 100  ? 'w-7 h-7 z-10 utsm:bottom-[22.5rem]  utsm:left-[2rem] sm:bottom-[-.75em] sm:left-[-.75em]':'h-9 w-9 bottom-[-1em] left-[-1em]'}`}>{cart.length < 100 ? cart.length : '99+'}</div>}
           </Link>
-          <Link to="/account" className={`rounded-sm flex justify-center items-center ${firstText} ${secondBg} hover:${firstBg} hover:text-stone-900 w-12 h-12 p-1  border-4`} style={{borderColor:secondHex}}>
+          <Link to="/account" className={`rounded-sm flex justify-center items-center ${firstText} ${secondBg} hover:${firstBg} hover:text-stone-900 w-12 h-12 p-1  transition-all border-4`} style={{borderColor:secondHex}}>
             <IoPersonOutline   size={24}/>
           </Link>
 

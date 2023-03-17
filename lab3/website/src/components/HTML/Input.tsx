@@ -6,3 +6,5 @@ const Input = ({name,value,onChange,disabled,type='text',width='auto'}:{name:str
    }
 
 export default Input
+
+

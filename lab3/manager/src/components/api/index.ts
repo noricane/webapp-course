@@ -158,7 +158,6 @@ export async function getProduct(id:string,color:string):Promise<Product | undef
 export async function removeProduct(id:string):Promise<any>{/* for now any */
   
  try {
-    let arr:Product[]= []
     const {data}:{data:Product} =  await axios.delete(`${config.URL}/product/${id}`);
 
     

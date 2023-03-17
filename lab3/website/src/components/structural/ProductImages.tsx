@@ -14,8 +14,8 @@ const ProductImages = ({images}:{images:string[]}) => {
     
   return (
     <>
-        <div className=' shadow-lg bg-white flex items-center rounded-t-xl justify-center'>
-            <img src={selected} className=" sm:h-[50vw]" alt="" />
+        <div className=' shadow-lg bg-white flex items-center rounded-t-xl overflow-hidden justify-center'>
+            <img src={selected} className=" sm:h-[50vw] " alt="" />
         </div>
         <div className='h-[1px] bg-stone-300'></div>
         <div className='flex shadow-lg   md:h-[10vw] h-24 overflow-scroll bg-stone-300 rounded-b-xl'>

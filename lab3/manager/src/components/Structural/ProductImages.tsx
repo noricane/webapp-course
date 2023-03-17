@@ -12,7 +12,7 @@ const ProductImages = ({images,setImages}:{images:string[],setImages?:Function})
     if(images.length == 0 ){
         return (
             <>
-            <div onMouseEnter={()=>setDeleteVisible(true)} onMouseLeave={()=>setDeleteVisible(false)} className='font-bold text-lg sm:h-[50vw]  shadow-lg bg-white flex items-center  rounded-t-xl overflow-hidden justify-center'>
+            <div  onMouseEnter={()=>setDeleteVisible(true)} onMouseLeave={()=>setDeleteVisible(false)} className='font-bold text-lg sm:h-[50vw] h-[70vw]  shadow-lg bg-white flex items-center  rounded-t-xl overflow-hidden justify-center'>
             No Images Added yet.
 
         </div>

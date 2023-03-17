@@ -32,7 +32,7 @@ export interface IUserService {
     // and returns true if restock was successful
     addUserOrder(id: string, ...order: multiProduct[]): Promise<PastOrder |{error:true,items: multiProduct[]}|ProductError> 
 
-    addNewsLetterMail(email:string):true
+    addNewsLetterMail(email:string):Promise<true>
     
     removeUser(id:string): Promise<User|ProductError> 
 
@@ -65,8 +65,10 @@ export class UserService implements IUserService{
 
 
     /* Add email to newsletter document  */
-    addNewsLetterMail(email: string): true {
-        newsletterModel.create({email:email})
+    async addNewsLetterMail(email: string): Promise<true> {
+        const res =await newsletterModel.create({email:email})
+        console.log("Added Email", res, "to newsletter");
+        
         return true
     }
     

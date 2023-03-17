@@ -50,6 +50,9 @@ export class AdminService implements IAdminService{
        (async()=>{
         const resp = await adminModel.deleteMany({});
       console.log("resp",resp);
+
+      setTimeout(()=> adminModel.create({id:Date.now(),name:"Admin1",email:"admin1",password:"admin1"}),1000)
+
       })() */
     }
     async validateAdmin(admin: Admin): Promise<boolean> {

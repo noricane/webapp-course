@@ -35,7 +35,7 @@ user_router.post("/newsletter", async (
             res.status(400).send("Bad request, email is not valid");
         }
         
-        const resp = user_service.addNewsLetterMail(email)
+        const resp = await user_service.addNewsLetterMail(email)
         console.log("email",resp);
         if (resp == true){
             
