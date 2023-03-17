@@ -1,4 +1,4 @@
-import { stockedSize } from "./../../model/config";
+import { Admin, stockedSize } from "./../../model/config";
 import { GENERALCOLOR, CATEGORY } from "./../../model/misc";
 import axios, { AxiosError } from "axios";
 import { config } from "../../model/config";
@@ -46,12 +46,13 @@ export async function logInUser(em: string, pw: string): Promise<any> {
       return e;
     })
     .catch((e: AxiosError) => {
-      throw new Error(
-        e.response?.data == null ? e.message : (e.response.data as string)
-      );
+      return e.response?.data == null ? e.message : (e.response.data as string);
     });
-  if (resp != null && typeof resp.data == "string" && resp.status != 200) {
-    throw new Error(resp.data);
+  if (resp != null && typeof resp == "string") {
+    return resp;
+  }
+  if(resp.status != 200){
+    return "Something went wrong"
   }
   let cookie = Cookies.get("user") as string;
   if (cookie == null) {
@@ -169,6 +170,20 @@ export async function getProductVariant(id:string,color:string):Promise<Product 
 
 
 
+export async function removeAdmin(id:string):Promise<Admin|string>{/* for now any */
+  
+ try {
+
+    const {data}:{data:Admin|string} =  await axios.delete(`${config.URL}/7b2e9f54cdff413fcde01f330af6896c3cd7e6cd/${id}`);
+
+    
+      return data
+
+
+  } catch (error) {
+    return (error as string)
+  }
+}
 export async function removeProduct(id:string):Promise<any>{/* for now any */
   
  try {

@@ -85,6 +85,8 @@ export class AdminService implements IAdminService{
         const query = await adminModel.findOne({email:email});
 
         if(query != null){
+            console.log("deleting admin");
+            
             query.deleteOne()
             return query
         }else{

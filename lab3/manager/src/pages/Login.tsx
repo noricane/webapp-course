@@ -14,30 +14,32 @@ const Login = () => {
     useEffect(() => {if(session!=null){nav('/dashboard')}}, [session])
     const loginHandler = () => {
       
-      if (email.current?.value == null || password.current?.value == null){
+      setError(undefined)
+      if (email.current?.value == null || email.current?.value == "" || password.current?.value == null || password.current?.value == ""){
         setError("Email and Password must be non empty")
         return
-      }
-      setError(undefined)
-      try{
-        const em:string = email.current.value;
-        const pw: string = password.current.value;
-        (async()=>{
-          const resp = await logInUser(em,pw)
-          console.log(resp);
-          
-          setSession(resp != null ? resp : undefined)
-          nav('/dashboard')
-        })()
-        
+      }else{
+        try{
+          const em:string = email.current.value;
+          const pw: string = password.current.value;
+          (async()=>{
+            const resp = await logInUser(em,pw)
+            if(typeof resp == "string"){
+              setError(resp)
+              return
+            }
 
-               
-        
-      }catch(err:any){
-        console.log(err);
-        
+            setSession(resp)
+            nav('/dashboard')
+          })()
+
+
+
+
+        }catch(err:any){
+          console.log(err); 
+        }
       }
-      
 
       
     }
@@ -55,8 +57,8 @@ const Login = () => {
 
             <span className="[&>button]:mx-2 utxs:[&>button]:my-2">
                 <Button title="LOG IN" onClick={(e:React.FormEvent<HTMLFormElement>)=>loginHandler()}/>
-                {error && <span className="text-red-500 font-bold text-center w-full">{error}</span>}
             </span>
+                {error && <span className="text-red-500 font-bold text-center w-full">{error}</span>}
         </form>
       </Card>
     </div>

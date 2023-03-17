@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { sessionAtom } from "../../model/jotai.config";
+import { removeAdmin } from "../api";
 
 const Layout = ({ children }: any) => {
 
@@ -53,6 +54,24 @@ const Layout = ({ children }: any) => {
 
 
         }}>Add Admin</button>
+          <button className="h-12 w-36 mt-14 absolute z-10 top-[6.5rem] mr-12 bg-stone-800 text-stone-50 active:bg-stone-200 active:text-stone-800 font-oswald text-xl rounded-sm right-0" onClick={(e:React.MouseEvent<HTMLButtonElement, MouseEvent>)=>{
+          e.preventDefault();
+          (async()=>{
+            const resp = await removeAdmin(session.email)
+            console.log(resp);
+            if(typeof resp == "string"){
+              return
+            }else{
+              Cookies.remove('user')
+              setSession(undefined)
+              nav('/')
+              nav(0)
+            }
+
+          })()
+
+
+        }}>Delete Admin</button>
         </>}
       </div>
       {children}

@@ -105,9 +105,10 @@ const ProductPage = () => {
         if(data == undefined){
           return
         }
+        
+        /* filter out product */
+        const list = data.filter(e => e.color != Product.color)
         /* Set product first in list */
-        const list = [Product,...data.filter(e => e.color != Product.color)]
-
         setVariants([Product,...list])
         setPrice(Product.price+"")
         setPriceFactor((100-Product.price_factor*100)+"")

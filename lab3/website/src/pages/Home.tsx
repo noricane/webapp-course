@@ -76,7 +76,7 @@ const Home = () => {
        <form onSubmit={addNewsletter}>
        <span>
        <label htmlFor="email" className="text-stone-50 font-bold"> Email </label>
-        <input id="email" ref={email} type="email" className="h-9 utlg:w-[90%] w-96 bg-stone-900 border-2 border-stone-300 text-white p-2"  placeholder="Enter your email" />
+        <input id="email" ref={email} type="email" className="h-9 utlg:w-[90%] max-w-xl w-96 bg-stone-900 border-2 border-stone-300 text-white p-2"  placeholder="Enter your email" />
        </span> <br />
        <button type="submit" className="mt-4 hover:bg-stone-900 h-12 w-32 border active:bg-stone-50 active:text-stone-900">Subscribe</button>
        </form>

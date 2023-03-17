@@ -58,8 +58,6 @@ function App() {
           if(Array.isArray(updatedCart) ){
             console.log("updatecart here");
             setCart(updatedCart)
-
-
           }else{
             console.log("no resp");
             
