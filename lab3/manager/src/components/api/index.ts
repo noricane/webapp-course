@@ -138,11 +138,25 @@ export async function editProduct(
   }
 }
 
-export async function getProduct(id:string,color:string):Promise<Product | undefined>{
+export async function getProduct(id:string):Promise<Product[] | undefined>{
+  try {
+    let arr:Product[]= []
+    const {data}:{data:{key:string,value:Product}[]|string} = await axios.get(`${config.URL}/product/${id}`)
+    if(typeof(data) == "string"){return}
+    const list:Product[] = []
+    console.log(data)
+    data.forEach(e => list.push(e.value))
+    return list
+
+  } catch (error) {
+    
+  }
+}
+export async function getProductVariant(id:string,color:string):Promise<Product | undefined>{
   try {
     let arr:Product[]= []
     const {data}:{data:Product} =  await axios.get(`${config.URL}/product/${id}?color=${color}`);
- 
+
     
     if (data != null) {
       return data
@@ -158,6 +172,7 @@ export async function getProduct(id:string,color:string):Promise<Product | undef
 export async function removeProduct(id:string):Promise<any>{/* for now any */
   
  try {
+    let arr:Product[]= []
     const {data}:{data:Product} =  await axios.delete(`${config.URL}/product/${id}`);
 
     

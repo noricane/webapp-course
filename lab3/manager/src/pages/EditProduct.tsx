@@ -11,7 +11,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAtom } from 'jotai';
 import axios from 'axios';
-import { getProduct, editProduct, removeProduct, removeVariant } from '../components/api';
+import { getProductVariant, editProduct, removeProduct, removeVariant, getProduct } from '../components/api';
 import ProductImages from '../components/Structural/ProductImages';
 import SizeList from '../components/Misc/SizeList';
 import ProductLink from '../components/Logic/ProductLink';
@@ -89,7 +89,7 @@ const ProductPage = () => {
 
     useEffect(()=>{
       (async ()=>{
-        const p = await getProduct(id,color)
+        const p = await getProductVariant(id,color)
         if(p == undefined){
           setMessage("Error Fetching product")
           return
@@ -101,11 +101,12 @@ const ProductPage = () => {
    useEffect(()=>{
     if(Product == null){return}
       (async ()=>{
-        const {data}:{data:{key:string,value:Product}[]|string} = await axios.get(`${config.URL}/product/${Product.id}`)
-        if(typeof(data) == "string"){return}
-        const list:Product[] = []
-        console.log(data)
-        data.forEach(e => e.value.color != Product.color && list.push(e.value))
+        const data = await getProduct(Product.id)
+        if(data == undefined){
+          return
+        }
+        /* Set product first in list */
+        const list = [Product,...data.filter(e => e.color != Product.color)]
 
         setVariants([Product,...list])
         setPrice(Product.price+"")
@@ -133,14 +134,8 @@ const ProductPage = () => {
             <h2 className='text-2xl text-stone-700  font-oswald'>{Product.brand}</h2>
             <h1 className='text-4xl font-oswald font-bold'>{Product.name}</h1>
           
-            {/* <ul className='flex w-auto gap-2 overflow-scroll'>
-        {variants.map(e => <button className='w-24' onClick={(evt)=>{
-          evt.preventDefault();
-          nav(`/edit/${e.id}?color=${e.color.replace(/\s/g, '').toLowerCase()}`)
-          nav(0)
-          }} ><img className='w-24 h-24 object-cover' src={e.images[0]}></img></button>)}
-        </ul> */}
             <ProductPageVariants items={variants} />
+            {/* Label and input for price, allows only for numerical input to be passed and removes any leading 0s */}
             <label htmlFor="price" className=' flex p-1 h-10 text-sm items-center font-bold '>Price:</label>
             <Input name="price" value={price} onChange={(e:string)=>{
               setPrice(prev => {
@@ -151,6 +146,8 @@ const ProductPage = () => {
                 return e.replace(/^0+/, '')})}}/>
 
 
+            {/* Label and input for discount, allows only for numerical input to be passed and removes any leading 0s, 
+            initial is just to handle the case where state goes from product.price_factor which is a value between 0-1 and discount % which is 0-100*/}
             <label htmlFor="pricefactor" className='flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
             <Input name="pricefactor" onChange={(e:string)=>{
               if(initial){setInitial(false)}

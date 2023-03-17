@@ -37,7 +37,7 @@ const AddProduct = () => {
  
     
   const submitHandler = () => {
-    /* Checl that input is valid */
+    /* Check that input is valid */
     if(sizeList.length == 0 || !checkString(name) || !checkString(brand) || !checkString(color) || colors.filter(e => e.toLowerCase()==generalColor?.toLowerCase()).length == 0 ||category == null || categories[parseInt(category as string)]==null || !checkString(desc) || price == null || isNaN(parseInt(price)) || priceFactor == null || isNaN(parseInt(priceFactor)) || images.length ==0    ){
       setError("Input nonvalid")
       return
@@ -97,23 +97,25 @@ const AddProduct = () => {
             <label htmlFor="desc" className='justify-end flex p-1 h-10 items-center font-bold '>Description: &nbsp;</label>
             <Input name='desc' value={desc} onChange={setDesc} />
 
-            
             <label className='justify-end flex p-1 h-10 items-center font-bold '>Price: &nbsp;</label>
-            <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={price} onChange={e=>setPrice(prev => {
-                    if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
-                        return prev
-                    }
-                    return e.target.value
-                })}/>
+            <Input name="price" value={price} onChange={(e:string)=>{
+              setPrice(prev => {
+                if(prev != null && prev?.length < e.length && isNaN(parseInt(e.slice(prev?.length,)))){
+                  return prev
+                }
+                if(isNaN(parseInt(e))){ return "" }
+                return e.replace(/^0+/, '')})}}/>
+      
 
-
+                {/* Label and input for discount, discount checks that the input is only of type number and. */}
             <label className='justify-end flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
-            <input className='text-2xl text-stone-700 h-10 rounded-sm font-oswald' value={priceFactor} onChange={e=>setPriceFactor(prev => {
-                    if(prev != null && prev?.length < e.target.value.length && isNaN(parseInt(e.target.value.slice(prev?.length,)))){
-                        return prev
-                    }
-                    return e.target.value
-                })}/>
+            <Input name="price" value={priceFactor} onChange={(e:string)=>{
+              setPriceFactor(prev => {
+                if(prev != null && prev?.length < e.length && isNaN(parseInt(e.slice(prev?.length,)))){
+                  return prev
+                }
+                if(isNaN(parseInt(e))){ return "" }
+                return e.replace(/^0+/, '')})}}/>
 
             {/* Add Product Images */}
             <label htmlFor="link" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
@@ -159,17 +161,11 @@ const AddProduct = () => {
               </div>
            
             </span>
-          
-
-
-              {error && <div className='absolute text-stone-600 text-2xl bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
+            {error && <div className='absolute text-stone-600 text-xl bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
             <button onClick={()=>{submitHandler()}} className='col-span-2 mt-4 justify-self-center w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add Product +</button>
 
         </article>
-    </div>
-   
-
-    
+    </div>  
     </>
   )
 }
@@ -178,15 +174,13 @@ export default AddProduct
 
 
 
-
+/* Can't remember why I use this local component instead of the one defined in /Misc, the code isn't identical and when trying to replace it I receive errors, no time to refactor */
 const ColorDropdown = (props:any) => {
   const [open, setOpen] = useState<boolean>() 
-    
-    const {color,setColor,colors} = props
+  const {color,setColor,colors} = props
   return (
     <div>
-        <button onClick={()=>{setOpen(prev => !prev)}} className='h-10 w-full rounded-sm bg-white px-2 overflow-hidden inline-block text-ellipsis whitespace-nowrap' >{color == null ? `Color ►` : GENERALCOLOR[colors.indexOf(color)]}</button>
-
+    <button onClick={()=>{setOpen(prev => !prev)}} className='h-10 w-full rounded-sm bg-white px-2 overflow-hidden inline-block text-ellipsis whitespace-nowrap' >{color == null ? `Color ►` : GENERALCOLOR[colors.indexOf(color)]}</button>
       <div className={`${open ? '' :'hidden'} absolute z-20 w-56  max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
         {colors.map((e:any) => <button onClick={() => e != color ? setColor(e) : setColor(undefined)} className={`p-2 m-1 ${color == e? 'bg-stone-900 text-white active:bg-white  active:text-black border-stone-900 hover:bg-stone-600': 'hover:bg-stone-200 bg-white active:bg-stone-900 active:border-stone-900 active:text-white border-stone-200' } border-2  rounded-md leading-[.25rem]`} m-1><span className={`h-4 w-4 inline-block border-black border`} style={{background:`${e.toLowerCase() == 'multicolored' ? 'linear-gradient(90deg, red, yellow, green, blue)': e}`}}></span> {e}</button>)}
       </div>

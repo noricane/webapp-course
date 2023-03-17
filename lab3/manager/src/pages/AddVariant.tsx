@@ -11,7 +11,7 @@ import ProductImages from '../components/Structural/ProductImages';
 import { MenuButton } from '../components/Misc/Dropdown';
 import { CategoryToArray, GeneralColorToArray } from '../helper/utils';
 import { GENERALCOLOR } from '../model/misc';
-import { addProduct, getProduct } from '../components/api';
+import { addProduct, getProductVariant } from '../components/api';
 import TextArea from '../components/HTML/TextArea';
 import Input from '../components/HTML/Input';
 
@@ -92,9 +92,10 @@ const AddProduct = () => {
   const colors :string[] = GeneralColorToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
   const categories :string[] = CategoryToArray().map((e:string) => e[0].toUpperCase().concat(e.substring(1).toLowerCase()))
 
+  /* Fetch product data from parsed url parameters */
   useEffect(()=>{
     (async ()=>{
-      const p = await getProduct(idParam,colorParam)
+      const p = await getProductVariant(idParam,colorParam)
       if(p == undefined){
         setError("Something went wrong")
         return
@@ -104,35 +105,21 @@ const AddProduct = () => {
     })()
   },[])
 
-
-  useEffect(()=>{
-    if(Product == null){return}
-      (async ()=>{
-        const {data}:{data:{key:string,value:Product}[]|string} = await axios.get(`${config.URL}/product/${Product.id}`)
-        if(typeof(data) == "string"){return}
-        const list:Product[] = []
-        console.log(data)
-        data.forEach(e => e.value.color != Product.color && list.push(e.value))
-
-        setVariants([Product,...list]);
-
-        
-        })()
-  },[Product])
-  
+  /* Check string */
   const checkString = (str:string | undefined):boolean =>{
     if(str == null || str == "") return false;
     return true
   }
     
   const submitHandler = () => {
-
+    /* validate input */
     if(sizeList.length == 0  || !checkString(color) || colors.filter(e => e.toLowerCase()==generalColor?.toLowerCase()).length == 0 ||category == null || categories[parseInt(category as string)]==null || !checkString(desc) || price == null || isNaN(parseInt(price)) || priceFactor == null || isNaN(parseInt(priceFactor)) || images.length ==0    ){
       setError("Input nonvalid")
       return
     }
     (async () => {
       let pf = 1- parseInt(priceFactor)/100 > 0 &&1- parseInt(priceFactor)/100 <= 1 ? 1- parseInt(priceFactor)/100 : 1 
+      /* Send request to add product */
       /* @ts-ignore - Typescript doesn't realize that we've checked name etc in the checkString function. */
       const resp = await addProduct(Product.name,Product.brand,desc,color,generalColor?.toUpperCase(),category?.toUpperCase(),parseInt(price),pf,sizeList,images)
       if(resp == true){
@@ -158,8 +145,6 @@ const AddProduct = () => {
             <Input name="brand" disabled={true} value={Product?.brand}/>
             <label htmlFor="name" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Name: &nbsp;</label>
             <Input name="name" disabled={true} value={Product?.name}/>
-           
-
 
             {/* Color and general color */}
             <label htmlFor="color" className='justify-end  h-10 col-span-1 flex p-1 items-center font-bold '>Color: &nbsp;</label>
@@ -175,14 +160,11 @@ const AddProduct = () => {
             {/* Add Stocked Size */}
             <label className='justify-end flex p-1 h-10 items-center font-bold '>Stock: &nbsp;</label>
             <span className='flex flex-col w-full'>
-              <Stock/>
-           
+              <Stock/>          
             </span>
-
             {/* Descritpion and Price */}
             <label htmlFor="desc" className='justify-end flex p-1 h-10 items-center font-bold '>Description: &nbsp;</label>
             <TextArea name="desc" value={desc} onChange={setDesc}/>      
-
 
             <label htmlFor="price" className='justify-end flex p-1 h-10 items-center font-bold '>Price: &nbsp;</label>
             <Input name="price" value={price} onChange={(e:string)=>setPrice(prev => {
@@ -192,31 +174,21 @@ const AddProduct = () => {
                     return e
                 })}/>
 
-
-
             <label htmlFor="priceFactor" className='justify-end flex p-1 h-10 text-sm items-center font-bold '>Discount &#40;%&#41;: &nbsp;</label>
             <Input name="priceFactor" value={priceFactor} onChange={(e:string)=>setPriceFactor(prev => {
                     if(prev != null && prev?.length < e.length && isNaN(parseInt(e.slice(prev?.length,)))){
                         return prev
                     }
                     return e})}/>
-           
-
+          
             {/* Add Product Images */}
             <label htmlFor="link" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
             <span className='flex w-full'>
               <input className='py-1 px-2 text-2xl text-stone-700 h-10 w-full font-oswald rounded-l-sm' value={link} onChange={e=>setLink(e.target.value)}/>
-
-
               <button onClick={()=>{setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
             </span>
-         
-          
-
-
             <button onClick={()=>{submitHandler()}} className='col-span-2 mt-4 justify-self-center w-36 rounded-sm p-1 h-12 font-bold bg-stone-900 text-stone-50 active:bg-stone-100 active:text-stone-900 transition-all'>Add Product +</button>
-
-              {error && <div className='absolute text-stone-800 bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
+            {error && <div className='absolute text-stone-800 bottom-4 font-bold utsm:col-span-2 md:col-span-1 md:col-start-2   utmd:justify-self-center'>{error}</div>}
         </article>
     </div>
    

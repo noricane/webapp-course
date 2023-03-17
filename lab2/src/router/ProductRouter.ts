@@ -83,7 +83,7 @@ product_router.get("/", async (
         let colorList: Product[] | null = null
         /* Check if request is intended for the next route */
         if(req.query.color == null && req.query.category == null){
-            console.log('the request will be passed to the next router function ...')
+            //console.log('the request will be passed to the next router function ...')
             return next()
         }
         /* Validate */
@@ -197,7 +197,7 @@ product_router.get("/:id", async (
 ) => {
     try {
         if(req.query.color == null){
-            console.log('the request will be passed to the next router function ...')
+            //console.log('the request will be passed to the next router function ...')
             return next()
         }
         if(typeof req.query.color != "string"){
