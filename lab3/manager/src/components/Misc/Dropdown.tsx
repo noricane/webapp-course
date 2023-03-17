@@ -12,7 +12,7 @@ export const GeneralDropdown = ({state,items,children,onClick,action }:{items:an
     return (
       <div className=''> 
         <MenuButton onClick={()=>setOpen(prev => !prev)}>{children}</MenuButton>
-        <div className={`${open ? '' :'hidden'} absolute w-56 max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
+        <div className={`${open ? '' :'hidden'} absolute w-64 max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
           {items.map(e => <button onClick={() => e != state ? onClick({type:action,payload:e}) : onClick({type:action,payload:null})} className={`p-2 m-1 overflow-hidden text-ellipsis whitespace-nowrap ${state == e? 'bg-stone-900 text-white active:bg-white  active:text-black border-stone-900 hover:bg-stone-600': 'hover:bg-stone-200 bg-white active:bg-stone-900 active:border-stone-900 active:text-white border-stone-200' } border-2  rounded-full leading-[.25rem]`} m-1>{e}</button>)}
         </div>
       </div>

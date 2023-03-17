@@ -7,6 +7,21 @@ import { ProductError, User } from "../model/types";
 import { color } from 'framer-motion';
 
 /* 
+Get all brands from backend*/
+export async function getProductBrands():Promise<string[]>{
+    try {
+
+      //Get array of all brands
+      const {data}:{data:string[]} =  await axios.get(`${config.URL}/product/brands`);
+
+      //Return array of all brands
+      return data
+    } catch (error) {
+      console.log(error);
+      return []
+    }
+}
+/* 
 Get all products from backend*/
 export async function getProducts():Promise<Product[]>{
     try {

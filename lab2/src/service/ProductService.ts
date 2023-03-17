@@ -10,6 +10,7 @@ import { initShoes } from './dummyproducts';
 import { multiProduct } from '../model/pastorder';
 import { productModel } from '../../db/product.db';
 import { ProductError } from '../model/ProductError';
+import { brandModel } from '../../db/brands.db';
 
 
 export interface IProductService {
@@ -138,7 +139,16 @@ export class ProductService implements IProductService{
     
 
     /* List of recorded brands, TODO mongodb */
-    brands: string[] = ["Nike","Louis Vuitton","Adidas","Yeezy", "Maison Margiela","Off-White x Nike"]
+
+
+    async addBrand(name: string): Promise<true> {
+      const search = await brandModel.findOne({normalizeString:checkLatinCharacters(name)})
+      if(search == null){
+      const res = await brandModel.create({normalizedName:checkLatinCharacters(name),name:name})
+      console.log("Added brand", res, "to brands");
+      }
+      return true
+  }
     
     constructor(){
       //console.log("creating");
@@ -146,9 +156,11 @@ export class ProductService implements IProductService{
        (async()=>{
         const resp = await productModel.deleteMany({});
       const resp2 = await productMapModel.deleteMany({});
+      const resp3 = await brandModel.deleteMany({});
       
       console.log("resp1",resp);
       console.log("resp2",resp2);
+      console.log("resp2",resp3);
       
       })() */
       
@@ -204,7 +216,16 @@ export class ProductService implements IProductService{
     
     /* Returns list of recorded brands */
     async getBrands(): Promise<string[]>{
-        return this.brands
+        const list:string[] = []
+        const brands = await brandModel.find({})
+        console.log("in brands");
+        console.log(brands);
+        
+        if(brands != null) {
+          /* Some unknown magic here, I don't know why TS claims that there is no property name when there is. */
+          brands.forEach(e=> list.push((e as unknown as &{name:string}).name))
+        }
+        return list
     }
 
     /* Returns collection of all products and a ProductError if none were found*/
@@ -291,8 +312,9 @@ export class ProductService implements IProductService{
               newProd.deleteOne()
         }
         //If brand doesn't exist add it.
-        if(this.brands.filter(e => checkLatinCharacters(e) == checkLatinCharacters(desc.brand)).length == 0){
-            this.brands.push(desc.brand);
+        const brands = await this.getBrands()
+        if(brands.filter(e => checkLatinCharacters(e) == checkLatinCharacters(desc.brand)).length == 0){
+            this.addBrand(desc.brand)
         }
         return newProd;
     }

@@ -20,7 +20,7 @@ export function CategoryToArray() {
 //This regex essentially expels everything that is not included in the alphabet.
 //Used to check if brand names are similar. Nike == NIKE == nike© == Nike™ etc. To avoid duplications.
 export function checkLatinCharacters(str: string):string{
-    return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
+    return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "").toLowerCase()
 }
 
 export const checkString = (str:string | undefined):boolean =>{

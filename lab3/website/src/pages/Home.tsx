@@ -20,10 +20,12 @@ const Home = () => {
     /* send request to server with newsletterRequest function and await response */
     (async()=>{
       if(email.current?.value != null){
+        console.log(email.current.value);
+        
         const resp = await newsletterRequest(email.current.value)
         if(resp == true){
           setMessage('Sucessfully added')
-          email.current.value = ""
+
         }else{
           setMessage('Error occured, please try again later')
         }

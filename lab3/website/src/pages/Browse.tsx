@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getFilteredProducts, getProducts } from '../api'
+import { getFilteredProducts, getProductBrands, getProducts } from '../api'
 import { ColorDropdown, GeneralDropdown } from '../components/Misc/Dropdown'
 
 import Grid from '../components/structural/Grid'
@@ -54,6 +54,7 @@ function reducer(state:FilterState,
 
 
 const Browse = () => {
+  /* State managing function for filter requests */
   async function getTasksPayload({category,color,brand}:{category:CATEGORY | null, color:GENERALCOLOR | null, brand:string | null}){
     try {
       const data:Product[] = await getFilteredProducts(category,color)
@@ -69,6 +70,7 @@ const Browse = () => {
       console.log(error);
     }
   }
+  /* Get */
   async function fetchProducts(){
     try {
       const arr:Product[] = await getProducts()
@@ -80,7 +82,7 @@ const Browse = () => {
   
   async function getBrands(){
     try {
-    const {data}:{data:string[]} =  await axios.get(`${config.URL}/product/brands`);
+    const data:string[] =  await getProductBrands();
     setBrands(prev => [...data])
     } catch (error) {
     }

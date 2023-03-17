@@ -10,7 +10,7 @@ export const GeneralDropdown = ({state,items,children,onClick,action }:{items:an
     return (
       <div ref={ref} className=''> 
         <MenuButton onClick={()=>setIsComponentVisible(prev => !prev)}>{children}</MenuButton>
-        <div className={`${isComponentVisible ? '' :'hidden'} absolute w-56 max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
+        <div className={`${isComponentVisible ? '' :'hidden'} absolute w-64 max-h-48 overflow-x-scroll bg-white rounded-md border-2 border-stone-200`}>
           {/* onclick is a useReducer dispatch function and is called with the object {type:string,payload:any} to update the usereducer state and closes the list*/}
           {items.map(e => <button onClick={() => {
             e != state ? onClick({type:action,payload:e}) : onClick({type:action,payload:null});

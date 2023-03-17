@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 /* Turn a string into the corresponding string that includes alphabet shown below and without spaces */
 export function checkLatinCharacters(str: string):string{
-    return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "")
+    return str.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ]+/g, "").toLowerCase()
 }
 /* Turn string into the same string without spaces */
 export function normalizeString(str: string){
