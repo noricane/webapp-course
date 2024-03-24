@@ -1,5 +1,5 @@
 const Dotenv = require('dotenv-webpack');
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+//const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 module.exports = {
   resolve: {
