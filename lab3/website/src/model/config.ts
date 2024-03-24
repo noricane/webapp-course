@@ -1,5 +1,8 @@
 //👋😳
+
+
+
 export const config = {
-    URL:"http://localhost:8080",
+    URL: process.env.URL,
     CURRENCY:'kr',
 }
