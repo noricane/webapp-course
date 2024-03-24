@@ -32,9 +32,11 @@ resave : false, //Whether or not state is saved everytime? or whenever session i
 saveUninitialized : true //Decides wherther a blank session is saved or if it waits until the user writes something to the session object
 })); */
 app.use(cors({
-origin: ["https://webapp-course.vercel.app"], //Allows requests from any origin, not good for production
-methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD','DELETE'],
-credentials : true //Specifies if express should include session id in every response, if this is true then origin property must be specified. 
+    origin: "https://webapp-course.vercel.app", 
+    
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD','DELETE'],
+    credentials : true //Specifies if express should include session id in every response, if this is true then origin property must be specified. 
 }));
 app.use(cookieParser());
 app.use(express.json());
