@@ -1,5 +1,6 @@
 import { createConnection } from "mongoose";
 require('dotenv').config();
 
-console.log("CREATING CONNECTION:",process.env.DB_CONN);
-export const conn = createConnection(process.env.DB_CONN);
+const url =  process.env.DB_CONN || "xdxdxdxdxd"
+console.log("CREATING CONNECTION:",url);
+export const conn = createConnection(url ,{});

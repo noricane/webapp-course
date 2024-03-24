@@ -25,12 +25,12 @@ app.use(express.static(path.join(__dirname, '../../lab3/website/build')));
 app.get('/*', (req : Request, res : Response) => {
  res.sendFile(path.join(__dirname, '../../lab3/website/build', 'index.html'));
 }); */
-
-app.use(session({
-secret : process.env.SESSION_KEY as string || "", //
+//Depreceated
+/* app.use(session({
+secret : process.env.SESSION_KEY as string || "", 
 resave : false, //Whether or not state is saved everytime? or whenever session is modified
 saveUninitialized : true //Decides wherther a blank session is saved or if it waits until the user writes something to the session object
-}));
+})); */
 /* app.use(cors({
 origin: true, //Allows requests from any origin, not good for production
 methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD','DELETE'],
