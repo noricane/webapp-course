@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "jest",
-    "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts"
+    "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts",
+    "start": "npx ts-node src/index.ts",
   },
   "author": "Tarek Chorfi",
   "license": "Proprietary",
