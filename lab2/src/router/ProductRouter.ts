@@ -15,6 +15,18 @@ export const product_service = makeProductService();
 export const product_router = express.Router();
 //initShoes(product_service);
 
+/* init route */
+product_router.get("/init", async (
+    req: Request<{}, {}, {}>,
+    res: Response<string>,
+) => {
+    try {
+        initShoes(product_service)
+        res.status(200).send("resp")
+    }catch (e: any) {
+        res.status(500).send(e.message);
+    }
+}) 
 /* brands path for retrieving a list of stored brands */
 product_router.get("/brands", async (
     req: Request<{}, {}, {}>,
