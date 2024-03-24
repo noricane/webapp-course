@@ -6,7 +6,7 @@ import { app } from "./start";
 */
 
 
-const PORT : number = 8080;
+const PORT : number = (process.env.PORT as unknown as number) || 8080;
 
 
 /**
