@@ -4,13 +4,14 @@ import ProductPageVariants from '../components/Misc/ProductPageVariants';
 import Carousel from '../components/structural/Carousel';
 import ProductImages from '../components/structural/ProductImages';
 import SizeList from '../components/structural/SizeList';
-import { config } from '../model/config';
+
 import { Product } from '../model/types';
 import { useLocation } from "react-router-dom";
 import { multiProduct, stockedSize } from '../model/types';
 import { cartAtom } from '../model/jotai.config';
 import { useAtom } from 'jotai';
 import axios from 'axios';
+import { config } from '../helper/config';
 
 
 const ProductPage = () => {

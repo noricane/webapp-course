@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import ProductCard from './ProductCard'
 import { BsArrowRightSquare } from "react-icons/bs";
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { config } from '../../model/config';
+
 import { Product } from '../../model/types';
 
 

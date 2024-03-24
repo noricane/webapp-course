@@ -4,7 +4,7 @@ import Price from '../Misc/Price'
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { Product } from '../../model/types';
 import axios from 'axios';
-import { config } from '../../model/config';
+import { config } from '../../helper/config';
 import ProductVariants from '../Misc/ProductVariants';
 import ProductLink from '../Logic/ProductLink';
 class MapAndColor {
@@ -29,7 +29,8 @@ const ProductCard = ({item,key}:Props //in some places we already have acces to 
         const {data}:{data:any[]} = await axios.get(`${config.URL}/product/${item.id}`)
         const toMap = new Map<string,Product>()
         data.forEach(e => toMap.set(e.key,e.value))
-        if (toMap instanceof Map<string,Product>){
+        /* Why am i doing this?! */
+        if (toMap instanceof Map/* <string,Product> */){
             setMap(toMap)
         }
     }

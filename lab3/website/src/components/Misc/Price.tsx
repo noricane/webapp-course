@@ -1,5 +1,5 @@
 import React from "react";
-import { config } from "../../model/config";
+import { config } from "../../helper/config";
 import Badge from "./Badge";
 
 /* Component for displaying price or discounted price */

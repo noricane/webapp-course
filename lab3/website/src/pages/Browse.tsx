@@ -7,7 +7,7 @@ import { ColorDropdown, GeneralDropdown } from '../components/Misc/Dropdown'
 import Grid from '../components/structural/Grid'
 
 import { checkLatinCharacters, ToArray } from '../helper/utils'
-import { config } from '../model/config'
+
 
 import { CATEGORY, GENERALCOLOR, Product } from '../model/types'
 

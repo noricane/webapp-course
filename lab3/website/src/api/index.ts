@@ -1,10 +1,11 @@
 import { CATEGORY, GENERALCOLOR, multiProduct } from '../model/types';
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-import { config } from "../model/config";
+
 import { Product } from "../model/types";
 import { ProductError, User } from "../model/types";
 import { color } from 'framer-motion';
+import { config } from '../helper/config';
 
 /* 
 Get all brands from backend*/
