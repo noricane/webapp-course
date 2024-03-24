@@ -114,7 +114,7 @@ export async function getProduct(id:string,color:string):Promise<Product | undef
 export async function  registerUser(name:string,email:string,phonenumber:string,birthdate:Date,street:string,city:string,country:string,zip:string,password:string):Promise<User | string>{
     try {
         let message = ""
-        console.log("In register");
+        console.log("In register:",`${config.URL}/user/register`);
         const user = {name:name, email:email,phonenumber:phonenumber, birthdate:birthdate, street:street, city:city, country:country, zip:zip, password:password}
         const {data}:{data:any} =  await axios.post(`${config.URL}/user/register`,{user:user}).catch((e:AxiosError) =>{
             e.response?.data == null ? message = e.message : message = e.response.data as string;
