@@ -178,7 +178,7 @@ product_router.get("/", async (
     try {
         const resp = await product_service.getProducts();
 
-        if(resp instanceof Map<string, Map<string, Product>>){
+        if(resp instanceof Map/* <string, Map<string, Product>> */){
             //Success, resp contains products! 
             //Convert to object since JSON stringify will introduce problems upon nested maps.
             const res_obj = toObject(resp)            
@@ -254,7 +254,7 @@ product_router.get("/:id", async (
         }
         
         const resp = await product_service.getProduct(id);
-        if(resp instanceof Map<string, Product>){
+        if(resp instanceof Map/* <string, Product> */){
             //Success, resp contains products!            
             res.status(200).send(toObject(resp));
         }else{
@@ -364,7 +364,7 @@ product_router.delete("/:id", async (
             return
         }
         const resp =  await product_service.removeProduct(id)
-        if(resp instanceof Map<string, Product>){
+        if(resp instanceof Map/* <string, Product> */){
             //Success, resp contains products!
             res.status(200).send(resp);
         }else{
