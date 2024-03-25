@@ -120,7 +120,7 @@ const AddProduct = () => {
             {/* Add Product Images */}
             <label htmlFor="link" className='justify-end flex p-1 h-10 items-center font-bold '>Image: &nbsp;</label>
             <span className='flex w-full'>
-              <Input name='link' value={link} onChange={setLink} />
+              <Input name='link'  value={link} onChange={setLink} />
 
               <button onClick={()=>{ link!= null && setImages(prev => [...prev,link]);setLink("")}} className='h-10 rounded-r-sm bg-stone-800 text-white font-oswald w-12 text-3xl active:bg-stone-100 active:text-stone-900 transition-all'>+</button>
             </span>
