@@ -8,6 +8,8 @@ import { ProductError } from "../model/ProductError";
 /* Hardcoded method for initialization of shoe objects*/
 
 export function initShoes(service:ProductService){
+    console.log("init shoes fren");
+
     const promises = [
     createProduct(service,"Foam Runners","Yeezy","Stone Salt",GENERALCOLOR.BEIGE,3495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front_970x.jpg?v=1670005153","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Front-Side_970x.jpg?v=1670404734","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-Stone-Salt-Crepslocker-Sole_970x.jpg?v=1670404734"),
     createProduct(service,"Foam Runners","Yeezy","MXT Moon Grey",GENERALCOLOR.GRAY,3495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-MXT-Moon-Grey-Crepslocker-2048x2048-1_f47252b8-46a2-4987-a9f6-4428f8c197ca_970x.jpg?v=1648475497","https://cdn.shopify.com/s/files/1/1626/5391/products/Yeezy-Foam-RNNR-MXT-Moon-Grey-Crepslocker-2048x2048-2_1aea5deb-560b-4388-a7f5-0eac2aa597b5_970x.jpg?v=1648475497",),
@@ -35,7 +37,9 @@ export function initShoes(service:ProductService){
     createProduct(service,"Monogram Denim Sneaker","Louis Vuitton","Navy",GENERALCOLOR.BLUE,53495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Louis-Vuitton-LV-Monogram-Blue-Denim-Sneaker-Crepslocker-Front_a46429a1-c2f3-4478-9ccf-8fa31e2669bb_970x.jpg?v=1652172453"),
     createProduct(service,"Monogram Denim Sneaker","Louis Vuitton","Black",GENERALCOLOR.BLACK,43495,"https://cdn.shopify.com/s/files/1/1626/5391/products/Louis-Vuitton-LV-Monogram-Black-Denim-Sneaker-Front.jpg?v=1657542874"),
 ]
-
+    console.log("promises resolving")
+    Promise.all(promises).then(e => console.log("res",e)).catch(e => console.log("error",e))
+    
 }
 
 

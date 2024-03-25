@@ -150,7 +150,9 @@ export class ProductService implements IProductService{
       return true
   }
     
-    constructor(){
+  constructor(){
+
+
       //console.log("creating");
       /* console.log("Removing all");
        (async()=>{
@@ -293,9 +295,11 @@ export class ProductService implements IProductService{
         const query = await productMapModel.findOne({id:id});
 
         //Allow 
-        let generalColor = gc == -1 ? desc.generalColor : gc
-        if(generalColor < 0){return new ProductError(400,"Bad Request, general color not right type")}
+        let generalColor = gc == -1 ? parseInt(desc.generalColor)  : gc
+        if(generalColor < 0 || isNaN(generalColor)){return new ProductError(400,"Bad Request, general color not right type")}
         const newProd = await productModel.create({id:id,name:desc.name, brand:desc.brand, description:desc.description, color:desc.color,generalColor:generalColor, price:desc.price, category:desc.category, stock:desc.stock, price_factor:desc.price_factor, images:desc.images});
+        console.log("created",newProd);
+        
         if(query != null){
             const getproduct = query.get('product');
             if(getproduct.get(color)!=null){
@@ -341,7 +345,6 @@ export class ProductService implements IProductService{
           return new ProductError(409, "Product not found, did you mean to add?");
         }
       }
-
 
 
     /* Removes product's Map if found and returns it, returns ProductError if Product wasn't found*/
