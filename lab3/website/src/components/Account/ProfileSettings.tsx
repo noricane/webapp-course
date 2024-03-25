@@ -34,6 +34,7 @@ const ProfileSettings = ({user}:{user:User}) => {
   return (
     <div className='w-full h-[100%]  py-8 px-4 bg-stone-200  '>
     <div className='w-full h-[100%] items-center mx-auto bg-stone-300 rounded-lg py-4 grid grid-cols-2 gap-2'>
+    Didn't implement change email and pass functionality
       <span className='flex flex-col items-center justify-center col-span-2 sm:grid grid-cols-2'>
         <label htmlFor="email" className='col-span-1 justify-self-end font-bold text-lg'>Email:&nbsp;</label>
         <Input width='w-[80%]' value={email} onChange={setEmail} name='email' />

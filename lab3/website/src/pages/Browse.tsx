@@ -89,8 +89,9 @@ const Browse = () => {
 }
   useEffect(()=>{
     
-    fetchProducts();   
-    getBrands();   
+    const res = [fetchProducts(),getBrands()]
+    Promise.all(res)
+    setLoading(false)
   },[])
   
   
@@ -107,8 +108,10 @@ const Browse = () => {
   
   const [items, setItems] = useState<Product[]>()
   const [filtered, setFiltered] = useState<Product[]>()
+  const [loading, setLoading] = useState<boolean>(true)
 
   const filterHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {    
+
     if(state.brand == prevState.brand && state.category == prevState.category && state.color == prevState.color ){return}
     else if ( state.category != prevState.category || state.color != prevState.color){/*  if (state.category != prevState.category || state.color != prevState.color) */
     console.log("Here");
@@ -170,7 +173,7 @@ const Browse = () => {
 
 
         </div>
-        <Grid items={filtered}/>
+        <Grid loading={loading} items={filtered}/>
     </div>
   )
 }
