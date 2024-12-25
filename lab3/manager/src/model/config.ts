@@ -3,7 +3,6 @@ import { Product } from "./product";
 //👋😳
 export const config = {
     URL: process.env.REACT_APP_URL,
-
     CURRENCY:'kr',
 }
 
